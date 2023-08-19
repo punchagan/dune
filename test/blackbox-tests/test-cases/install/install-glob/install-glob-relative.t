@@ -43,6 +43,14 @@ Incorrect install stanza that would place files outside the package's install di
   stanzas beginning with .. will be disallowed to prevent a package's installed
   files from escaping that package's install directories.
 
+Test that we can disable the warning:
+  $ cat >>dune-project <<EOF
+  > (warnings (escaping_paths_in_install_stanza disabled))
+  > EOF
+  $ dune build foo.install
+
+Now we remove disabling the warning
+  $ sed -i.bak '$d' dune-project
 
 Correction to the above which uses `with_prefix` to change the install destination:
   $ cat >stanza/dune <<EOF

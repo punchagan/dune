@@ -1169,6 +1169,7 @@ module Executables = struct
       :  t
       -> ext:Filename.Extension.t
       -> enabled_if:Blang.t
+      -> dir:Path.Source.t
       -> Install_conf.t option
   end = struct
     type public =
@@ -1323,7 +1324,7 @@ module Executables = struct
       { names; public; dune_syntax }
     ;;
 
-    let install_conf t ~ext ~enabled_if =
+    let install_conf t ~ext ~enabled_if ~dir =
       Option.map t.public ~f:(fun { package; public_names } ->
         let files =
           List.map2 t.names public_names ~f:(fun (locn, name) (locp, pub) ->
@@ -1332,7 +1333,8 @@ module Executables = struct
                 (File_binding.Unexpanded.make
                    ~src:(locn, name ^ ext)
                    ~dst:(locp, pub)
-                   ~dune_syntax:t.dune_syntax)))
+                   ~dune_syntax:t.dune_syntax
+                   ~dir)))
           |> List.filter_opt
         in
         { Install_conf.section = Section Bin
@@ -1609,6 +1611,7 @@ module Executables = struct
          if not (Dune_project.is_extension_set project bootstrap_info_extension)
          then User_error.raise ~loc [ Pp.text "This field is reserved for Dune itself" ];
          fname)
+    and+ project_root = Dune_project.get_exn () >>| Dune_project.root
     and+ enabled_if =
       let allowed_vars = Enabled_if.common_vars ~since:(2, 3) in
       let is_error = Dune_lang.Syntax.Version.Infix.(dune_version >= (2, 6)) in
@@ -1639,7 +1642,7 @@ module Executables = struct
             | Other { mode = Byte; _ } -> ".bc"
             | Other { mode = Native | Best; _ } -> ".exe"
           in
-          Names.install_conf names ~ext ~enabled_if
+          Names.install_conf names ~ext ~enabled_if ~dir:project_root
       in
       let embed_in_plugin_libraries =
         let plugin =
