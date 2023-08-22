@@ -14,7 +14,7 @@ Test missing entries in the .install file
 This should give us a proper error that myfile wasn't generated
 
   $ lockfile "myfile"
-  $ dune build .pkg/test/target/
+  $ dune build _build/_private/.pkg/test/target/
   Error: No such file or directory
   -> required by _build/default/.pkg/test/target
   [1]
@@ -22,4 +22,4 @@ This should give us a proper error that myfile wasn't generated
 This on the other hand shouldn't error because myfile is optional
 
   $ lockfile "?myfile"
-  $ dune build .pkg/test/target/
+  $ dune build _build/_private/.pkg/test/target/

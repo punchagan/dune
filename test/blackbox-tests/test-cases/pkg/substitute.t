@@ -18,7 +18,7 @@ The test-source folder has a file to use substitution on.
 
 This should take the `foo.ml.in`, do the substitutions and create `foo.ml`:
 
-  $ dune build .pkg/test/target/
+  $ dune build _build/_private/.pkg/test/target/
   This file will be fed to the substitution mechanism
 
 This should also work with any other filename combination:
@@ -37,7 +37,7 @@ This should also work with any other filename combination:
 This should take the `foo.ml.template`, do the substitution and create
 `foo.ml`, thus be more flexible that the OPAM `substs` field:
 
-  $ dune build .pkg/test/target/
+  $ dune build _build/_private/.pkg/test/target/
   This is using a different file suffix
 
 Undefined variables, how do they substitute?
@@ -52,7 +52,7 @@ Undefined variables, how do they substitute?
   >   (substitute variables.ml.in variables.ml)
   >   (system "cat variables.ml")))
   > EOF
-  $ dune build .pkg/test/target/
+  $ dune build _build/_private/.pkg/test/target/
   We substitute this '%{var}%' into ''
 
 Now with variables set
@@ -85,7 +85,7 @@ Now with variables set
   >    (substitute defined.ml.in defined.ml))
   >   (system "cat defined.ml")))
   > EOF
-  $ dune build .pkg/test/target/
+  $ dune build _build/_private/.pkg/test/target/
   We substitute '%{name}%' into 'test' and '%{_:name}%' into 'test'
   And '%{version}%' is set to 'dev'
   There is also some paths set:
@@ -123,6 +123,6 @@ It is also possible to use variables of your dependencies:
   > There is also some paths set:
   > '%%{dependency:lib}%%' is '%{dependency:lib}%'
   > EOF
-  $ dune build .pkg/test/target/
+  $ dune build _build/_private/.pkg/test/target/
   There is also some paths set:
   '%{dependency:lib}%' is '_build/default/.pkg/test/target/lib/test'

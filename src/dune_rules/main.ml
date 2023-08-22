@@ -83,7 +83,8 @@ let init
     ~contexts:
       (Memo.lazy_ (fun () ->
          let open Memo.O in
-         Workspace.workspace () >>| Workspace.build_contexts))
+         let+ defined = Workspace.workspace () >>| Workspace.build_contexts in
+         Private_context.t :: defined))
     ~cache_config
     ~cache_debug_flags
     ~rule_generator:(module Gen_rules)

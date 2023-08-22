@@ -19,5 +19,5 @@ Create a lockdir with a lockfile that runs the shell script in a build command.
   > EOF
 
 The build command is run from an environment including the custom PATH variable.
-  $ dune build .pkg/test/target/
+  $ dune build _build/_private/.pkg/test/target/
   Hello, World!

@@ -25,7 +25,7 @@ Packages can export environment variables
   >   (run mkdir -p %{prefix})))
   > EOF
 
-  $ dune build .pkg/usetest/target/
+  $ dune build _build/_private/.pkg/usetest/target/
   FOO=bar
   BAR=zzz:yyy:xxx
   OPAM_PACKAGE_NAME=usetest

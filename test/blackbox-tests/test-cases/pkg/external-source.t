@@ -15,7 +15,7 @@ Test that can fetch the sources from an external dir
   >   (run cp x %{prefix}/bin/x )))
   > EOF
 
-  $ dune build .pkg/test/target/bin/x
+  $ dune build _build/_private/.pkg/test/target/bin/x
 
   $ find _build/default/.pkg/test | sort
   _build/default/.pkg/test

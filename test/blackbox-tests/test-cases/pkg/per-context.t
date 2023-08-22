@@ -23,6 +23,6 @@ TODO: versioning will be added once this feature is stable
   > EOF
   $ ln -s foo.lock bar.lock
 
-  $ dune build .pkg/test/target
+  $ dune build _build/_private/.pkg/test/target
   building from foo
   building from default

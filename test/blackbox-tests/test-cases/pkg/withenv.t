@@ -16,7 +16,7 @@ Setting environment variables in actions
   >    (+= BAR ""))
   >   (system "echo XYZ=$XYZ; echo FOO=$FOO; echo BAR=$BAR")))
   > EOF
-  $ dune build .pkg/test/target/
+  $ dune build _build/_private/.pkg/test/target/
   XYZ=111:000
   FOO=myfoo
   BAR=yyy:xxx

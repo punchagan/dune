@@ -28,7 +28,7 @@ Test that we can set variables
   >   (run mkdir -p %{prefix})))
   > EOF
 
-  $ dune build .pkg/usetest/target/
+  $ dune build _build/_private/.pkg/usetest/target/
   true
   foobar
   foo bar

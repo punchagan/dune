@@ -23,7 +23,7 @@ Additional files overlaid on top of the source can be found in the
   > bar from test.files
   > EOF
 
-  $ dune build .pkg/test/target/
+  $ dune build _build/_private/.pkg/test/target/
   foo:
   foo from test.files
   bar:

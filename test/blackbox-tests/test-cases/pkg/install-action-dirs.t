@@ -8,7 +8,7 @@ Install actions should have the switch directory prepared:
   > (install (system "find %{prefix} | sort"))
   > EOF
 
-  $ dune build .pkg/test/target/
+  $ dune build _build/_private/.pkg/test/target/
   ../target
   ../target/bin
   ../target/doc

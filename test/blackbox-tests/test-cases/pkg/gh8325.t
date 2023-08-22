@@ -20,7 +20,7 @@ And we have a package we want to build
   > (build
   >  (system "command -v cat > /dev/null 2>&1 || echo no cat"))
   > EOF
-  $ dune build .pkg/test/target/
+  $ dune build _build/_private/.pkg/test/target/
 
 Now it fails since adding the dependency modified PATH.
 
@@ -31,4 +31,4 @@ Now it fails since adding the dependency modified PATH.
   > (build
   >  (system "command -v cat > /dev/null 2>&1 || echo no cat"))
   > EOF
-  $ dune build .pkg/test/target/
+  $ dune build _build/_private/.pkg/test/target/

@@ -21,7 +21,7 @@ Fetch from more than one source
   >  (system "find . | sort -u"))
   > EOF
 
-  $ dune build .pkg/test/target/
+  $ dune build _build/_private/.pkg/test/target/
   .
   ./bar
   ./mybaz

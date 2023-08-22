@@ -24,6 +24,6 @@ Applying patches
   > +Hello World
   > EOF
 
-  $ dune build .pkg/test/target/
+  $ dune build _build/_private/.pkg/test/target/
   patching file foo.ml
   Hello World

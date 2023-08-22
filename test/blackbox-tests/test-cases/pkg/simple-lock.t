@@ -11,7 +11,7 @@ Test that we run the build command
   >   (run touch %{prefix}/bin/foo)))
   > EOF
 
-  $ dune build .pkg/test/target/bin/foo
+  $ dune build _build/_private/.pkg/test/target/bin/foo
 
   $ find _build/default/.pkg/test | sort
   _build/default/.pkg/test

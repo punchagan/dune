@@ -26,7 +26,7 @@ Test that installed binaries are visible in dependent packages
   >   (run mkdir -p %{prefix})))
   > EOF
 
-  $ dune build .pkg/usetest/target/
+  $ dune build _build/_private/.pkg/usetest/target/
   from test package
 
   $ find _build/default/.pkg/test/target | sort

@@ -8,7 +8,7 @@ Testing install actions
   > (install (system "echo foobar; mkdir -p %{lib}; touch %{lib}/xxx"))
   > EOF
 
-  $ dune build .pkg/test/target/
+  $ dune build _build/_private/.pkg/test/target/
   foobar
 
   $ find _build/default/.pkg/test/target | sort
