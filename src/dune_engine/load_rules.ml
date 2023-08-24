@@ -2,7 +2,7 @@ open Import
 open Memo.O
 module Action_builder = Action_builder0
 module Gen_rules = Build_config.Gen_rules
-module Context_or_install = Gen_rules.Context_or_install
+module Context_type = Gen_rules.Context_type
 module Build_only_sub_dirs = Gen_rules.Build_only_sub_dirs
 
 module type Rule_generator = Gen_rules.Rule_generator
@@ -49,7 +49,8 @@ module Dir_triage = struct
     (* invariant: [dir = context_or_install / sub_dir] *)
     type t =
       { dir : Path.Build.t
-      ; context_or_install : Context_or_install.t
+      ; context_or_install : Context_name.t
+      ; context_type : Context_type.t
       ; sub_dir : Path.Source.t
       }
 
@@ -61,10 +62,7 @@ module Dir_triage = struct
 
     let parent t =
       Option.map (Path.Source.parent t.sub_dir) ~f:(fun sub_dir ->
-        { dir = Path.Build.parent_exn t.dir
-        ; context_or_install = t.context_or_install
-        ; sub_dir
-        })
+        { t with dir = Path.Build.parent_exn t.dir; sub_dir })
     ;;
   end
 
@@ -106,18 +104,8 @@ let get_dir_triage ~dir =
     let allowed_subdirs =
       Subdir_set.to_dir_set
         (Subdir_set.of_list
-           (([ Dpath.Build.anonymous_actions_dir; Dpath.Build.install_dir ]
-             |> List.map ~f:Path.Build.basename)
+           (([ Dpath.Build.anonymous_actions_dir ] |> List.map ~f:Path.Build.basename)
             @ (Context_name.Map.keys contexts |> List.map ~f:Context_name.to_string)))
-    in
-    Dir_triage.Known (Loaded.no_rules ~allowed_subdirs)
-  | Build (Install Root) ->
-    let+ contexts = Memo.Lazy.force (Build_config.get ()).contexts in
-    let allowed_subdirs =
-      Context_name.Map.keys contexts
-      |> List.map ~f:Context_name.to_string
-      |> Subdir_set.of_list
-      |> Subdir_set.to_dir_set
     in
     Dir_triage.Known (Loaded.no_rules ~allowed_subdirs)
   | Build (Anonymous_action p) ->
@@ -127,16 +115,20 @@ let get_dir_triage ~dir =
       [ "dir", Path.Build.to_dyn build_dir ]
   | Build (Invalid _) ->
     Memo.return @@ Dir_triage.Known (Loaded.no_rules ~allowed_subdirs:Dir_set.empty)
-  | Build (Install (With_context (context_name, sub_dir))) ->
-    (* In this branch, [dir] is in the build directory. *)
-    let dir = Path.as_in_build_dir_exn dir in
-    let context_or_install = Context_or_install.Install context_name in
-    Memo.return (Dir_triage.Build_directory { dir; context_or_install; sub_dir })
   | Build (Regular (With_context (context_name, sub_dir))) ->
     (* In this branch, [dir] is in the build directory. *)
     let dir = Path.as_in_build_dir_exn dir in
-    let context_or_install = Context_or_install.Context context_name in
-    Memo.return (Dir_triage.Build_directory { dir; context_or_install; sub_dir })
+    let+ context_type =
+      let+ contexts = Memo.Lazy.force (Build_config.get ()).contexts in
+      match Context_name.Map.find contexts context_name with
+      | Some (_, type_) -> type_
+      | None ->
+        Code_error.raise
+          "called get_dir_triage on an incorrect context"
+          [ "context_name", Context_name.to_dyn context_name ]
+    in
+    Dir_triage.Build_directory
+      { dir; context_or_install = context_name; context_type; sub_dir }
 ;;
 
 let describe_rule (rule : Rule.t) =
@@ -251,17 +243,6 @@ let no_rule_found ~loc fn =
       User_error.raise
         [ Pp.textf
             "Trying to build %s but build context %s doesn't exist."
-            (Path.Build.to_string_maybe_quoted fn)
-            (Context_name.to_string ctx)
-        ]
-        ~hints:(hints ctx)
-  | Install (ctx, _) ->
-    if Context_name.Map.mem contexts ctx
-    then fail fn ~loc
-    else
-      User_error.raise
-        [ Pp.textf
-            "Trying to build %s for install but build context %s doesn't exist."
             (Path.Build.to_string_maybe_quoted fn)
             (Context_name.to_string ctx)
         ]
@@ -491,7 +472,7 @@ end = struct
       let module Source_tree = (val (Build_config.get ()).source_tree) in
       let corresponding_source_dir =
         match Dpath.analyse_target dir with
-        | Install _ | Alias _ | Anonymous_action _ | Other _ -> Memo.return None
+        | Alias _ | Anonymous_action _ | Other _ -> Memo.return None
         | Regular (_ctx, sub_dir) -> Source_tree.find_dir sub_dir
       in
       corresponding_source_dir
@@ -624,7 +605,8 @@ end = struct
     ;;
 
     let call_rules_generator
-      ({ Dir_triage.Build_directory.dir; context_or_install; sub_dir } as d)
+      ({ Dir_triage.Build_directory.dir; context_or_install; context_type = _; sub_dir }
+       as d)
       =
       let (module RG : Rule_generator) = (Build_config.get ()).rule_generator in
       let sub_dir_components = Path.Source.explode sub_dir in
@@ -634,13 +616,13 @@ end = struct
       | Unknown_context_or_install ->
         Code_error.raise
           "[gen_rules] did not specify rules for the context"
-          [ "context_or_install", Context_or_install.to_dyn context_or_install ]
+          [ "context_or_install", Context_name.to_dyn context_or_install ]
       | Redirect_to_parent child ->
         (match Dir_triage.Build_directory.parent d with
          | None ->
            Code_error.raise
              "[gen_rules] returned Redirect_to_parent on a root directory"
-             [ "context_or_install", Context_or_install.to_dyn context_or_install ]
+             [ "context_or_install", Context_name.to_dyn context_or_install ]
          | Some parent ->
            let child = Normal.make_rules_gen_result ~of_:dir child in
            let+ parent = Gen_rules.gen_rules parent in
@@ -728,64 +710,62 @@ end = struct
           })
   ;;
 
-  type source_rules =
-    { source_files : Path.Source.Set.t
-    ; source_dirs : Filename.Set.t
-    ; copy_rules : Rule.t list
-    }
+  module Source_rules = struct
+    type t =
+      { source_files : Path.Source.Set.t
+      ; source_dirs : Filename.Set.t
+      ; copy_rules : Rule.t list
+      }
+
+    let empty =
+      { source_files = Path.Source.Set.empty
+      ; source_dirs = Filename.Set.empty
+      ; copy_rules = []
+      }
+    ;;
+  end
 
   (* Compute all the copying rules from the source directory. *)
-  let rules_from_source_dir
-    source_paths_to_ignore
-    (context_or_install : Context_or_install.t)
-    sub_dir
+  let rules_from_source_dir source_paths_to_ignore (context_name : Context_name.t) sub_dir
     =
-    match context_or_install with
-    | Install _ ->
-      Memo.return
-        { source_files = Path.Source.Set.empty
-        ; source_dirs = Filename.Set.empty
-        ; copy_rules = []
-        }
-    | Context context_name ->
-      (* Take into account the source files *)
-      let+ source_files, source_dirs =
-        let+ files, subdirs =
-          let module Source_tree = (val (Build_config.get ()).source_tree) in
-          Source_tree.find_dir sub_dir
-          >>| function
-          | None -> Path.Source.Set.empty, Filename.Set.empty
-          | Some dir -> Source_tree.Dir.file_paths dir, Source_tree.Dir.sub_dir_names dir
-        in
-        let files =
-          let source_files_to_ignore =
-            Path.Build.Set.to_list_map
-              ~f:Path.Build.drop_build_context_exn
-              source_paths_to_ignore.files
-            |> Path.Source.Set.of_list
-          in
-          Path.Source.Set.diff files source_files_to_ignore
-        in
-        let subdirs = Filename.Set.diff subdirs source_paths_to_ignore.dirnames in
-        files, subdirs
+    (* Take into account the source files *)
+    let+ source_files, source_dirs =
+      let+ files, subdirs =
+        let module Source_tree = (val (Build_config.get ()).source_tree) in
+        Source_tree.find_dir sub_dir
+        >>| function
+        | None -> Path.Source.Set.empty, Filename.Set.empty
+        | Some dir -> Source_tree.Dir.file_paths dir, Source_tree.Dir.sub_dir_names dir
       in
-      (* Compile the rules and cleanup stale artifacts *)
-      let copy_rules =
-        let ctx_dir = Context_name.build_dir context_name in
-        create_copy_rules ~ctx_dir ~non_target_source_files:source_files
+      let files =
+        let source_files_to_ignore =
+          Path.Build.Set.to_list_map
+            ~f:Path.Build.drop_build_context_exn
+            source_paths_to_ignore.files
+          |> Path.Source.Set.of_list
+        in
+        Path.Source.Set.diff files source_files_to_ignore
       in
-      { source_files; source_dirs; copy_rules }
+      let subdirs = Filename.Set.diff subdirs source_paths_to_ignore.dirnames in
+      files, subdirs
+    in
+    (* Compile the rules and cleanup stale artifacts *)
+    let copy_rules =
+      let ctx_dir = Context_name.build_dir context_name in
+      create_copy_rules ~ctx_dir ~non_target_source_files:source_files
+    in
+    { Source_rules.source_files; source_dirs; copy_rules }
   ;;
 
   let descendants_to_keep
-    { Dir_triage.Build_directory.dir; context_or_install; sub_dir }
+    { Dir_triage.Build_directory.dir; context_or_install = _; context_type; sub_dir }
     (build_dir_only_sub_dirs : Subdir_set.t)
     ~source_dirs
     rules_produced
     =
     let* allowed_by_parent =
-      match context_or_install, Path.Source.to_string sub_dir with
-      | Context _, ".dune" ->
+      match context_type, Path.Source.to_string sub_dir with
+      | With_sources, ".dune" ->
         (* GROSS HACK: this is to avoid a cycle as the rules for all
            directories force the generation of ".dune/configurator". We need a
            better way to deal with such cases. *)
@@ -866,7 +846,8 @@ end = struct
   ;;
 
   let load_build_directory_exn
-    ({ Dir_triage.Build_directory.dir; context_or_install; sub_dir } as build_dir)
+    ({ Dir_triage.Build_directory.dir; context_or_install; context_type; sub_dir } as
+     build_dir)
     =
     (* Load all the rules *)
     Gen_rules.gen_rules build_dir
@@ -892,11 +873,14 @@ end = struct
       (* Compute the set of sources and targets promoted to the source tree that
          must not be copied to the build directory. *)
       (* Take into account the source files *)
-      let* { source_files; source_dirs; copy_rules } =
-        let source_paths_to_ignore =
-          source_paths_to_ignore ~dir build_dir_only_sub_dirs rules
-        in
-        rules_from_source_dir source_paths_to_ignore context_or_install sub_dir
+      let* { Source_rules.source_files; source_dirs; copy_rules } =
+        match context_type with
+        | Empty -> Memo.return Source_rules.empty
+        | With_sources ->
+          let source_paths_to_ignore =
+            source_paths_to_ignore ~dir build_dir_only_sub_dirs rules
+          in
+          rules_from_source_dir source_paths_to_ignore context_or_install sub_dir
       in
       (* Compile the rules and cleanup stale artifacts *)
       let rules =
@@ -928,9 +912,9 @@ end = struct
               (Path.Build.local dir))
          ~subdirs_to_keep);
       let+ aliases =
-        match context_or_install with
-        | Context _ -> compute_alias_expansions ~collected ~dir
-        | Install _ ->
+        match context_type with
+        | With_sources -> compute_alias_expansions ~collected ~dir
+        | Empty ->
           (* There are no aliases in the [_build/install] directory *)
           Memo.return Alias.Name.Map.empty
       in
