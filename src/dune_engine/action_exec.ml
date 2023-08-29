@@ -696,12 +696,13 @@ let exec
         Execution_parameters.add_workspace_root_to_build_path_prefix_map
           execution_parameters
       with
-      | false -> env
-      | true ->
+      | Do_not_add -> env
+      | Add_value target ->
         Dune_util.Build_path_prefix_map.extend_build_path_prefix_map
           env
           `New_rules_have_precedence
-          [ Some { source = Path.to_absolute_filename root; target = "/workspace_root" } ]
+          (* TODO generify *)
+          [ Some { source = Path.to_absolute_filename root; target } ]
     in
     { working_dir = Path.root
     ; env

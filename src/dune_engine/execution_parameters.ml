@@ -27,13 +27,35 @@ module Action_output_limit = struct
   let equal = Int.equal
 end
 
+module Workspace_root = struct
+  type t =
+    | Do_not_add
+    | Add_value of string
+
+  let equal x y =
+    match x, y with
+    | Do_not_add, Do_not_add -> true
+    | Do_not_add, _ | _, Do_not_add -> false
+    | Add_value x, Add_value y -> String.equal x y
+  ;;
+
+  let to_dyn =
+    let open Dyn in
+    function
+    | Do_not_add -> variant "Do_not_add" []
+    | Add_value s -> variant "Add_value" [ string s ]
+  ;;
+
+  let default = Add_value "/workspace_root"
+end
+
 type t =
   { action_stdout_on_success : Action_output_on_success.t
   ; action_stderr_on_success : Action_output_on_success.t
   ; action_stdout_limit : Action_output_limit.t
   ; action_stderr_limit : Action_output_limit.t
   ; expand_aliases_in_sandbox : bool
-  ; add_workspace_root_to_build_path_prefix_map : bool
+  ; add_workspace_root_to_build_path_prefix_map : Workspace_root.t
   ; should_remove_write_permissions_on_generated_files : bool
   }
 
@@ -53,7 +75,7 @@ let equal
   && Action_output_limit.equal action_stdout_limit t.action_stdout_limit
   && Action_output_limit.equal action_stderr_limit t.action_stderr_limit
   && Bool.equal expand_aliases_in_sandbox t.expand_aliases_in_sandbox
-  && Bool.equal
+  && Workspace_root.equal
        add_workspace_root_to_build_path_prefix_map
        t.add_workspace_root_to_build_path_prefix_map
   && Bool.equal
@@ -98,7 +120,7 @@ let to_dyn
     ; "action_stderr_limit", Action_output_limit.to_dyn action_stderr_limit
     ; "expand_aliases_in_sandbox", Bool expand_aliases_in_sandbox
     ; ( "add_workspace_root_to_build_path_prefix_map"
-      , Bool add_workspace_root_to_build_path_prefix_map )
+      , Workspace_root.to_dyn add_workspace_root_to_build_path_prefix_map )
     ; ( "should_remove_write_permissions_on_generated_files"
       , Bool should_remove_write_permissions_on_generated_files )
     ]
@@ -110,7 +132,7 @@ let builtin_default =
   ; action_stdout_limit = Action_output_limit.default
   ; action_stderr_limit = Action_output_limit.default
   ; expand_aliases_in_sandbox = true
-  ; add_workspace_root_to_build_path_prefix_map = true
+  ; add_workspace_root_to_build_path_prefix_map = Workspace_root.default
   ; should_remove_write_permissions_on_generated_files = true
   }
 ;;

@@ -49,14 +49,20 @@ end
 
 (** {1 Constructors} *)
 
+module Workspace_root : sig
+  type t =
+    | Do_not_add
+    | Add_value of string
+end
+
 val builtin_default : t
 val set_action_stdout_on_success : Action_output_on_success.t -> t -> t
 val set_action_stderr_on_success : Action_output_on_success.t -> t -> t
 val set_action_stdout_limit : Action_output_limit.t -> t -> t
 val set_action_stderr_limit : Action_output_limit.t -> t -> t
 val set_expand_aliases_in_sandbox : bool -> t -> t
-val set_add_workspace_root_to_build_path_prefix_map : bool -> t -> t
-val add_workspace_root_to_build_path_prefix_map : t -> bool
+val set_add_workspace_root_to_build_path_prefix_map : Workspace_root.t -> t -> t
+val add_workspace_root_to_build_path_prefix_map : t -> Workspace_root.t
 val set_should_remove_write_permissions_on_generated_files : bool -> t -> t
 
 (** As configured by [init] *)
