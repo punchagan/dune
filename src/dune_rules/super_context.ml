@@ -1,7 +1,7 @@
 open Import
 
-let default_context_flags (ctx : Context.t) ~project =
-  let cflags = Ocaml_config.ocamlc_cflags ctx.ocaml.ocaml_config in
+let default_context_flags (ctx : Build_context.t) ocaml_config ~project =
+  let cflags = Ocaml_config.ocamlc_cflags ocaml_config in
   let c, cxx =
     let cxxflags =
       List.filter cflags ~f:(fun s -> not (String.is_prefix s ~prefix:"-std="))
@@ -11,13 +11,13 @@ let default_context_flags (ctx : Context.t) ~project =
     | Some true ->
       let open Action_builder.O in
       let c =
-        let+ cc = Cxx_flags.ccomp_type ctx.build_context in
+        let+ cc = Cxx_flags.ccomp_type ctx in
         let fdiagnostics_color = Cxx_flags.fdiagnostics_color cc in
-        cflags @ Ocaml_config.ocamlc_cppflags ctx.ocaml.ocaml_config @ fdiagnostics_color
+        cflags @ Ocaml_config.ocamlc_cppflags ocaml_config @ fdiagnostics_color
       in
       let cxx =
-        let+ cc = Cxx_flags.ccomp_type ctx.build_context
-        and+ db_flags = Cxx_flags.get_flags ~for_:Compile ctx.build_context in
+        let+ cc = Cxx_flags.ccomp_type ctx
+        and+ db_flags = Cxx_flags.get_flags ~for_:Compile ctx in
         let fdiagnostics_color = Cxx_flags.fdiagnostics_color cc in
         db_flags @ cxxflags @ fdiagnostics_color
       in
@@ -133,10 +133,11 @@ end = struct
 
   let get_impl t dir =
     let* scope = Scope.DB.find_by_dir dir in
+    let project = Scope.project scope in
     let inherit_from =
       if Path.Build.equal dir (Scope.root scope)
       then (
-        let format_config = Dune_project.format_config (Scope.project scope) in
+        let format_config = Dune_project.format_config project in
         Memo.lazy_ (fun () ->
           let+ default_env = Memo.Lazy.force t.default_env in
           Env_node.set_format_config default_env format_config))
@@ -149,8 +150,9 @@ end = struct
         | Some parent -> Memo.lazy_ (fun () -> get_node t ~dir:parent))
     in
     let+ config_stanza = get_env_stanza ~dir in
-    let project = Scope.project scope in
-    let default_context_flags = default_context_flags t.context ~project in
+    let default_context_flags =
+      default_context_flags t.context.build_context t.context.ocaml.ocaml_config ~project
+    in
     let expander_for_artifacts =
       Memo.lazy_ (fun () ->
         let* external_env = external_env t ~dir in
@@ -385,6 +387,120 @@ let resolve_program t ~dir ?hint ~loc bin =
   Artifacts.Bin.binary ?hint ~loc bin_artifacts bin
 ;;
 
+let make_context_env context ~context_env stanzas packages =
+  let+ package_sections =
+    (* Add the section of the site mentioned in stanzas (it could be a site
+       of an external package) *)
+    let add_in_package_section m pkg section =
+      Package.Name.Map.update m pkg ~f:(function
+        | None -> Some (Section.Set.singleton section)
+        | Some s -> Some (Section.Set.add s section))
+    in
+    let+ package_sections =
+      let* sites = Sites.create context in
+      Dune_file.Memo_fold.fold_stanzas
+        stanzas
+        ~init:Package.Name.Map.empty
+        ~f:(fun _ stanza acc ->
+          let add_in_package_sites acc pkg site loc =
+            let+ section = Sites.section_of_site sites ~loc ~pkg ~site in
+            add_in_package_section acc pkg section
+          in
+          match stanza with
+          | Dune_file.Install { section = Site { pkg; site; loc }; _ } ->
+            add_in_package_sites acc pkg site loc
+          | Dune_file.Plugin { site = loc, (pkg, site); _ } ->
+            add_in_package_sites acc pkg site loc
+          | _ -> Memo.return acc)
+    in
+    (* Add the site of the local package: it should only useful for making
+       sure that at least one location is given to the site of local package
+       because if the site is used it should already be in
+       [packages_sections] *)
+    Package.Name.Map.foldi
+      packages
+      ~init:package_sections
+      ~f:(fun package_name (package : Package.t) acc ->
+        Site.Map.fold package.sites ~init:acc ~f:(fun section acc ->
+          add_in_package_section acc package_name section))
+  in
+  let env_dune_dir_locations =
+    let roots =
+      Install.Context.dir ~context |> Path.build |> Install.Roots.opam_from_prefix
+    in
+    let init =
+      match Stdune.Env.get context_env Dune_site_private.dune_dir_locations_env_var with
+      | None -> []
+      | Some var ->
+        (match Dune_site_private.decode_dune_dir_locations var with
+         | Some s -> s
+         | None ->
+           User_error.raise
+             [ Pp.textf
+                 "Invalid env var %s=%S"
+                 Dune_site_private.dune_dir_locations_env_var
+                 var
+             ])
+    in
+    Package.Name.Map.foldi ~init package_sections ~f:(fun package_name sections init ->
+      let paths = Install.Paths.make ~package:package_name ~roots in
+      Section.Set.fold sections ~init ~f:(fun section acc ->
+        let package = Package.Name.to_string package_name in
+        let dir = Path.to_absolute_filename (Install.Paths.get paths section) in
+        { Dune_site_private.package; dir; section } :: acc))
+  in
+  if List.is_empty env_dune_dir_locations
+  then context_env
+  else
+    Stdune.Env.add
+      context_env
+      ~var:Dune_site_private.dune_dir_locations_env_var
+      ~value:(Dune_site_private.encode_dune_dir_locations env_dune_dir_locations)
+;;
+
+let make_default_env_node
+  ocaml_config
+  (context : Build_context.t)
+  profile
+  root_expander
+  (env_nodes : Context.Env_nodes.t)
+  ~context_env
+  ~(artifacts : Artifacts.t)
+  =
+  let make ~inherit_from ~config_stanza =
+    let config_stanza = Option.value config_stanza ~default:Dune_env.Stanza.empty in
+    let dir = context.build_dir in
+    let+ scope = Scope.DB.find_by_dir dir in
+    let project = Scope.project scope in
+    let default_context_flags = default_context_flags context ocaml_config ~project in
+    let expander_for_artifacts =
+      Memo.lazy_ (fun () ->
+        Code_error.raise "[expander_for_artifacts] in [default_env] is undefined" [])
+    in
+    Dune_env.Stanza.fire_hooks config_stanza ~profile;
+    let expander = Memo.Lazy.of_val (Expander.set_dir ~dir root_expander) in
+    Env_node.make
+      context
+      ~dir
+      ~scope
+      ~inherit_from
+      ~config_stanza
+      ~profile
+      ~expander
+      ~expander_for_artifacts
+      ~default_context_flags
+      ~default_env:context_env
+      ~default_bin_artifacts:artifacts.bin
+      ~default_bin_annot:true
+  in
+  make
+    ~config_stanza:env_nodes.context
+    ~inherit_from:
+      (Some
+         (Memo.lazy_ (fun () ->
+            make ~inherit_from:None ~config_stanza:env_nodes.workspace)))
+;;
+
 let create ~(context : Context.t) ~host ~packages ~stanzas =
   let* artifacts = Artifacts_db.get context in
   let* root_expander =
@@ -406,114 +522,20 @@ let create ~(context : Context.t) ~host ~packages ~stanzas =
       ~lib_artifacts_host:artifacts_host.public_libs
   in
   let+ context_env =
-    let+ package_sections =
-      (* Add the section of the site mentioned in stanzas (it could be a site
-         of an external package) *)
-      let add_in_package_section m pkg section =
-        Package.Name.Map.update m pkg ~f:(function
-          | None -> Some (Section.Set.singleton section)
-          | Some s -> Some (Section.Set.add s section))
-      in
-      let+ package_sections =
-        let* sites = Sites.create context.name in
-        Dune_file.Memo_fold.fold_stanzas
-          stanzas
-          ~init:Package.Name.Map.empty
-          ~f:(fun _ stanza acc ->
-            let add_in_package_sites acc pkg site loc =
-              let+ section = Sites.section_of_site sites ~loc ~pkg ~site in
-              add_in_package_section acc pkg section
-            in
-            match stanza with
-            | Dune_file.Install { section = Site { pkg; site; loc }; _ } ->
-              add_in_package_sites acc pkg site loc
-            | Dune_file.Plugin { site = loc, (pkg, site); _ } ->
-              add_in_package_sites acc pkg site loc
-            | _ -> Memo.return acc)
-      in
-      (* Add the site of the local package: it should only useful for making
-         sure that at least one location is given to the site of local package
-         because if the site is used it should already be in
-         [packages_sections] *)
-      Package.Name.Map.foldi
-        packages
-        ~init:package_sections
-        ~f:(fun package_name (package : Package.t) acc ->
-          Site.Map.fold package.sites ~init:acc ~f:(fun section acc ->
-            add_in_package_section acc package_name section))
-    in
-    let env_dune_dir_locations =
-      let roots =
-        Install.Context.dir ~context:context.name
-        |> Path.build
-        |> Install.Roots.opam_from_prefix
-      in
-      let init =
-        match Stdune.Env.get context.env Dune_site_private.dune_dir_locations_env_var with
-        | None -> []
-        | Some var ->
-          (match Dune_site_private.decode_dune_dir_locations var with
-           | Some s -> s
-           | None ->
-             User_error.raise
-               [ Pp.textf
-                   "Invalid env var %s=%S"
-                   Dune_site_private.dune_dir_locations_env_var
-                   var
-               ])
-      in
-      Package.Name.Map.foldi ~init package_sections ~f:(fun package_name sections init ->
-        let paths = Install.Paths.make ~package:package_name ~roots in
-        Section.Set.fold sections ~init ~f:(fun section acc ->
-          let package = Package.Name.to_string package_name in
-          let dir = Path.to_absolute_filename (Install.Paths.get paths section) in
-          { Dune_site_private.package; dir; section } :: acc))
-    in
-    if List.is_empty env_dune_dir_locations
-    then context.env
-    else
-      Stdune.Env.add
-        context.env
-        ~var:Dune_site_private.dune_dir_locations_env_var
-        ~value:(Dune_site_private.encode_dune_dir_locations env_dune_dir_locations)
+    make_context_env context.name ~context_env:context.env stanzas packages
   in
   (* Env node that represents the environment configured for the workspace. It
      is used as default at the root of every project in the workspace. *)
   let default_env =
     Memo.lazy_ (fun () ->
-      let make ~inherit_from ~config_stanza =
-        let config_stanza = Option.value config_stanza ~default:Dune_env.Stanza.empty in
-        let dir = context.build_dir in
-        let+ scope = Scope.DB.find_by_dir dir in
-        let project = Scope.project scope in
-        let default_context_flags = default_context_flags context ~project in
-        let expander_for_artifacts =
-          Memo.lazy_ (fun () ->
-            Code_error.raise "[expander_for_artifacts] in [default_env] is undefined" [])
-        in
-        let profile = context.profile in
-        Dune_env.Stanza.fire_hooks config_stanza ~profile;
-        let expander = Memo.Lazy.of_val (Expander.set_dir ~dir root_expander) in
-        Env_node.make
-          context.build_context
-          ~dir
-          ~scope
-          ~inherit_from
-          ~config_stanza
-          ~profile
-          ~expander
-          ~expander_for_artifacts
-          ~default_context_flags
-          ~default_env:context_env
-          ~default_bin_artifacts:artifacts.bin
-          ~default_bin_annot:true
-      in
-      make
-        ~config_stanza:context.env_nodes.context
-        ~inherit_from:
-          (Some
-             (Memo.lazy_ (fun () ->
-                make ~inherit_from:None ~config_stanza:context.env_nodes.workspace))))
+      make_default_env_node
+        context.ocaml.ocaml_config
+        context.build_context
+        context.profile
+        root_expander
+        context.env_nodes
+        ~context_env
+        ~artifacts)
   in
   Env_tree.create
     ~context
