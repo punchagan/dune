@@ -1,6 +1,6 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1692572586403,
-  "repoUrl": "https://github.com/ocaml/dune",
+  "lastUpdate": 1715090590159,
+  "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
       {
@@ -91813,6 +91813,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": "23.171070034926668",
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@emillon.org",
+            "name": "Etienne Millon",
+            "username": "emillon"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "b076e9d8e9c9b242ff2d5d247bcdd2986afc25ce",
+          "message": "fix: handle trailing / in Path.External.drop_prefix (#10465)\n\n* fix: handle trailing / in Path.drop_prefix\r\n\r\nIn a nutshell:\r\n\r\n    # drop_prefix ~prefix:\"/a/b/c/\" \"/a/b/c/d/e\"\r\n    Some \"d/e\"\r\n\r\nThis improves the test situation on nix (#8203) in the default devshell,\r\nbecause the paths in `OCAMLPATH` can have trailing slashes.\r\n\r\nMore precisely, the `--sanitize-for-tests` options uses\r\n`Path.External.drop_prefix` to replace elements of `OCAMLPATH` by the\r\n`FINDLIB` string. If `OCAMLPATH` contains paths with trailing slashes,\r\nthese prefixes are not sanitized properly.\r\n\r\nSigned-off-by: Etienne Millon <me@emillon.org>\r\n\r\n* refactor: get rid of [Path.External.drop_prefix]\r\n\r\nJust as easily replaced by [Path.drop_prefix]. None of its uses were\r\nperformance critical, so the reduced complexity is more important here.\r\n\r\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>\r\nCo-authored-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2024-05-06T18:00:15+02:00",
+          "tree_id": "00f952c8c09315de56ee4a8de194f6ab1bcde383",
+          "url": "https://github.com/punchagan/dune/commit/b076e9d8e9c9b242ff2d5d247bcdd2986afc25ce"
+        },
+        "date": 1715090582228,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": "14.274188721853333",
             "unit": "seconds"
           }
         ]
