@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1715090968744,
+  "lastUpdate": 1717768999175,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -91929,6 +91929,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": "14.274188721853333",
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "stephen@sherra.tt",
+            "name": "Stephen Sherratt",
+            "username": "gridbugs"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "fed22c86a601ae49c0062506fb53aeb79ece09a0",
+          "message": "Use fixed version of mirage in mirage test (#10615)\n\nSigned-off-by: Stephen Sherratt <stephen@sherra.tt>",
+          "timestamp": "2024-06-06T23:07:13+10:00",
+          "tree_id": "99911c08755f55cbeec8b2ea6a16e6730e124730",
+          "url": "https://github.com/punchagan/dune/commit/fed22c86a601ae49c0062506fb53aeb79ece09a0"
+        },
+        "date": 1717768990935,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": "13.87198770144",
             "unit": "seconds"
           }
         ]
