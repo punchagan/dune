@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1717769365508,
+  "lastUpdate": 1724754211650,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -92045,6 +92045,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": "13.87198770144",
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ambre@tarides.com",
+            "name": "Ambre Austen Suhamy",
+            "username": "ElectreAAS"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "5607dd9428dd1a17d555f783665bbf3dc1762e87",
+          "message": "Enable dune cache by default (#10710)\n\n* Added feature flag to enable dune cache by default",
+          "timestamp": "2024-08-26T20:11:16+01:00",
+          "tree_id": "c60de72f01753a55e542e70663744bc5ece68834",
+          "url": "https://github.com/punchagan/dune/commit/5607dd9428dd1a17d555f783665bbf3dc1762e87"
+        },
+        "date": 1724754203046,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": "13.686477446466668",
             "unit": "seconds"
           }
         ]
