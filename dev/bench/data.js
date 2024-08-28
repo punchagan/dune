@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1724754580049,
+  "lastUpdate": 1724840932382,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -92161,6 +92161,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": "13.686477446466668",
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "punchagan@muse-amuse.in",
+            "name": "Puneeth Chaganti",
+            "username": "punchagan"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "beea68fded69a587c45a0f0340caa598da203748",
+          "message": "Encourage adding email in author & maintainer info (#10848)\n\nFor packages submitted to the opam-repository, it would help to have the\r\nemail addresses of the maintainers. See ocaml/infrastructure#152. This\r\ncommit subtly encourages package authors/maintainers to do so.\r\n\r\nSigned-off-by: Puneeth Chaganti <punchagan@muse-amuse.in>",
+          "timestamp": "2024-08-28T11:46:51+02:00",
+          "tree_id": "169772901e8a108938bd153d7005b70e8380bd87",
+          "url": "https://github.com/punchagan/dune/commit/beea68fded69a587c45a0f0340caa598da203748"
+        },
+        "date": 1724840924369,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": "13.911668278246667",
             "unit": "seconds"
           }
         ]
