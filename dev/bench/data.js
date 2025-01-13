@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1724841297764,
+  "lastUpdate": 1736749886171,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -92277,6 +92277,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": "13.911668278246667",
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "53c6dfc3e86b863121d9e0da65d9b87a67130870",
+          "message": "refactor(pkg): use stdune in sat solver (#11282)\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2025-01-12T17:03:38Z",
+          "tree_id": "432485e192b17f7aeda8b91a303622b539e0ed20",
+          "url": "https://github.com/punchagan/dune/commit/53c6dfc3e86b863121d9e0da65d9b87a67130870"
+        },
+        "date": 1736749877461,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": "14.72708763128",
             "unit": "seconds"
           }
         ]
