@@ -905,7 +905,7 @@ let spawn
   in
   let prog_str = Path.reach_for_running ?from:dir prog in
   let args, response_file =
-    if Sys.win32 && cmdline_approximate_length prog_str args >= 1024
+    if Sys.win32 && cmdline_approximate_length prog_str args >= 256
     then (
       match Response_file.get ~prog with
       | Not_supported -> args, None
