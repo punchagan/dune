@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1751884760316,
+  "lastUpdate": 1751884998933,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -71889,6 +71889,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": "0.99628080996",
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "stephen@sherra.tt",
+            "name": "Stephen Sherratt",
+            "username": "gridbugs"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "6d096f90f2da4cdc125b4c0613c126f8726d1b4d",
+          "message": "refactor: prefix rpc_ to rpc modules in bin (#11944)\n\nThis allows the Build_cmd module to be renamed to Build (directories to\nnot act like module namespaces in dune projects so rpc/build.ml and\nbuild.ml would otherwise conflict). Since all the other files\nimplementing direct dune subcommands do not have the \"_cmd\" suffix, this\nsuffix is removed from build_cmd.ml. We now need to rename rpc/build.ml,\nand since rpc/rpc_common.ml already exists, we follow suit to name it\nrpc/rpc_build.ml. Then for consistency, all other files in the rpc\ndirectory are renamed to rpc_*.\n\nSigned-off-by: Stephen Sherratt <stephen@sherra.tt>",
+          "timestamp": "2025-07-07T17:07:02+10:00",
+          "tree_id": "4ee66558f07b0405c9200232370ff4539797e92c",
+          "url": "https://github.com/punchagan/dune/commit/6d096f90f2da4cdc125b4c0613c126f8726d1b4d"
+        },
+        "date": 1751884998247,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": "46.81949922582667",
             "unit": "seconds"
           }
         ]
