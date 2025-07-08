@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1751885005808,
+  "lastUpdate": 1751973853989,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -92509,6 +92509,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": "15.629911151493332",
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "f52fbe1bd2c216f1795ef2ae82f3b59d1084a5ce",
+          "message": "refactor(cram): replace tuple with record (#11993)\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2025-07-07T23:42:07+01:00",
+          "tree_id": "fcd06b72b479270122281cc44d3a3d1aa4b4983e",
+          "url": "https://github.com/punchagan/dune/commit/f52fbe1bd2c216f1795ef2ae82f3b59d1084a5ce"
+        },
+        "date": 1751973845437,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": "15.532963226673333",
             "unit": "seconds"
           }
         ]
