@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1756813178029,
+  "lastUpdate": 1756813325672,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -28998,6 +28998,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "pupilfirst build time (Linux)",
             "value": "22.020598715006667",
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "49699333+dependabot[bot]@users.noreply.github.com",
+            "name": "dependabot[bot]",
+            "username": "dependabot[bot]"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "28b7e8f3b2563a6e2c9e8838ae774d1aa82c6d8d",
+          "message": "chore(deps): bump actions/checkout from 4 to 5 (#12380)",
+          "timestamp": "2025-09-01T13:16:55Z",
+          "tree_id": "8464f0b9172d90f1083479e3b8acf6e0a232bfca",
+          "url": "https://github.com/punchagan/dune/commit/28b7e8f3b2563a6e2c9e8838ae774d1aa82c6d8d"
+        },
+        "date": 1756813325146,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "pupilfirst build time (Linux)",
+            "value": "22.424336264546668",
             "unit": "seconds"
           }
         ]
