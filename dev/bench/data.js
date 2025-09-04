@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1756966495912,
+  "lastUpdate": 1756966637839,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -29027,6 +29027,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "pupilfirst build time (Linux)",
             "value": "22.424336264546668",
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "punchagan@muse-amuse.in",
+            "name": "Puneeth Chaganti",
+            "username": "punchagan"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "9da280f6341783a6180cc199357ad2e148cc6368",
+          "message": "doc: changing heading levels for sub-sections (#12389)\n\nThis commit correctly nests the sub-sections under the \"Package\nManagement in a Project\" section of the doc.\n\nSigned-off-by: Puneeth Chaganti <punchagan@muse-amuse.in>",
+          "timestamp": "2025-09-03T14:16:45-04:00",
+          "tree_id": "df8159903e2b53589d0cb42773c820ebedb40834",
+          "url": "https://github.com/punchagan/dune/commit/9da280f6341783a6180cc199357ad2e148cc6368"
+        },
+        "date": 1756966637281,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "pupilfirst build time (Linux)",
+            "value": "21.81629701845333",
             "unit": "seconds"
           }
         ]
