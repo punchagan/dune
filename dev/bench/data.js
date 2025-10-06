@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1759751753629,
+  "lastUpdate": 1759751761020,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -72266,6 +72266,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 47.16835144738,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "2127cae60f41621dd86effd1bd9a9cbbb78da1da",
+          "message": "Merge pull request #12336 from art-w/lib-field-parameters\n\nfeat(oxcaml): add parameters field for libraries",
+          "timestamp": "2025-10-06T11:38:39+02:00",
+          "tree_id": "f3eb0d5bdad556a6dfc2024140b9ad5097f757ae",
+          "url": "https://github.com/punchagan/dune/commit/2127cae60f41621dd86effd1bd9a9cbbb78da1da"
+        },
+        "date": 1759751760373,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.0735388373666668,
             "unit": "seconds"
           }
         ]
