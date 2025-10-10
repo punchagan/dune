@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1760067820947,
+  "lastUpdate": 1760067828418,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -72353,6 +72353,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 47.057396131240004,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "3802d479eb868e34da379d74bfb4fd36f413c44d",
+          "message": "Merge pull request #12543 from Leonidas-from-XIV/enable-pkg-in-tests\n\nEnable package management for more (pkg) tests",
+          "timestamp": "2025-10-08T11:40:19+02:00",
+          "tree_id": "1e9c52755b39764f2a0c80ddc0e1813d000671b6",
+          "url": "https://github.com/punchagan/dune/commit/3802d479eb868e34da379d74bfb4fd36f413c44d"
+        },
+        "date": 1760067827724,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.0986182965266666,
             "unit": "seconds"
           }
         ]
