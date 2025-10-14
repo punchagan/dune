@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1760067828418,
+  "lastUpdate": 1760458883947,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -93089,6 +93089,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 15.912713595599998,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ambre@tarides.com",
+            "name": "Ambre Austen Suhamy",
+            "username": "ElectreAAS"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "b003d1a9838c6bbce1de8f5773ee0953235bccec",
+          "message": "In CHANGES.md, fix the location of the changelog files (#12573)\n\nSigned-off-by: Ambre Austen Suhamy <ambre@tarides.com>",
+          "timestamp": "2025-10-14T16:00:02Z",
+          "tree_id": "6c96f72b1491b5c093dc5a8756abd57c5bafc540",
+          "url": "https://github.com/punchagan/dune/commit/b003d1a9838c6bbce1de8f5773ee0953235bccec"
+        },
+        "date": 1760458875078,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 15.897664138473333,
             "unit": "seconds"
           }
         ]
