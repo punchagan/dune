@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1760589467220,
+  "lastUpdate": 1760589474354,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -72527,6 +72527,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 46.38752819611333,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ambre@tarides.com",
+            "name": "Ambre Austen Suhamy",
+            "username": "ElectreAAS"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "f760557dbbee342b04e44063f1e7072cef9a044b",
+          "message": "Added changelog entry for previous PR (#12572)\n\n* Added changelog entry for previous PR\n\nSigned-off-by: Ambre Austen Suhamy <ambre@tarides.com>",
+          "timestamp": "2025-10-15T21:22:02+02:00",
+          "tree_id": "71f5d096c51412049c00978d2e70e3f2c7888280",
+          "url": "https://github.com/punchagan/dune/commit/f760557dbbee342b04e44063f1e7072cef9a044b"
+        },
+        "date": 1760589473733,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.0386432185733334,
             "unit": "seconds"
           }
         ]
