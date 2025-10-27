@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1761548454758,
+  "lastUpdate": 1761548462093,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -72701,6 +72701,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 46.965415073900004,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "anmonteiro@gmail.com",
+            "name": "Antonio Nuno Monteiro",
+            "username": "anmonteiro"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "686abc2473ca14708cfc8964610a11eff8aab30a",
+          "message": "test(melange): improve `@all` alias test (#12627)\n\nSigned-off-by: Antonio Nuno Monteiro <anmonteiro@gmail.com>",
+          "timestamp": "2025-10-25T21:41:39Z",
+          "tree_id": "9d11c59f415248c1e2300e20777366fd60449404",
+          "url": "https://github.com/punchagan/dune/commit/686abc2473ca14708cfc8964610a11eff8aab30a"
+        },
+        "date": 1761548461330,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.04096549676,
             "unit": "seconds"
           }
         ]
