@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1761629410033,
+  "lastUpdate": 1761629562575,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -29230,6 +29230,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "pupilfirst build time (Linux)",
             "value": 21.97967530968,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "fc0108c5e5c362ed848ea9afd95122010c0fa5d9",
+          "message": "Update changes (#12639)\n\n* Add CHANGES entry for #838\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2025-10-27T20:44:43Z",
+          "tree_id": "973b7fca09255b470edba3276bbe7c3a7e141225",
+          "url": "https://github.com/punchagan/dune/commit/fc0108c5e5c362ed848ea9afd95122010c0fa5d9"
+        },
+        "date": 1761629561742,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "pupilfirst build time (Linux)",
+            "value": 23.368075669013336,
             "unit": "seconds"
           }
         ]
