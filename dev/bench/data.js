@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1761723586984,
+  "lastUpdate": 1761723805388,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -72846,6 +72846,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 1.1130833946,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "stephen@sherra.tt",
+            "name": "Stephen Sherratt",
+            "username": "gridbugs"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "968e2557fd313f44874c38d849d8fd24cc1e2e9c",
+          "message": "pkg: relock ocamlformat when version changes (#12605)\n\nThe .ocamlformat file can contain the version of ocamlformat which a\nproject uses for autoformatting. Previously this file was used to\ndetermine which version of ocamlformat to install initially, but changes\nto the version specified in .ocamlformat did not cause dune to relock\nthe tool with the new version, leading to a mismatch between the\nspecified and installed versions of ocamlformat within a project.\n\nThis change allows dune to detect when the specified and locked versions\nof ocamlformat differ, and relocks (and re-installs) ocamlformat in this\ncase.\n\nSigned-off-by: Stephen Sherratt <stephen@sherra.tt>",
+          "timestamp": "2025-10-29T17:50:15+11:00",
+          "tree_id": "0507e56be72433313b41aab3cbdf3c3395e0f0f3",
+          "url": "https://github.com/punchagan/dune/commit/968e2557fd313f44874c38d849d8fd24cc1e2e9c"
+        },
+        "date": 1761723804745,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 43.03419995182,
             "unit": "seconds"
           }
         ]
