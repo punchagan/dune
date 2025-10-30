@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1761790475678,
+  "lastUpdate": 1761790712045,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -72933,6 +72933,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 0.9748837965133333,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "821ae4f3ee51abab5df2397bd1e14348ce6e0af3",
+          "message": "Merge pull request #12651 from Alizter/push-luppyxluzruz\n\ncram: rename conflict -> conflict_marker",
+          "timestamp": "2025-10-29T23:08:12Z",
+          "tree_id": "fcea2d2a97c9969dae62d974a59f504583c9b2b7",
+          "url": "https://github.com/punchagan/dune/commit/821ae4f3ee51abab5df2397bd1e14348ce6e0af3"
+        },
+        "date": 1761790711078,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 46.35259223406667,
             "unit": "seconds"
           }
         ]
