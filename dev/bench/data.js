@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1762168996529,
+  "lastUpdate": 1762169003949,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -73049,6 +73049,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 47.13291902798667,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "a677f99096fe8ae62eff4c880ba586ca19e49e27",
+          "message": "Merge pull request #12649 from punchagan/remove-hidden-lock-dir-dance\n\npkg: fall back to copy when renaming lock dir",
+          "timestamp": "2025-11-03T10:49:36Z",
+          "tree_id": "6000d185723e023a620d94011f5734a5aabd45cd",
+          "url": "https://github.com/punchagan/dune/commit/a677f99096fe8ae62eff4c880ba586ca19e49e27"
+        },
+        "date": 1762169003181,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.0662426948333332,
             "unit": "seconds"
           }
         ]
