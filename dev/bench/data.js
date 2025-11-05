@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1762310635286,
+  "lastUpdate": 1762310780839,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -29346,6 +29346,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "pupilfirst build time (Linux)",
             "value": 21.901149590273334,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "a6d78193c439e443776203c25014377dd35c2f86",
+          "message": "fix: -H for hidden modules (#12666)\n\n* fix: -H for hidden modules\n\nAlways make sure that hidden modules are available via -H when the compiler supports this -H flag.\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2025-11-04T22:20:37Z",
+          "tree_id": "9ac1026fadef56a96230ec6abe7882159efcc8f4",
+          "url": "https://github.com/punchagan/dune/commit/a6d78193c439e443776203c25014377dd35c2f86"
+        },
+        "date": 1762310779790,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "pupilfirst build time (Linux)",
+            "value": 21.896630184173336,
             "unit": "seconds"
           }
         ]
