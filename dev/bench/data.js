@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1762407226209,
+  "lastUpdate": 1762407461126,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -73194,6 +73194,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 1.0354420368533332,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "25157844468bcf5706e1a498fd9eb18e935d87f5",
+          "message": "Merge pull request #12675 from ElectreAAS/push-puoskmvorrun\n\nrefactor: add fire_notification to rpc_common and use in shutdown",
+          "timestamp": "2025-11-05T13:13:47Z",
+          "tree_id": "b8908cd4f89769628d4d8b44d78712abfcc6aa9a",
+          "url": "https://github.com/punchagan/dune/commit/25157844468bcf5706e1a498fd9eb18e935d87f5"
+        },
+        "date": 1762407460590,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 46.145228548906665,
             "unit": "seconds"
           }
         ]
