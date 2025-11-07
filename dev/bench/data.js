@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1762498376462,
+  "lastUpdate": 1762498384360,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -73310,6 +73310,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 48.239175668633344,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "2346113ccf4b8f0c241b72b8a52c80829fcb4500",
+          "message": "Merge pull request #12691 from Alizter/push-xvxvlytvxlnr\n\ndoc: (finally) add allow_empty to docs",
+          "timestamp": "2025-11-06T21:50:42Z",
+          "tree_id": "2906daf1f753aee8ade7d0cc2438c732d9c8efac",
+          "url": "https://github.com/punchagan/dune/commit/2346113ccf4b8f0c241b72b8a52c80829fcb4500"
+        },
+        "date": 1762498383372,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.06981260018,
             "unit": "seconds"
           }
         ]
