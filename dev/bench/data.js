@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1762782355183,
+  "lastUpdate": 1762782496254,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -29462,6 +29462,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "pupilfirst build time (Linux)",
             "value": 22.664091347419998,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "4421b9dbae53a5d3a942b9994b9661b310b7e3cb",
+          "message": "Merge pull request #12704 from ocaml/dependabot/github_actions/docker/metadata-action-5.9.0\n\nchore(deps): bump docker/metadata-action from 5.8.0 to 5.9.0",
+          "timestamp": "2025-11-10T13:17:32Z",
+          "tree_id": "5c9e201944617ea3c9e05da3e6e4285206bb6618",
+          "url": "https://github.com/punchagan/dune/commit/4421b9dbae53a5d3a942b9994b9661b310b7e3cb"
+        },
+        "date": 1762782495744,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "pupilfirst build time (Linux)",
+            "value": 21.693499704693334,
             "unit": "seconds"
           }
         ]
