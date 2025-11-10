@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1762762625728,
+  "lastUpdate": 1762762775165,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -29433,6 +29433,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "pupilfirst build time (Linux)",
             "value": 22.392052293779997,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "78236e057299303a1d8042d357abd34819ee1925",
+          "message": "Merge pull request #12686 from Alizter/push-kpxlutwryopo\n\nchore(nix): remove macos compat stubs",
+          "timestamp": "2025-11-07T10:09:45Z",
+          "tree_id": "3da79cb7a3ea48ea349f7b3a596a0a8643c08a59",
+          "url": "https://github.com/punchagan/dune/commit/78236e057299303a1d8042d357abd34819ee1925"
+        },
+        "date": 1762762774255,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "pupilfirst build time (Linux)",
+            "value": 22.664091347419998,
             "unit": "seconds"
           }
         ]
