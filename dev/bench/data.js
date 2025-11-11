@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1762782738932,
+  "lastUpdate": 1762859499697,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -94597,6 +94597,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 15.382983096446665,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "stephen@sherra.tt",
+            "name": "Stephen Sherratt",
+            "username": "gridbugs"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "21c3e949e3e4b2002e2b7e1b3eb144a4a4d80316",
+          "message": "Include non-platform-specific solver vars in portable lockdirs (#12678)\n\nPreviously all expanded solver variables were omitted from lockdirs, as\nsome solver variables are specific to the platform being solved for.\nThis was too strict, and meant that non-platform-specific solver\nvariables like \"with-doc\" were incorrectly omitted. This change adds\nnon-platform-specific expanded solver variables to portable lockdirs.\n\nSigned-off-by: Stephen Sherratt <stephen@sherra.tt>",
+          "timestamp": "2025-11-11T12:49:32+11:00",
+          "tree_id": "112e36acb1f12c204e9d404fe5c1e407fbcb4bcf",
+          "url": "https://github.com/punchagan/dune/commit/21c3e949e3e4b2002e2b7e1b3eb144a4a4d80316"
+        },
+        "date": 1762859489715,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 15.775213627926666,
             "unit": "seconds"
           }
         ]
