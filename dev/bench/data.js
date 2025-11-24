@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1763991383784,
+  "lastUpdate": 1763991529595,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -29520,6 +29520,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "pupilfirst build time (Linux)",
             "value": 22.502011464826666,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "ae2ce2b6809aa7365cbb587411c8385992ddbe30",
+          "message": "Merge pull request #12779 from Leonidas-from-XIV/dev-tool-lock-dir-var\n\nAdd variable in helpers to contain dev-tool lock dir location",
+          "timestamp": "2025-11-24T11:59:45Z",
+          "tree_id": "f93dc23a2a97b89e60a9ac36e216aaab68215a79",
+          "url": "https://github.com/punchagan/dune/commit/ae2ce2b6809aa7365cbb587411c8385992ddbe30"
+        },
+        "date": 1763991528643,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "pupilfirst build time (Linux)",
+            "value": 21.83601565424,
             "unit": "seconds"
           }
         ]
