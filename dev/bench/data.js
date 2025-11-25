@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1764064346180,
+  "lastUpdate": 1764064353861,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -73745,6 +73745,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 46.251479059219996,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "95431847d306a9b7b94748ec2c2903c989f34c34",
+          "message": "Demonstrate re-exports bug (#12783)\n\n* test: demonstrate issue with unused-libs and re_exports\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2025-11-25T00:02:48Z",
+          "tree_id": "2e9b43b632fd355143f36cbc271a2a3a43f83399",
+          "url": "https://github.com/punchagan/dune/commit/95431847d306a9b7b94748ec2c2903c989f34c34"
+        },
+        "date": 1764064352920,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.03975001784,
             "unit": "seconds"
           }
         ]
