@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1765954110336,
+  "lastUpdate": 1765954118070,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -73803,6 +73803,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 58.575876370846665,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "e5269e591a8c77843ca06ff0114576b0a9b55219",
+          "message": "Remove [set_log_file] (#12987)\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2025-12-16T21:22:52Z",
+          "tree_id": "0954b8bd6d352e243c408fb9ccaae8ac0e815fc2",
+          "url": "https://github.com/punchagan/dune/commit/e5269e591a8c77843ca06ff0114576b0a9b55219"
+        },
+        "date": 1765954117023,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.0231383684,
             "unit": "seconds"
           }
         ]
