@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1767609792264,
+  "lastUpdate": 1767610074630,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -73832,6 +73832,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 1.0231383684,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "c94dc66f34b1a183feff2c89ffd86f146608b21b",
+          "message": "refactor: merge dune_async_io and dune_scheduler (#13215)\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-01-05T10:13:59Z",
+          "tree_id": "1819ecd6bbfc9b35fa1529c7a5e1579bb599b2ea",
+          "url": "https://github.com/punchagan/dune/commit/c94dc66f34b1a183feff2c89ffd86f146608b21b"
+        },
+        "date": 1767610073728,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 55.966817163513326,
             "unit": "seconds"
           }
         ]
