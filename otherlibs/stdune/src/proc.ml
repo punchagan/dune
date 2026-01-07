@@ -23,6 +23,49 @@ let restore_cwd_and_execve prog argv ~env =
     Unix.execve prog argv env)
 ;;
 
+let get_win32_prog_and_args ~env ~dir prog args =
+  let get_cmd_and_args prog args =
+    let cmd, extra_args =
+      try
+        (* Check if first 2 chars are shebang *)
+        Io.with_file_in ~binary:true prog ~f:(fun ic ->
+          if really_input_string ic 2 <> "#!"
+          then None, []
+          else (
+            let line = input_line ic |> String.trim in
+            let parts = String.split_on_char ~sep:' ' line in
+            match parts with
+            | [] -> None, [] (* Empty shebang line *)
+            | executable_path :: exe_args ->
+              let exe_name = Filename.basename executable_path in
+              let exe, extra_args =
+                if exe_name <> "env"
+                then Some exe_name, exe_args
+                else (
+                  match exe_args with
+                  | [] -> None, [] (* env command with no args *)
+                  | name :: cmd_args -> Some name, cmd_args)
+              in
+              exe, extra_args))
+      with
+      | Not_found -> None, args
+    in
+    match cmd with
+    | None -> prog, args
+    | Some cmd ->
+      (* FIXME: Env.initial?  *)
+      let path = Option.value env ~default:Env.initial |> Env_path.path in
+      (match Bin.which ~path cmd with
+       | None -> prog, args
+       | Some cmd ->
+         let prog_str = Path.reach_for_running ?from:dir prog in
+         let args = List.concat [ extra_args; prog_str :: args ] in
+         cmd, args)
+  in
+  (* Check if we are on Windows and change the prog being used if required *)
+  if not Sys.win32 then prog, args else get_cmd_and_args prog args
+;;
+
 module Resource_usage = struct
   type t =
     { user_cpu_time : float

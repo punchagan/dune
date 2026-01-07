@@ -983,6 +983,7 @@ let run_internal
       | Some p -> if Path.is_root p then None else Some p
     in
     let id = Running_jobs.Id.gen () in
+    let prog, args = Proc.get_win32_prog_and_args ~env ~dir prog args in
     let prog_str = Path.reach_for_running ?from:dir prog in
     let command_line =
       command_line ~prog:prog_str ~args ~dir ~stdout_to ~stderr_to ~stdin_from

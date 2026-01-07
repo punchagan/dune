@@ -40,3 +40,11 @@ type wait =
 
 (** This function is not implemented on Windows *)
 val wait : wait -> Unix.wait_flag list -> Process_info.t
+
+(* FIXME: What's the right place to put this? *)
+val get_win32_prog_and_args
+  :  env:Env.t option
+  -> dir:Path.t option
+  -> Path.t
+  -> string list
+  -> Path.t * string list
