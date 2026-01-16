@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1768209134482,
+  "lastUpdate": 1768550090624,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -95148,6 +95148,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 20.271864057780004,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "brianmward99@gmail.com",
+            "name": "Brian Ward",
+            "username": "WardBrian"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "b2a1a5e2b0a2e25222af08b01bd463a1f6bb9906",
+          "message": "test: add test for #13307 (#13313)\n\nAdds an (even smaller) reproduction of the issue in #13307 as a test\ncase\n\n---------\n\nSigned-off-by: Brian Ward <bward@flatironinstitute.org>",
+          "timestamp": "2026-01-15T22:36:34Z",
+          "tree_id": "1806720390e37e98e78e111e76d6f593368e4f30",
+          "url": "https://github.com/punchagan/dune/commit/b2a1a5e2b0a2e25222af08b01bd463a1f6bb9906"
+        },
+        "date": 1768550081599,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 19.921942812466668,
             "unit": "seconds"
           }
         ]
