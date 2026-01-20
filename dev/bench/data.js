@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1768882233939,
+  "lastUpdate": 1768902910510,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -95322,6 +95322,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 19.9599942009,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "anmonteiro@gmail.com",
+            "name": "Antonio Nuno Monteiro",
+            "username": "anmonteiro"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "1f6cb53412ecded8502375340652edcc0bd1791e",
+          "message": "refactor(compilation_context): store stdlib flags in the compilation context (#13373)\n\nSigned-off-by: Antonio Nuno Monteiro <anmonteiro@gmail.com>",
+          "timestamp": "2026-01-19T19:02:37-08:00",
+          "tree_id": "79a8d29ed1204f67e36ea71db7386cdbcccb44f3",
+          "url": "https://github.com/punchagan/dune/commit/1f6cb53412ecded8502375340652edcc0bd1791e"
+        },
+        "date": 1768902901373,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 19.813236844326667,
             "unit": "seconds"
           }
         ]
