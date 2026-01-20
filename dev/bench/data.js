@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1768550397946,
+  "lastUpdate": 1768881926392,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -95235,6 +95235,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 19.921942812466668,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "thomas@gazagnaire.org",
+            "name": "Thomas Gazagnaire",
+            "username": "samoht"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "c4d32400299a8818d182c58ebbd7de506e99611d",
+          "message": "Revert \"fix(test): make macOS file watcher tests less flaky (#13316)\" (#13380)\n\nThis reverts commit d52ff76c81824574a2a135b56f512b7b84d5fbf6.\n\nThe root cause is actually a bug in the FSEvent bindings (see #13324),\nso it's best to fix the bug rather than the tests!\n\nSigned-off-by: Thomas Gazagnaire <thomas@gazagnaire.org>",
+          "timestamp": "2026-01-19T16:57:46Z",
+          "tree_id": "4b4b9fe4694d06d237bb993fb8925d4b56b6823e",
+          "url": "https://github.com/punchagan/dune/commit/c4d32400299a8818d182c58ebbd7de506e99611d"
+        },
+        "date": 1768881917387,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 19.9599942009,
             "unit": "seconds"
           }
         ]
