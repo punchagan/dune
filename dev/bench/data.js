@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1768977561829,
+  "lastUpdate": 1768977860524,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -74064,6 +74064,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 1.1347438404533332,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "anmonteiro@gmail.com",
+            "name": "Antonio Nuno Monteiro",
+            "username": "anmonteiro"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "7a2e102552f0bb4538473c935728476ac52c67c2",
+          "message": "fix(select-field): eval closure when resolving select (#13389)\n\nfixes #13299\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>\nSigned-off-by: Antonio Nuno Monteiro <anmonteiro@gmail.com>\nCo-authored-by: Ali Caglayan <alizter@gmail.com>",
+          "timestamp": "2026-01-20T21:58:49-08:00",
+          "tree_id": "348ddca505c76c8e59fb7093b5e28cce87f4f90a",
+          "url": "https://github.com/punchagan/dune/commit/7a2e102552f0bb4538473c935728476ac52c67c2"
+        },
+        "date": 1768977859434,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 58.66767034994667,
             "unit": "seconds"
           }
         ]
