@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1768977868291,
+  "lastUpdate": 1769052586753,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -95496,6 +95496,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 19.808976351273333,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "916b9586e9c7cb2b6e841d80eaa82a0821e32159",
+          "message": "refactor: remove remains of patch back (#13417)\n\nIt was deleted long ago from the rules, so this is just dead code\n\n---------\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-01-21T22:40:06Z",
+          "tree_id": "0bcf08af679b41ad9461efa39b0f5335e3079933",
+          "url": "https://github.com/punchagan/dune/commit/916b9586e9c7cb2b6e841d80eaa82a0821e32159"
+        },
+        "date": 1769052577861,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 20.14342956102,
             "unit": "seconds"
           }
         ]
