@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1769143230859,
+  "lastUpdate": 1769173206236,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -95670,6 +95670,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 19.7471893173,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "971c9eaebd15d4620a9a4d06fe56b20ca02e981b",
+          "message": "refactor: remove embedded_location + needs_stacktrace annotations (#13433)\n\nAll annotations need to go, so let's start with the simplest ones\n\n---------\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-01-23T12:29:50Z",
+          "tree_id": "123c39f0a77e4ade12c477c0460efbf605528826",
+          "url": "https://github.com/punchagan/dune/commit/971c9eaebd15d4620a9a4d06fe56b20ca02e981b"
+        },
+        "date": 1769173196753,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 19.962876592113332,
             "unit": "seconds"
           }
         ]
