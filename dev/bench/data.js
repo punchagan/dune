@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1769052897190,
+  "lastUpdate": 1769142926196,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -95583,6 +95583,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 20.14342956102,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "punchagan@muse-amuse.in",
+            "name": "Puneeth Chaganti",
+            "username": "punchagan"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "10e031a6669bf1aa651eb51e47b5224f910ed87c",
+          "message": "Use Env_path helper to update PATH with the dune folder (#13405)\n\nThe code previously used : as the path separator, but Windows uses ;\n\nSigned-off-by: Puneeth Chaganti <punchagan@muse-amuse.in>",
+          "timestamp": "2026-01-23T09:55:30+05:30",
+          "tree_id": "62a50d54e6d41966e32214b5878dedfefda7872e",
+          "url": "https://github.com/punchagan/dune/commit/10e031a6669bf1aa651eb51e47b5224f910ed87c"
+        },
+        "date": 1769142917209,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 19.7471893173,
             "unit": "seconds"
           }
         ]
