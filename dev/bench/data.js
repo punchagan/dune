@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1769173515747,
+  "lastUpdate": 1770097815664,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -95757,6 +95757,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 19.962876592113332,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "2d96f064e192af1cdd502019c5f94a94f39f2490",
+          "message": "Adjust program and args when running executables on Windows (#13293)\n\nWindows doesn't support shebang lines and build rules generated from\nopam build instructions could have rules like `(build (run\n<executable-script>))`, which would fail to run on Windows. This commit\nadds support to parse shebang lines of such executable scripts on\nWindows and run them with an appropriate executable.\n\nCloses #11174",
+          "timestamp": "2026-02-03T01:27:41+01:00",
+          "tree_id": "bf8f32f194e189789f81505f58f9d1d8458afe4a",
+          "url": "https://github.com/punchagan/dune/commit/2d96f064e192af1cdd502019c5f94a94f39f2490"
+        },
+        "date": 1770097804237,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 18.56118543742,
             "unit": "seconds"
           }
         ]
