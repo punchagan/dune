@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1770202510142,
+  "lastUpdate": 1770202518014,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -74383,6 +74383,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 59.97212934260667,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "sspies@janestreet.com",
+            "name": "Simon Spies",
+            "username": "spiessimon"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "2b47cea0a560b73e498cd67bbd2058c2952070cf",
+          "message": "Add support for OxCaml's .cms files (#13397)\n\nIn contrast to the upstream OCaml compiler, the OxCaml compiler supports\nproducing so-called shape files (with extension `.cms`) that contain a\ntrimmed down version of the type information contained in `.cmt` files.\nBuilding on #13395, this PR adds support to dune for invoking the\ncompiler with the necessary flag to produce these files\n(`-bin-annot-cms`) and makes dune aware that compilation with an OxCaml\ncompiler can depend on these `.cms` files. (The dependency on `.cms`\nfiles occurs when compiling with OxCaml's extra debug information, which\nrequires resolving information about the types declared in other\nmodules.)\n\nBoth extensions are guarded behind the language extension `(using oxcaml\n0.1)` and should only take effect when compiling with an OxCaml\ncompiler. Moreover, since this PR already introduces the ability of\ncompilation to depend on `.cms` files, it is approximately free to add\nthe ability to depend on `.cmt` files (which also contain the relevant\ntype information for producing debug information). As such, this PR also\nadds support for depending on .cmt files during compilation.\n\n**Help for reviewing.** The PR is split into two commits (and can be\nreviewed commit by commit if desired):\n1. Support for `-bin-annot-cms` via an env stanza and flags.\n2. Support for making `.cms`/`.cmt` files a dependency via the stanza\n`cms-cmt-dependency (none | cms | cmt)`.\n\n---------\n\nSigned-off-by: Simon Spies <sspies@janestreet.com>",
+          "timestamp": "2026-02-04T07:57:45Z",
+          "tree_id": "06f06db4114c2e55a3a1c77aaf7e6e598c5f1b74",
+          "url": "https://github.com/punchagan/dune/commit/2b47cea0a560b73e498cd67bbd2058c2952070cf"
+        },
+        "date": 1770202517078,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.0665004809333334,
             "unit": "seconds"
           }
         ]
