@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1770378111379,
+  "lastUpdate": 1770378118569,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -74499,6 +74499,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 58.52425103143333,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "punchagan@muse-amuse.in",
+            "name": "Puneeth Chaganti",
+            "username": "punchagan"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "3469e6df49c6b0e53a328fd13e762cdd71e2024f",
+          "message": "minor: Remove program_not_found_message utility function (#13546)\n\nThe `Dune_engine.Utils` module already exposes a `program_not_found`\nutility that does what would be needed in most cases\n\nSigned-off-by: Puneeth Chaganti <punchagan@muse-amuse.in>",
+          "timestamp": "2026-02-06T11:44:11+05:30",
+          "tree_id": "62a7603d2e5edc32fec90060adc589ffe2161424",
+          "url": "https://github.com/punchagan/dune/commit/3469e6df49c6b0e53a328fd13e762cdd71e2024f"
+        },
+        "date": 1770378117855,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.0236104284999998,
             "unit": "seconds"
           }
         ]
