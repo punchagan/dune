@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1770355800535,
+  "lastUpdate": 1770356107163,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -74412,6 +74412,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 1.0665004809333334,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "d3989a40f0c248171184986889bfe67d9d143c8f",
+          "message": "refactor(rpc): move some code outside of client functor (#13553)\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-02-05T23:49:55Z",
+          "tree_id": "d35a55c6919a8672b4f239dd2217df2e8c5913b2",
+          "url": "https://github.com/punchagan/dune/commit/d3989a40f0c248171184986889bfe67d9d143c8f"
+        },
+        "date": 1770356106045,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 60.30957111665333,
             "unit": "seconds"
           }
         ]
