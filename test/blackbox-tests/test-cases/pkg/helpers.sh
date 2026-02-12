@@ -27,7 +27,9 @@ default_repo_path() {
 get_build_pkg_dir() {
   local package_name=$1
   local digest
-  digest=$($dune pkg print-digest "$package_name")
+  # CR-soon punchagan: print-digest seems to have a \r at the end of its output
+  # on Windows, which causes the path to be malformed.
+  digest=$($dune pkg print-digest "$package_name" | tr -d '\r')
   local status=$?
   if [ "$status" -eq "0" ]; then
     echo "$pkg_root/$digest"

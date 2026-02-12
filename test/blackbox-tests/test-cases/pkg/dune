@@ -97,7 +97,7 @@
  (applies_to pkg-extract-fail))
 
 (cram
- (applies_to build-action-path build-with-executable-script)
+ (applies_to build-action-path build-with-executable-script installed-binary)
  (alias runtest-windows))
 
 (cram

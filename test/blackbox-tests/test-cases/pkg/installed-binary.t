@@ -4,16 +4,17 @@ Test that installed binaries are visible in dependent packages
   $ make_lockpkg test <<EOF
   > (version 0.0.1)
   > (build
-  >  (system "\| echo "#!/bin/sh\necho from test package" > foo;
-  >          "\| chmod +x foo;
-  >          "\| touch libxxx lib_rootxxx;
-  >          "\| cat >test.install <<EOF
-  >          "\| bin: [ "foo" ]
-  >          "\| lib: [ "libxxx" ]
-  >          "\| lib_root: [ "lib_rootxxx" ]
-  >          "\| share_root: [ "lib_rootxxx" ]
-  >          "\| EOF
-  >  ))
+  >  (progn
+  >   (write-file foo "#!/bin/sh\necho from test package")
+  >   (run chmod +x foo)
+  >   (write-file libxxx "")
+  >   (write-file lib_rootxxx "")
+  >   (write-file test.install
+  >    "\| bin: [ "foo" ]
+  >    "\| lib: [ "libxxx" ]
+  >    "\| lib_root: [ "lib_rootxxx" ]
+  >    "\| share_root: [ "lib_rootxxx" ]
+  >   )))
   > EOF
 
   $ make_lockpkg usetest <<EOF
@@ -43,19 +44,19 @@ Test that installed binaries are visible in dependent packages
   { files =
       [ (LIB,
          [ In_build_dir
-             "_private/default/.pkg/test.0.0.1-3961b04534812838962de3518e57cedc/target/lib/test/libxxx"
+             "_private/default/.pkg/test.0.0.1-9c502b954310c290a553a3c76bcaddd1/target/lib/test/libxxx"
          ])
       ; (LIB_ROOT,
          [ In_build_dir
-             "_private/default/.pkg/test.0.0.1-3961b04534812838962de3518e57cedc/target/lib/lib_rootxxx"
+             "_private/default/.pkg/test.0.0.1-9c502b954310c290a553a3c76bcaddd1/target/lib/lib_rootxxx"
          ])
       ; (BIN,
          [ In_build_dir
-             "_private/default/.pkg/test.0.0.1-3961b04534812838962de3518e57cedc/target/bin/foo"
+             "_private/default/.pkg/test.0.0.1-9c502b954310c290a553a3c76bcaddd1/target/bin/foo"
          ])
       ; (SHARE_ROOT,
          [ In_build_dir
-             "_private/default/.pkg/test.0.0.1-3961b04534812838962de3518e57cedc/target/share/lib_rootxxx"
+             "_private/default/.pkg/test.0.0.1-9c502b954310c290a553a3c76bcaddd1/target/share/lib_rootxxx"
          ])
       ]
   ; variables = []
@@ -67,7 +68,7 @@ It should also be visible in the workspace:
 
   $ cat >dune <<EOF
   > (rule
-  >  (with-stdout-to testout (run %{bin:foo})))
+  >  (with-stdout-to testout (run sh %{bin:foo})))
   > EOF
 
   $ dune build ./testout && cat _build/default/testout
