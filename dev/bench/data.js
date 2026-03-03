@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1772528215829,
+  "lastUpdate": 1772528517486,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -74528,6 +74528,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 1.0236104284999998,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "anmonteiro@gmail.com",
+            "name": "Antonio Nuno Monteiro",
+            "username": "anmonteiro"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "2875358e7f7de44886af2fa05067117fb945bd2d",
+          "message": "test: reproduce #12297 (`dune describe workspace` + missing libraries) (#13722)\n\nSigned-off-by: Antonio Nuno Monteiro <anmonteiro@gmail.com>",
+          "timestamp": "2026-03-02T23:59:09-08:00",
+          "tree_id": "b3e1a3125ebce77708652a13220c7ce5fa99a89d",
+          "url": "https://github.com/punchagan/dune/commit/2875358e7f7de44886af2fa05067117fb945bd2d"
+        },
+        "date": 1772528516827,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 59.71393437850666,
             "unit": "seconds"
           }
         ]
