@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1774342843473,
+  "lastUpdate": 1774343163744,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -74586,6 +74586,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 1.0495841756733333,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "14e8346010bd362ac2d2c8906422ce7c0dba541a",
+          "message": "feature: allow promoting prefixes with [$ dune promote] (#13876)\n\nCurrently, $ dune promote foo will only promote the file foo.\n\nWith this change, it will now promote foo and all descendants of foo/\n\nThe old behavior can be recovered with the --file flag.\n\nRPC is adjusted accordingly.\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-03-23T21:28:15Z",
+          "tree_id": "82fd456fb2947ea1f61f25deaa121fbe32f5be19",
+          "url": "https://github.com/punchagan/dune/commit/14e8346010bd362ac2d2c8906422ce7c0dba541a"
+        },
+        "date": 1774343162983,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 60.92946966981333,
             "unit": "seconds"
           }
         ]
