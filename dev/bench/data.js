@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1775131089008,
+  "lastUpdate": 1775131390923,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -74644,6 +74644,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 1.0830591007266666,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "f1624a447ef748f540676837d52a57666dbebd2e",
+          "message": "feat(pkg): relocatable compiler support (#13321)\n\nThis PR adds a way for us to detect if a compiler in our \"package\nuniverse\" is relocatable. Knowing this means we can avoid the use of our\ntoolchains functionality and instead build the compiler like a regular\npackage.\n\nThe current chosen heuristic for knowing so is by inspecting if we have\nthe `reloctable-compiler` meta-package available (for interoperability\nwith David's relocatable opam repository) or by checking for the\n`relocatable` meta-package in opam-repository.\n\nWe add a test checking the checking behaviour and making sure that\ncompiler-like packages are able to be cached in these cases.\n\nTo try it out for yourself, put the following in `dune-workspace`:\n```\n(repository\n (name dra27-relocatable)\n (url \"git+https://github.com/dra27/opam-repository.git#relocatable\"))\n\n(lock_dir\n (repositories dra27-relocatable :standard))\n```\n\nOr use `(ocaml (= 5.5.0)) relocatable` in your `package` `(depends)`.",
+          "timestamp": "2026-04-02T12:36:43+02:00",
+          "tree_id": "97bc3c9b81621a7b75016d9cff78b945493ce3bb",
+          "url": "https://github.com/punchagan/dune/commit/f1624a447ef748f540676837d52a57666dbebd2e"
+        },
+        "date": 1775131390354,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 59.627524439926674,
             "unit": "seconds"
           }
         ]
