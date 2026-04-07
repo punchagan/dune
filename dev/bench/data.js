@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1775559712493,
+  "lastUpdate": 1775560014299,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -74702,6 +74702,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 1.06539515606,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "e91e6a62d5aef74c8480a7640b436c11ae8471c4",
+          "message": "chore(nix): stop copying the entire dune repo in nix develop (#14074)\n\nreuse the same source filter that we use elsewhere in the flake\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-04-07T11:18:27+01:00",
+          "tree_id": "2b9b87b34de1195e37da5c51d03acb0fd49343ea",
+          "url": "https://github.com/punchagan/dune/commit/e91e6a62d5aef74c8480a7640b436c11ae8471c4"
+        },
+        "date": 1775560013603,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 59.34685072292666,
             "unit": "seconds"
           }
         ]
