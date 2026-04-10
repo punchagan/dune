@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1775801941468,
+  "lastUpdate": 1775801949205,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -74789,6 +74789,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 61.55707031799334,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "2b5923f8b29f858ef8d9d34a22a47fe55c724592",
+          "message": "refactor: remove last remains of marshal based digests (#14110)\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-04-09T23:53:45+01:00",
+          "tree_id": "0c331b9592e71c24d468748a8e3c9ad5938022ee",
+          "url": "https://github.com/punchagan/dune/commit/2b5923f8b29f858ef8d9d34a22a47fe55c724592"
+        },
+        "date": 1775801948440,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.0963302997066666,
             "unit": "seconds"
           }
         ]
