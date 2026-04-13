@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776050602616,
+  "lastUpdate": 1776050916028,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -74818,6 +74818,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 1.0963302997066666,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "1c124d61f2bf56ef9e028de920991892a5b05b19",
+          "message": "feature: watch mode trace events (#14163)\n\nWe'd like events for:\n\n1. Starting a new build iteration\n2. Restarting a build\n3. Finishing a build\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-04-12T22:31:14+01:00",
+          "tree_id": "cf3d398ed7d564c1842a52f74fe4971e49ae39c3",
+          "url": "https://github.com/punchagan/dune/commit/1c124d61f2bf56ef9e028de920991892a5b05b19"
+        },
+        "date": 1776050914995,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 61.90762430193333,
             "unit": "seconds"
           }
         ]
