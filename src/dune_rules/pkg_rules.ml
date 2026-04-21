@@ -1304,11 +1304,15 @@ module DB = struct
                    | true, _ -> true, acc
                    | false, true -> has_dune_dep, acc
                    | _, false ->
-                     let dep_pkg = Package.Name.Map.find_exn pkgs_by_name name in
-                     let dep_entry = compute_entry dep_pkg ~seen_set ~seen_list in
-                     ( has_dune_dep
-                     , { dep_pkg; dep_loc; dep_pkg_digest = dep_entry.pkg_digest } :: acc
-                     ))
+                     (match Package.Name.Map.find pkgs_by_name name with
+                      (* FIXME: silently ignoring packages not found in the
+                         lockdir package list. *)
+                      | None -> has_dune_dep, acc
+                      | Some dep_pkg ->
+                        let dep_entry = compute_entry dep_pkg ~seen_set ~seen_list in
+                        ( has_dune_dep
+                        , { dep_pkg; dep_loc; dep_pkg_digest = dep_entry.pkg_digest }
+                          :: acc )))
           in
           let pkg_digest =
             Pkg_digest.create
