@@ -35,26 +35,8 @@ Attempting to build `b` fails. The lockdir validation code sees that `c` is not
 in the lockdir and rejects it, even though `c` is a workspace package.
 
   $ build_pkg b
-  File "_build/_private/default/.lock/dune.lock/b.pkg", line 2, characters
-  9-10:
-  The package "b" depends on the package "c", but "c" does not appear in the
-  lockdir _build/_private/default/.lock/dune.lock.
-  Error: At least one package dependency is itself not present as a package in
-  the lockdir _build/_private/default/.lock/dune.lock.
-  Hint: This could indicate that the lockdir is corrupted. Delete it and then
-  regenerate it by running: 'dune pkg lock'
-  [1]
 
   $ dune build
-  File "_build/_private/default/.lock/dune.lock/b.pkg", line 2, characters
-  9-10:
-  The package "b" depends on the package "c", but "c" does not appear in the
-  lockdir _build/_private/default/.lock/dune.lock.
-  Error: At least one package dependency is itself not present as a package in
-  the lockdir _build/_private/default/.lock/dune.lock.
-  Hint: This could indicate that the lockdir is corrupted. Delete it and then
-  regenerate it by running: 'dune pkg lock'
-  [1]
 
 The same happens even when `b` is a real dune package with `(libraries c)` in
 its dune file. The lockdir validation error is correctly seen here, even though
@@ -88,14 +70,16 @@ in the absence of validation we'd fail with a "Library c not found" error.
   > EOF
 
   $ build_pkg b
-  File "_build/_private/default/.lock/dune.lock/b.pkg", line 2, characters
-  9-10:
-  The package "b" depends on the package "c", but "c" does not appear in the
-  lockdir _build/_private/default/.lock/dune.lock.
-  Error: At least one package dependency is itself not present as a package in
-  the lockdir _build/_private/default/.lock/dune.lock.
-  Hint: This could indicate that the lockdir is corrupted. Delete it and then
-  regenerate it by running: 'dune pkg lock'
+  Context: _private
+  File "dune", line 1, characters 36-37:
+  1 | (library (public_name b) (libraries c))
+                                          ^
+  Error: Library "c" not found.
+  -> required by library "b" in _build/default
+  -> required by _build/default/META.b
+  -> required by _build/install/default/lib/b/META
+  -> required by _build/default/b.install
+  -> required by alias install
   [1]
 
 Richer fixture: workspace `c` itself depends on another locked package `e`.
@@ -122,14 +106,16 @@ resolve `e` in the workspace context.
   > EOF
 
   $ build_pkg b 2>&1 | sanitize_pkg_digest b.0.0.1
-  File "_build/_private/default/.lock/dune.lock/b.pkg", line 2, characters
-  9-10:
-  The package "b" depends on the package "c", but "c" does not appear in the
-  lockdir _build/_private/default/.lock/dune.lock.
-  Error: At least one package dependency is itself not present as a package in
-  the lockdir _build/_private/default/.lock/dune.lock.
-  Hint: This could indicate that the lockdir is corrupted. Delete it and then
-  regenerate it by running: 'dune pkg lock'
+  Context: _private
+  File "dune", line 1, characters 36-37:
+  1 | (library (public_name b) (libraries c))
+                                          ^
+  Error: Library "c" not found.
+  -> required by library "b" in _build/default
+  -> required by _build/default/META.b
+  -> required by _build/install/default/lib/b/META
+  -> required by _build/default/b.install
+  -> required by alias install
   [1]
 
 A lockdir dep that is neither in the lockdir nor a workspace package is still
