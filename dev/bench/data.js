@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1776050924518,
+  "lastUpdate": 1776754714662,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -96627,6 +96627,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 20.5675666212,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "504b96c1296ac5d63bd765101c1b766d89dde007",
+          "message": "fix: sandbox generation of the inline test runner (#14257)\n\nYet another user rule we need to start sandboxing\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-04-20T22:53:02+01:00",
+          "tree_id": "b0ef3f21fd083b0977f66cddd75ff778adfebf1e",
+          "url": "https://github.com/punchagan/dune/commit/504b96c1296ac5d63bd765101c1b766d89dde007"
+        },
+        "date": 1776754705041,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 20.300721219466666,
             "unit": "seconds"
           }
         ]
