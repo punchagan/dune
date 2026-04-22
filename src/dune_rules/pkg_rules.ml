@@ -447,6 +447,7 @@ module Pkg = struct
     ; build_command : Build_command.t option
     ; install_command : Dune_lang.Action.t option
     ; depends : t list
+    ; workspace_deps : Package.Name.t list
     ; depends_on_dune : bool
       (* whether the package declares a dependency on Dune, even if Dune is stripped from [depends] *)
     ; depexts : Depexts.t list
@@ -1257,6 +1258,7 @@ module DB = struct
     type entry =
       { pkg : Pkg.t
       ; deps : dep list
+      ; workspace_deps : Dune_lang.Package_name.t list
       ; has_dune_dep : bool
       ; pkg_digest : Pkg_digest.t
       }
@@ -1287,30 +1289,31 @@ module DB = struct
         Package.Name.Table.find_or_add cache pkg.info.name ~f:(fun name ->
           let seen_set = Package.Name.Set.add seen_set name in
           let seen_list = pkg :: seen_list in
-          let has_dune_dep, deps =
+          let has_dune_dep, workspace_deps, deps =
             Dune_pkg.Lock_dir.Conditional_choice.choose_for_platform pkg.depends ~platform
             |> Option.value ~default:[]
             |> List.fold_right
-                 ~init:(false, [])
+                 ~init:(false, [], [])
                  ~f:
                    (fun
                      { Dune_pkg.Lock_dir.Dependency.name; loc = dep_loc }
-                     (has_dune_dep, acc)
+                     (has_dune_dep, workspace_deps, acc)
                    ->
                    match
                      ( Dune_lang.Package_name.equal name Dune_dep.name
                      , Package.Name.Set.mem system_provided name )
                    with
-                   | true, _ -> true, acc
-                   | false, true -> has_dune_dep, acc
+                   | true, _ -> true, workspace_deps, acc
+                   | false, true -> has_dune_dep, workspace_deps, acc
                    | _, false ->
                      (match Package.Name.Map.find pkgs_by_name name with
-                      (* FIXME: silently ignoring packages not found in the
-                         lockdir package list. *)
-                      | None -> has_dune_dep, acc
+                      (* FIXME: We assume any package not found in the lockdir
+                         package list is a workspace package. *)
+                      | None -> has_dune_dep, name :: workspace_deps, acc
                       | Some dep_pkg ->
                         let dep_entry = compute_entry dep_pkg ~seen_set ~seen_list in
                         ( has_dune_dep
+                        , workspace_deps
                         , { dep_pkg; dep_loc; dep_pkg_digest = dep_entry.pkg_digest }
                           :: acc )))
           in
@@ -1319,7 +1322,7 @@ module DB = struct
               pkg
               (List.map deps ~f:(fun { dep_pkg_digest; _ } -> dep_pkg_digest))
           in
-          { pkg; deps; has_dune_dep; pkg_digest })
+          { pkg; deps; workspace_deps; has_dune_dep; pkg_digest })
       in
       Package.Name.Map.map
         pkgs_by_name
@@ -1342,8 +1345,18 @@ module DB = struct
        dependencies are identical as a sanity check. *)
     let union_check
           pkg_digest
-          ({ pkg = pkg_a; deps = deps_a; has_dune_dep = _; pkg_digest = _ } as entry)
-          { pkg = pkg_b; deps = deps_b; has_dune_dep = _; pkg_digest = _ }
+          ({ pkg = pkg_a
+           ; deps = deps_a
+           ; workspace_deps = _
+           ; has_dune_dep = _
+           ; pkg_digest = _
+           } as entry)
+          { pkg = pkg_b
+          ; deps = deps_b
+          ; workspace_deps = _
+          ; has_dune_dep = _
+          ; pkg_digest = _
+          }
       =
       if not (Pkg.equal (Pkg.remove_locs pkg_a) (Pkg.remove_locs pkg_b))
       then
@@ -1564,6 +1577,7 @@ end = struct
             } as pkg
         ; deps
         ; has_dune_dep
+        ; workspace_deps
         ; pkg_digest = _
         } ->
       assert (Package.Name.equal pkg_digest.name info.name);
@@ -1637,6 +1651,7 @@ end = struct
         ; build_command
         ; install_command
         ; depends
+        ; workspace_deps
         ; depends_on_dune = has_dune_dep
         ; depexts
         ; paths
@@ -2336,13 +2351,39 @@ let build_rule context_name ~source_deps (pkg : Pkg.t) =
   let open Action_builder.With_targets.O in
   (let deps =
      let deps = Dep.Set.union source_deps (Pkg.package_deps pkg) in
-     match pkg.depends_on_dune with
-     | false -> deps
-     | true -> Dep.Set.add deps (Lazy.force dune_dep)
+     let deps =
+       match pkg.depends_on_dune with
+       | false -> deps
+       | true -> Dep.Set.add deps (Lazy.force dune_dep)
+     in
+     (* FIXME Hackish way to force build workspace deps to ensure they are
+        built before this pkg *)
+     Dep.Set.of_list_map pkg.workspace_deps ~f:(fun ws_dep ->
+       let install_file =
+         Path.Build.relative
+           (Context_name.build_dir context_name)
+           (Package.Name.to_string ws_dep ^ ".install")
+         |> Path.build
+       in
+       install_file |> Dep.file)
+     |> Dep.Set.union deps
    in
    Action_builder.deps deps |> Action_builder.with_no_targets)
   (* TODO should we add env deps on these? *)
-  >>> add_env (Pkg.exported_env pkg) build_action
+  >>> (let env_with_workspace_libs =
+         (* FIXME This is a HACK adding workspace packages on PATH. *)
+         let lib_root =
+           (let dir = Install.Context.dir ~context:context_name in
+            Path.Build.relative dir "lib")
+           |> Path.build
+         in
+         let pkg_env = Pkg.exported_value_env pkg in
+         Value_list_env.add_path pkg_env Dune_findlib.Config.ocamlpath_var lib_root
+         |> Value_list_env.to_env
+       in
+       if pkg.workspace_deps = []
+       then add_env (Pkg.exported_env pkg) build_action
+       else add_env env_with_workspace_libs build_action)
   |> Action_builder.With_targets.add_directories
        ~directory_targets:[ pkg.write_paths.target_dir ]
 ;;
