@@ -70,17 +70,6 @@ in the absence of validation we'd fail with a "Library c not found" error.
   > EOF
 
   $ build_pkg b
-  Context: _private
-  File "dune", line 1, characters 36-37:
-  1 | (library (public_name b) (libraries c))
-                                          ^
-  Error: Library "c" not found.
-  -> required by library "b" in _build/default
-  -> required by _build/default/META.b
-  -> required by _build/install/default/lib/b/META
-  -> required by _build/default/b.install
-  -> required by alias install
-  [1]
 
 Richer fixture: workspace `c` itself depends on another locked package `e`.
 Building `b` transitively forces `c` to build, which now needs findlib to
@@ -106,16 +95,10 @@ resolve `e` in the workspace context.
   > EOF
 
   $ build_pkg b 2>&1 | sanitize_pkg_digest b.0.0.1
-  Context: _private
-  File "dune", line 1, characters 36-37:
-  1 | (library (public_name b) (libraries c))
-                                          ^
-  Error: Library "c" not found.
-  -> required by library "b" in _build/default
-  -> required by _build/default/META.b
-  -> required by _build/install/default/lib/b/META
-  -> required by _build/default/b.install
-  -> required by alias install
+  Error: Dependency cycle between:
+     _build/_private/default/.pkg/b.0.0.1-DIGEST_HASH/target
+  -> library "c" in _build/default/c
+  -> _build/_private/default/.pkg/b.0.0.1-DIGEST_HASH/target
   [1]
 
 A lockdir dep that is neither in the lockdir nor a workspace package is still
