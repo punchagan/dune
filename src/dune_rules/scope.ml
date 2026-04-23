@@ -204,6 +204,7 @@ module DB = struct
   type redirect_to =
     | Project of
         { project : Dune_project.t
+        ; src_dir : Path.Source.t
         ; lib_id : Lib_id.Local.t
         ; enabled : Toggle.t Memo.t
         ; loc : Loc.t
@@ -214,14 +215,31 @@ module DB = struct
   let public_libs =
     let resolve_redirect_to t rt =
       match rt with
-      | Project { project; lib_id; enabled; _ } ->
+      | Project { project; src_dir; lib_id; enabled; _ } ->
         let+ enabled =
           let+ toggle = enabled in
           Toggle.enabled toggle
         in
         if enabled
         then (
-          let scope = find_by_project (Fdecl.get t) project in
+          (* Route to the per-package scope at [src_dir] if one was
+             registered (i.e. a package with a [(dir ...)] field covers
+             this stanza). Otherwise fall back to the project-root scope.
+             This ensures the library is instantiated with the
+             per-package DB, so its [requires] gets resolved against the
+             narrowed OCAMLPATH. *)
+          let t = Fdecl.get t in
+          let scope =
+            let rec loop d =
+              match Path.Source.Map.find t.by_dir d with
+              | Some s -> s
+              | None ->
+                (match Path.Source.parent d with
+                 | Some d' -> loop d'
+                 | None -> find_by_project t project)
+            in
+            loop src_dir
+          in
           Lib.DB.Resolve_result.redirect_by_id scope.db (Local lib_id))
         else Lib.DB.Resolve_result.not_found
       | Name name -> Memo.return (Lib.DB.Resolve_result.redirect_in_the_same_db name)
@@ -244,12 +262,8 @@ module DB = struct
             let candidate =
               match stanza with
               | Library ({ project; visibility = Public p; _ } as conf) ->
-                let lib_id =
-                  let src_dir =
-                    Path.drop_optional_build_context_src_exn (Path.build dir)
-                  in
-                  Library.to_lib_id ~src_dir conf
-                in
+                let src_dir = Path.drop_optional_build_context_src_exn (Path.build dir) in
+                let lib_id = Library.to_lib_id ~src_dir conf in
                 let enabled =
                   Memo.lazy_ (fun () ->
                     let* expander = Expander0.get ~dir in
@@ -258,7 +272,7 @@ module DB = struct
                 in
                 Some
                   ( Public_lib.name p
-                  , Project { project; lib_id; enabled; loc = Public_lib.loc p }
+                  , Project { project; src_dir; lib_id; enabled; loc = Public_lib.loc p }
                   , Some lib_id )
               | Library _ | Library_redirect _ -> None
               | Deprecated_library_name s ->
@@ -318,7 +332,7 @@ module DB = struct
         Dune_project.root project, (dir, stanza))
       |> Path.Source.Map.of_list_multi
     in
-    let db_by_project_dir =
+    let per_package_db_by_project_dir =
       Path.Source.Map.merge
         projects_by_root
         stanzas_by_project_dir
@@ -327,9 +341,58 @@ module DB = struct
           let stanzas = Option.value stanzas ~default:[] in
           Some (project, stanzas))
       |> Path.Source.Map.map ~f:(fun (project, stanzas) ->
-        let db =
+        (* Partition stanzas by owning package (or no owner). *)
+        let stanzas_by_owner, _orphan_stanzas =
+          List.fold_left
+            stanzas
+            ~init:(Package.Name.Map.empty, [])
+            ~f:(fun (acc, orphans) (dir, stanza) ->
+              let owner_pkg : Package.t option =
+                let src_dir = Path.Build.drop_build_context_exn dir in
+                match Dune_project.exclusive_package project ~dir:src_dir with
+                | Some id ->
+                  Package.Name.Map.find
+                    (Dune_project.packages project)
+                    (Package.Id.name id)
+                | None ->
+                  (match (stanza : Library_related_stanza.t) with
+                   | Library lib -> Library.package lib
+                   | Library_redirect _ | Deprecated_library_name _ -> None)
+              in
+              match owner_pkg with
+              | None -> acc, (dir, stanza) :: orphans
+              | Some package ->
+                let name = Package.name package in
+                let acc =
+                  Package.Name.Map.update acc name ~f:(function
+                    | None -> Some (package, [ dir, stanza ])
+                    | Some (p, xs) -> Some (p, (dir, stanza) :: xs))
+                in
+                acc, orphans)
+        in
+        (* Build a DB per package. *)
+        let db_per_package =
+          let pkg_public_libs = public_libs in
+          Package.Name.Map.map stanzas_by_owner ~f:(fun (package, _stanzas_for_pkg) ->
+            let db =
+              create_db_from_stanzas
+                stanzas
+                (* we pass the full stanzas list for cross-package
+                           internal lookups *)
+                ~instrument_with
+                ~public_libs:pkg_public_libs
+                ~lib_config
+            in
+            package, db)
+        in
+        let fallback_db =
           create_db_from_stanzas stanzas ~instrument_with ~public_libs ~lib_config
         in
+        project, db_per_package, fallback_db)
+    in
+    (* HACK to avoid changing coq_ rocq scopes etc. *)
+    let db_by_project_dir =
+      Path.Source.Map.map per_package_db_by_project_dir ~f:(fun (project, _, db) ->
         project, db)
     in
     let coq_scopes =
@@ -343,11 +406,33 @@ module DB = struct
         ~db_by_project_dir
         ~projects_by_root
     in
-    Path.Source.Map.mapi db_by_project_dir ~f:(fun dir (project, db) ->
-      let root = Path.Build.append_source build_dir (Dune_project.root project) in
-      let coq_db = Coq_scope.find coq_scopes ~dir in
-      let rocq_db = Rocq_scope.find rocq_scopes ~dir in
-      { project; db; coq_db; rocq_db; root })
+    Path.Source.Map.foldi
+      per_package_db_by_project_dir
+      ~init:Path.Source.Map.empty
+      ~f:(fun project_root (project, db_per_package, fallback_db) acc ->
+        let root = Path.Build.append_source build_dir project_root in
+        let coq_db = Coq_scope.find coq_scopes ~dir:project_root in
+        let rocq_db = Rocq_scope.find rocq_scopes ~dir:project_root in
+        (* Add fallback_db at the project_root *)
+        let acc =
+          Path.Source.Map.add_exn
+            acc
+            project_root
+            { project; db = fallback_db; coq_db; rocq_db; root }
+        in
+        (* Add the DB for each package in the project to the mapping *)
+        Package.Name.Map.foldi db_per_package ~init:acc ~f:(fun _pkg (package, db) acc ->
+          match Package.exclusive_dir package with
+          | None ->
+            (* Package has no (dir ...). These stanzas get resolved via the
+               fallback scope. *)
+            acc
+          | Some (_loc, pkg_dir) ->
+            let pkg_root = Path.Build.append_source build_dir pkg_dir in
+            Path.Source.Map.add_exn
+              acc
+              pkg_dir
+              { project; db; coq_db; rocq_db; root = pkg_root }))
   ;;
 
   let create ~context ~projects_by_root stanzas coq_stanzas rocq_stanzas =
