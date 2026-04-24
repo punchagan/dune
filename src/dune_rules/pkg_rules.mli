@@ -24,6 +24,16 @@ val ocaml_toolchain : Context_name.t -> Ocaml_toolchain.t Action_builder.t optio
 val which : Context_name.t -> (Filename.t -> Path.t option Memo.t) Staged.t
 val exported_env : Context_name.t -> Env.t Memo.t
 val project_ocamlpath : Context_name.t -> Path.t list Memo.t
+
+(** Like [project_ocamlpath], but narrows to only the transitive locked-pkg
+    closure reachable from [package_deps]. Used to give a single workspace
+    package a view of findlib restricted to its declared dependencies, so
+    its compile doesn't probe unrelated locked packages' target dirs. *)
+val project_ocamlpath_for_package
+  :  Context_name.t
+  -> package_deps:Package.Name.t list
+  -> Path.t list Memo.t
+
 val dev_tool_ocamlpath : Dune_pkg.Dev_tool.t -> Path.t list Memo.t
 val find_package : Context_name.t -> Package.Name.t -> unit Action_builder.t option Memo.t
 
