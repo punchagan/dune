@@ -316,6 +316,7 @@ module DB = struct
         ~projects_by_root
         ~public_libs
         ~instrument_with
+        ~lock_dir_active
         context
         stanzas
         coq_stanzas
@@ -370,10 +371,57 @@ module DB = struct
                 in
                 acc, orphans)
         in
-        (* Build a DB per package. *)
+        (* Build a DB per package.
+
+           When pkg management is active, the findlib (OCAMLPATH) parent of
+           each per-package DB is narrowed to just the transitive locked-pkg
+           closure of that package's declared [Package.depends]. When pkg
+           management is not active there is no lockdir to narrow against,
+           and we keep the un-narrowed [public_libs] as the parent — the
+           per-package partition is then a no-op for resolution behavior. *)
         let db_per_package =
-          let pkg_public_libs = public_libs in
           Package.Name.Map.map stanzas_by_owner ~f:(fun (package, _stanzas_for_pkg) ->
+            let pkg_public_libs =
+              if not lock_dir_active
+              then public_libs
+              else (
+                let pkg_depends =
+                  Package.depends package
+                  |> List.map ~f:(fun (pd : Package_dependency.t) -> pd.name)
+                in
+                let narrowed_installed =
+                  let narrowed_db =
+                    let* paths =
+                      Pkg_rules.project_ocamlpath_for_package
+                        (Context.name context)
+                        ~package_deps:pkg_depends
+                    in
+                    Lib.DB.of_paths context ~paths
+                  in
+                  let resolve_lib_id_narrowed lib_id =
+                    let* db = narrowed_db in
+                    Lib.DB.find_lib_id_even_when_hidden db lib_id
+                    >>| function
+                    | None -> Lib.DB.Resolve_result.not_found
+                    | Some l -> Lib.DB.Resolve_result.found (Lib.info l)
+                  in
+                  let resolve_name_narrowed name =
+                    let* db = narrowed_db in
+                    Lib.DB.find_even_when_hidden db name
+                    >>| function
+                    | None -> []
+                    | Some l -> [ Lib.DB.Resolve_result.found (Lib.info l) ]
+                  in
+                  Lib.DB.create
+                    ~parent:None (* TODO: is this correct? *)
+                    ~resolve:resolve_name_narrowed
+                    ~resolve_lib_id:resolve_lib_id_narrowed
+                    ~all:(fun () -> Memo.return [])
+                    ~instrument_with
+                    ()
+                in
+                Lib.DB.with_parent public_libs ~parent:(Some narrowed_installed))
+            in
             let db =
               create_db_from_stanzas
                 stanzas
@@ -421,7 +469,7 @@ module DB = struct
             { project; db = fallback_db; coq_db; rocq_db; root }
         in
         (* Add the DB for each package in the project to the mapping *)
-        Package.Name.Map.foldi db_per_package ~init:acc ~f:(fun _pkg (package, db) acc ->
+        Package.Name.Map.fold db_per_package ~init:acc ~f:(fun (package, db) acc ->
           match Package.exclusive_dir package with
           | None ->
             (* Package has no (dir ...). These stanzas get resolved via the
@@ -444,6 +492,7 @@ module DB = struct
       ocaml.lib_config
     in
     let instrument_with = Context.instrument_with context in
+    let* lock_dir_active = Pkg_rules.lock_dir_active (Context.name context) in
     let+ public_libs =
       let+ installed_libs = Lib.DB.installed context in
       public_libs t ~instrument_with ~installed_libs stanzas
@@ -455,6 +504,7 @@ module DB = struct
         ~projects_by_root
         ~public_libs
         ~instrument_with
+        ~lock_dir_active
         context
         stanzas
         coq_stanzas
