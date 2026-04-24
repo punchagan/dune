@@ -2615,6 +2615,54 @@ let ocamlpath universe =
 
 let project_ocamlpath context = ocamlpath (Dependencies context)
 let dev_tool_ocamlpath dev_tool = ocamlpath (Dev_tool dev_tool)
+
+(* Transitive locked-pkg closure reachable from [package_deps] by walking the
+   pkg_table. Names not present in the pkg_table (workspace packages, unknown
+   names) are skipped. Used to narrow OCAMLPATH to a single workspace
+   package's declared dependencies, breaking spurious cycles in
+   findlib probing. *)
+let all_deps_for_package context ~package_deps =
+  let* lock_dir = Lock_dir.get_exn context
+  and* platform = Lock_dir.Sys_vars.solver_env in
+  let pkg_table =
+    DB.Pkg_table.of_lock_dir
+      lock_dir
+      ~platform
+      ~system_provided:DB.default_system_provided
+  in
+  let direct_digests =
+    List.filter_map package_deps ~f:(fun name ->
+      Pkg_digest.Map.keys pkg_table
+      |> List.find ~f:(fun (d : Pkg_digest.t) -> Package.Name.equal d.name name))
+  in
+  let rec collect visited = function
+    | [] -> visited
+    | pkg_digest :: rest ->
+      if Pkg_digest.Set.mem visited pkg_digest
+      then collect visited rest
+      else (
+        match Pkg_digest.Map.find pkg_table pkg_digest with
+        | None -> collect visited rest
+        | Some (entry : DB.Pkg_table.entry) ->
+          let visited = Pkg_digest.Set.add visited pkg_digest in
+          let new_digests =
+            List.map entry.deps ~f:(fun (d : DB.Pkg_table.dep) -> d.dep_pkg_digest)
+          in
+          collect visited (new_digests @ rest))
+  in
+  Memo.return (collect Pkg_digest.Set.empty direct_digests)
+;;
+
+let project_ocamlpath_for_package context ~package_deps =
+  let+ digests = all_deps_for_package context ~package_deps in
+  Pkg_digest.Set.to_list digests
+  |> List.map ~f:(fun pkg_digest ->
+    let paths =
+      Paths.make pkg_digest (Dependencies context) ~relative:Path.Build.relative
+    in
+    Path.build (Paths.install_roots paths).lib_root)
+;;
+
 let lock_dir_active = Lock_dir.lock_dir_active
 let lock_dir_path = Lock_dir.get_path
 
