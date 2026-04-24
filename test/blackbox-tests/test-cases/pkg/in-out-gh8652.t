@@ -73,10 +73,28 @@ in the absence of validation we'd fail with a "Library c not found" error.
 
 Richer fixture: workspace `c` itself depends on another locked package `e`.
 Building `b` transitively forces `c` to build, which now needs findlib to
-resolve `e` in the workspace context.
+resolve `e` in the workspace context. This is the case that used to cycle
+before narrowing, because findlib would probe the full lockdir OCAMLPATH
+(including b's target) while building c.
+
+Make `e` a proper dune-built library so c can actually resolve it.
+
+  $ mkdir e-src
+  $ cat > e-src/dune-project << EOF
+  > (lang dune 3.22)
+  > (package (name e))
+  > EOF
+  $ cat > e-src/dune << EOF
+  > (library (public_name e))
+  > EOF
+  $ cat > e-src/e.ml << EOF
+  > let greeting = "hello from e"
+  > EOF
 
   $ make_lockpkg e << EOF
   > (version 1.0)
+  > (dune)
+  > (source (copy $PWD/e-src))
   > EOF
 
   $ cat > dune-project << EOF
@@ -93,13 +111,15 @@ resolve `e` in the workspace context.
   $ cat > c/dune << EOF
   > (library (public_name c) (libraries e))
   > EOF
+  $ cat > c/c.ml << EOF
+  > let greeting = E.greeting ^ " via c"
+  > EOF
 
-  $ build_pkg b 2>&1 | sanitize_pkg_digest b.0.0.1
-  Error: Dependency cycle between:
-     _build/_private/default/.pkg/b.0.0.1-DIGEST_HASH/target
-  -> library "c" in _build/default/c
-  -> _build/_private/default/.pkg/b.0.0.1-DIGEST_HASH/target
-  [1]
+Narrowing makes c's compile see only e's target on OCAMLPATH (not b's),
+so the cycle is broken and the full chain b -> c.install -> c.compile ->
+e.target builds successfully.
+
+  $ build_pkg b
 
 A lockdir dep that is neither in the lockdir nor a workspace package is still
 rejected by validation, with a similar error as the workspace package.
