@@ -1577,6 +1577,7 @@ end = struct
             { Lock_dir.Pkg.build_command
             ; install_command
             ; depends = _
+            ; workspace_depends = _
             ; info
             ; exported_env
             ; depexts

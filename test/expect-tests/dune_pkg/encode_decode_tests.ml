@@ -133,6 +133,7 @@ let empty_package name ~version =
   { Lock_dir.Pkg.build_command = Lock_dir.Conditional_choice.empty
   ; install_command = Lock_dir.Conditional_choice.empty
   ; depends = Lock_dir.Conditional_choice.empty
+  ; workspace_depends = Lock_dir.Conditional_choice.empty
   ; depexts = []
   ; info =
       { Lock_dir.Pkg_info.name
@@ -184,6 +185,7 @@ let%expect_test "encode/decode round trip test for lockdir with simple deps" =
                     { build_command = []
                     ; install_command = []
                     ; depends = []
+                    ; workspace_depends = []
                     ; depexts = []
                     ; info =
                         { name = "bar"
@@ -203,6 +205,7 @@ let%expect_test "encode/decode round trip test for lockdir with simple deps" =
                     { build_command = []
                     ; install_command = []
                     ; depends = []
+                    ; workspace_depends = []
                     ; depexts = []
                     ; info =
                         { name = "foo"
@@ -352,6 +355,7 @@ let%expect_test "encode/decode round trip test for lockdir with complex deps" =
                           }
                         ]
                     ; depends = []
+                    ; workspace_depends = []
                     ; depexts = []
                     ; info =
                         { name = "a"
@@ -382,6 +386,7 @@ let%expect_test "encode/decode round trip test for lockdir with complex deps" =
                               ]
                           }
                         ]
+                    ; workspace_depends = []
                     ; depexts = []
                     ; info =
                         { name = "b"
@@ -414,6 +419,7 @@ let%expect_test "encode/decode round trip test for lockdir with complex deps" =
                               ]
                           }
                         ]
+                    ; workspace_depends = []
                     ; depexts = []
                     ; info =
                         { name = "c"
@@ -496,6 +502,7 @@ let%expect_test "encode/decode round trip test with locked repo revision" =
                     { build_command = []
                     ; install_command = []
                     ; depends = []
+                    ; workspace_depends = []
                     ; depexts = []
                     ; info =
                         { name = "a"
@@ -515,6 +522,7 @@ let%expect_test "encode/decode round trip test with locked repo revision" =
                     { build_command = []
                     ; install_command = []
                     ; depends = []
+                    ; workspace_depends = []
                     ; depexts = []
                     ; info =
                         { name = "b"
@@ -534,6 +542,7 @@ let%expect_test "encode/decode round trip test with locked repo revision" =
                     { build_command = []
                     ; install_command = []
                     ; depends = []
+                    ; workspace_depends = []
                     ; depexts = []
                     ; info =
                         { name = "c"
