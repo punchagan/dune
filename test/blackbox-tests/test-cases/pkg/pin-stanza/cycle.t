@@ -36,12 +36,12 @@ detect it and not descend into an infinite loop.
   > }
 
   $ runtest a
-  Error: Dune does not support packages outside the workspace depending on
-  packages in the workspace. The package "b" is not in the workspace but it
-  depends on the package "a" which is in the workspace.
-  [1]
+  Solution for dune.lock
+  
+  Dependencies common to all supported platforms:
+  - b.dev
   $ runtest b
-  Error: Dune does not support packages outside the workspace depending on
-  packages in the workspace. The package "a" is not in the workspace but it
-  depends on the package "b" which is in the workspace.
-  [1]
+  Solution for dune.lock
+  
+  Dependencies common to all supported platforms:
+  - a.dev
