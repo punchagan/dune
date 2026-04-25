@@ -749,15 +749,8 @@ let raise_on_lock_dir_out_of_sync =
           Dune_load.packages ()
           >>| Dune_lang.Package.Name.Map.map ~f:Dune_pkg.Local_package.of_package
         in
-        let local_package_names =
-          Dune_lang.Package.Name.Map.keys local_packages
-          |> Dune_lang.Package.Name.Set.of_list
-        in
         User_error.ok_exn
-          (Dune_pkg.Lock_dir.check_packages
-             lock_dir.packages
-             ~lock_dir_path:path
-             ~local_package_names);
+          (Dune_pkg.Lock_dir.check_packages lock_dir.packages ~lock_dir_path:path);
         match
           Dune_pkg.Package_universe.up_to_date
             local_packages

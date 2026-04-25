@@ -161,15 +161,11 @@ end
 val read_disk : Path.t -> (t, User_message.t) result
 val read_disk_exn : Path.t -> t
 
-(** [check_packages packages ~lock_dir_path ~local_package_names] validates
-    that every dependency of every package in [packages] either exists in
-    [packages], is the dune build system itself, or is a local workspace
-    package listed in [local_package_names]. Otherwise, returns an error. *)
-val check_packages
-  :  Packages.t
-  -> lock_dir_path:Path.t
-  -> local_package_names:Package_name.Set.t
-  -> (unit, User_message.t) result
+(** [check_packages packages ~lock_dir_path] validates that every entry in
+    each package's [depends] either exists in [packages] or is the dune
+    build system itself. Workspace package dependencies live in
+    [Pkg.t.workspace_depends] and are not validated here. *)
+val check_packages : Packages.t -> lock_dir_path:Path.t -> (unit, User_message.t) result
 
 module Make_load (Io : sig
     include Monad.S
