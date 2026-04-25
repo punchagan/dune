@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1777087736640,
+  "lastUpdate": 1777087744490,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -74963,6 +74963,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 59.47390730460666,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@robinbb.com",
+            "name": "Robin Bate Boerop",
+            "username": "robinbb"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "a6ec61ae702662fd7ccada1a5e9040ac4c493ae6",
+          "message": "fix: guard SIGTERM grace period in shutdown on Windows (#14302) (#14316)\n\n## Summary\n\nFixes #14302.\n\nPR #14170 added a SIGTERM-before-SIGKILL grace period to\n`kill_and_wait_for_all_processes`. The new polling loop calls\n`Process_watcher.wait_unix` unconditionally, which on Windows routes\nthrough\n`Proc.wait` and raises `Code_error \"wait4 not available on windows\"`,\ncrashing\ndune on Ctrl+C.\n\n## Fix\n\nSince SIGTERM is not meaningful on Windows anyway — as PR #14170 itself\nnoted\n(\"On Windows, where SIGTERM is not meaningful, behavior is unchanged\") —\nskip\nthe grace-period pre-phase on Windows and send SIGKILL directly. The\nexisting\nmain drain loop already handles the Windows case correctly: job exits\nare\npushed to `jobs_completed` by the `run_win32` polling thread and\ndecrement\n`pending_jobs` when popped by `Event.Queue.next` (see\n`src/dune_scheduler/event.ml:222` and `:187-191`).\n\nSigned-off-by: Robin Bate Boerop <me@robinbb.com>",
+          "timestamp": "2026-04-24T12:12:38-07:00",
+          "tree_id": "795eb187a06e4d4e529d45b263924b4b7b8fc8a3",
+          "url": "https://github.com/punchagan/dune/commit/a6ec61ae702662fd7ccada1a5e9040ac4c493ae6"
+        },
+        "date": 1777087744007,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.1338533979733334,
             "unit": "seconds"
           }
         ]
