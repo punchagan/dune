@@ -28,7 +28,7 @@ Package `b` is in the lock dir and depends on workspace package `c`.
 
   $ make_lockpkg b << EOF
   > (version 0.0.1)
-  > (depends c)
+  > (workspace_depends c)
   > EOF
 
 Attempting to build `b` fails. The lockdir validation code sees that `c` is not
@@ -64,7 +64,7 @@ in the absence of validation we'd fail with a "Library c not found" error.
 
   $ make_lockpkg b <<EOF
   > (version 0.0.1)
-  > (depends c)
+  > (workspace_depends c)
   > (dune)
   > (source (copy $PWD/b-src))
   > EOF
