@@ -1806,6 +1806,9 @@ let solve_lock_dir
            let+ resolved_pkgs =
              resolve_opam_packages opam_packages_to_lock candidates_cache
            in
+           let local_package_names =
+             Package_name.Map.keys local_packages |> Package_name.Set.of_list
+           in
            List.map resolved_pkgs ~f:(fun (name, opam_package, resolved_package) ->
              Lock_pkg.opam_package_to_lock_file_pkg
                solver_env
@@ -1813,6 +1816,7 @@ let solve_lock_dir
                version_by_package_name
                opam_package
                ~pinned:(Package_name.Set.mem pinned_package_names name)
+               ~local_packages:local_package_names
                resolved_package
                ~portable_lock_dir)
            |> Result.List.all
@@ -1863,53 +1867,26 @@ let solve_lock_dir
          let open Result.O in
          let* pkgs_by_name = pkgs_by_name
          and* ocaml = ocaml in
-         let+ () =
-           Package_name.Map.values pkgs_by_name
-           |> Result.List.map ~f:(fun { Lock_dir.Pkg.depends; info = { name; _ }; _ } ->
-             match
-               Lock_dir.Conditional_choice.choose_for_platform
-                 depends
-                 ~platform:solver_env
-             with
-             | None -> Ok ()
-             | Some depends ->
-               Result.List.map
-                 depends
-                 ~f:(fun { Lock_dir.Dependency.name = dep_name; loc } ->
-                   match
-                     (not (is_dune dep_name))
-                     && Package_name.Map.mem local_packages dep_name
-                   with
-                   | false -> Ok ()
-                   | true ->
-                     Error
-                       (User_error.make
-                          ~loc
-                          [ Pp.textf
-                              "Dune does not support packages outside the workspace \
-                               depending on packages in the workspace. The package %S is \
-                               not in the workspace but it depends on the package %S \
-                               which is in the workspace."
-                              (Package_name.to_string name)
-                              (Package_name.to_string dep_name)
-                          ]))
-               |> Result.map ~f:(fun (_ : unit list) -> ()))
-           |> Result.map ~f:(fun (_ : unit list) -> ())
-         in
+         (* The previous in-out check rejected lockdirs in which a locked
+            package depends on a workspace package. With the [workspace_depends]
+            field on [Lock_dir.Pkg.t] now classifying these deps separately,
+            consumers route them through the workspace install tree
+            explicitly; the configuration is supported. *)
          let expanded_solver_variable_bindings =
            let stats = Solver_stats.Updater.snapshot stats_updater in
            Solver_stats.Expanded_variable_bindings.of_variable_set
              stats.expanded_variables
              solver_env
          in
-         Lock_dir.create_latest_version
-           pkgs_by_name
-           ~local_packages:(Package_name.Map.values local_packages)
-           ~ocaml
-           ~repos:(Some repos)
-           ~expanded_solver_variable_bindings
-           ~solved_for_platform:(Some solver_env)
-           ~portable_lock_dir
+         Ok
+           (Lock_dir.create_latest_version
+              pkgs_by_name
+              ~local_packages:(Package_name.Map.values local_packages)
+              ~ocaml
+              ~repos:(Some repos)
+              ~expanded_solver_variable_bindings
+              ~solved_for_platform:(Some solver_env)
+              ~portable_lock_dir)
        in
        let+ files =
          match pkgs_by_name with
