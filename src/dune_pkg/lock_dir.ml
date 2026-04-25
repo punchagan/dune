@@ -1212,12 +1212,14 @@ type missing_dependency =
   ; loc : Loc.t
   }
 
-(* [validate_packages ~local_package_names packages] returns
+(* [validate_packages packages] returns
    [Error (`Missing_dependencies missing_dependencies)] where
    [missing_dependencies] is a non-empty list with an element for each package
-   dependency which doesn't have a corresponding entry in [packages] or is
-   not a local workspace package name.*)
-let validate_packages ~local_package_names packages =
+   dependency which doesn't have a corresponding entry in [packages].
+   Workspace package dependencies live in [Pkg.t.workspace_depends] (not
+   [depends]) and are not validated here — they reference packages outside
+   the lockdir by design. *)
+let validate_packages packages =
   let missing_dependencies =
     Packages.to_pkg_list packages
     |> List.concat_map ~f:(fun (dependant_package : Pkg.t) ->
@@ -1228,7 +1230,6 @@ let validate_packages ~local_package_names packages =
           if
             Package_name.Map.mem packages depend.name
             || Package_name.equal depend.name Dune_dep.name
-            || Package_name.Set.mem local_package_names depend.name
           then None
           else Some { dependant_package; dependency = depend.name; loc = depend.loc })))
   in
@@ -1250,11 +1251,7 @@ let create_latest_version
     Package_name.Map.map packages ~f:(fun (pkg : Pkg.t) ->
       Package_version.Map.singleton pkg.info.version pkg)
   in
-  let local_package_names =
-    List.map local_packages ~f:(fun p -> p.Local_package.For_solver.name)
-    |> Package_name.Set.of_list
-  in
-  (match validate_packages ~local_package_names packages with
+  (match validate_packages packages with
    | Ok () -> ()
    | Error (`Missing_dependencies missing_dependencies) ->
      List.map missing_dependencies ~f:(fun { dependant_package; dependency; loc = _ } ->
@@ -1632,40 +1629,6 @@ module Write_disk = struct
   let commit t = t ()
 end
 
-let check_packages packages ~lock_dir_path ~local_package_names =
-  match validate_packages ~local_package_names packages with
-  | Ok () -> Ok ()
-  | Error (`Missing_dependencies missing_dependencies) ->
-    List.iter missing_dependencies ~f:(fun { dependant_package; dependency; loc } ->
-      User_message.prerr
-        (User_message.make
-           ~loc
-           [ Pp.textf
-               "The package %S depends on the package %S, but %S does not appear in the \
-                lockdir %s."
-               (Package_name.to_string dependant_package.info.name)
-               (Package_name.to_string dependency)
-               (Package_name.to_string dependency)
-               (Path.to_string_maybe_quoted lock_dir_path)
-           ]));
-    Error
-      (User_error.make
-         ~hints:
-           [ Pp.concat
-               ~sep:Pp.space
-               [ Pp.text
-                   "This could indicate that the lockdir is corrupted. Delete it and \
-                    then regenerate it by running:"
-               ; User_message.command "dune pkg lock"
-               ]
-           ]
-         [ Pp.textf
-             "At least one package dependency is itself not present as a package in the \
-              lockdir %s."
-             (Path.to_string_maybe_quoted lock_dir_path)
-         ])
-;;
-
 module Make_load (Io : sig
     include Monad.S
 
@@ -1754,6 +1717,40 @@ struct
       package_name
   ;;
 
+  let check_packages packages ~lock_dir_path =
+    match validate_packages packages with
+    | Ok () -> Ok ()
+    | Error (`Missing_dependencies missing_dependencies) ->
+      List.iter missing_dependencies ~f:(fun { dependant_package; dependency; loc } ->
+        User_message.prerr
+          (User_message.make
+             ~loc
+             [ Pp.textf
+                 "The package %S depends on the package %S, but %S does not appear in \
+                  the lockdir %s."
+                 (Package_name.to_string dependant_package.info.name)
+                 (Package_name.to_string dependency)
+                 (Package_name.to_string dependency)
+                 (Path.to_string_maybe_quoted lock_dir_path)
+             ]));
+      Error
+        (User_error.make
+           ~hints:
+             [ Pp.concat
+                 ~sep:Pp.space
+                 [ Pp.text
+                     "This could indicate that the lockdir is corrupted. Delete it and \
+                      then regenerate it by running:"
+                 ; User_message.command "dune pkg lock"
+                 ]
+             ]
+           [ Pp.textf
+               "At least one package dependency is itself not present as a package in \
+                the lockdir %s."
+               (Path.to_string_maybe_quoted lock_dir_path)
+           ])
+  ;;
+
   let load lock_dir_path =
     let event =
       Dune_trace.(
@@ -1798,7 +1795,8 @@ struct
       >>| Packages.of_pkg_list
     in
     let result =
-      Ok
+      check_packages packages ~lock_dir_path
+      |> Result.map ~f:(fun () ->
         { version
         ; dependency_hash
         ; packages
@@ -1806,7 +1804,7 @@ struct
         ; repos
         ; expanded_solver_variable_bindings
         ; solved_for_platforms
-        }
+        })
     in
     Option.iter (Dune_trace.global ()) ~f:(fun trace -> Dune_trace.Out.finish trace event);
     result

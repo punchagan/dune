@@ -743,21 +743,12 @@ let raise_on_lock_dir_out_of_sync =
     Memo.lazy_ (fun () ->
       let* lock_dir_available = Lock_dir.lock_dir_active ctx in
       if lock_dir_available
-      then (
+      then
         let* path, lock_dir = Lock_dir.get_with_path ctx >>| User_error.ok_exn in
         let+ local_packages =
           Dune_load.packages ()
           >>| Dune_lang.Package.Name.Map.map ~f:Dune_pkg.Local_package.of_package
         in
-        let local_package_names =
-          Dune_lang.Package.Name.Map.keys local_packages
-          |> Dune_lang.Package.Name.Set.of_list
-        in
-        User_error.ok_exn
-          (Dune_pkg.Lock_dir.check_packages
-             lock_dir.packages
-             ~lock_dir_path:path
-             ~local_package_names);
         match
           Dune_pkg.Package_universe.up_to_date
             local_packages
@@ -772,7 +763,7 @@ let raise_on_lock_dir_out_of_sync =
           User_error.raise
             ~loc
             ~hints
-            [ Pp.text "The lock dir is not sync with your dune-project" ])
+            [ Pp.text "The lock dir is not sync with your dune-project" ]
       else Memo.return ())
     |> Memo.Lazy.force)
   |> Staged.unstage
