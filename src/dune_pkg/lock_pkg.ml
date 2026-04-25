@@ -438,6 +438,7 @@ let opam_package_to_lock_file_pkg
       version_by_package_name
       opam_package
       ~pinned
+      ~local_packages
       resolved_package
       ~portable_lock_dir
   =
@@ -482,7 +483,7 @@ let opam_package_to_lock_file_pkg
     let avoid = List.mem opam_file.flags Pkgflag_AvoidVersion ~equal:Poly.equal in
     { Lock_dir.Pkg_info.name; version; dev; avoid; source; extra_sources }
   in
-  let depends =
+  let depends, workspace_depends =
     let resolve what =
       Resolve_opam_formula.filtered_formula_to_package_names
         ~with_test:false
@@ -509,8 +510,14 @@ let opam_package_to_lock_file_pkg
       |> List.filter ~f:(fun package_name ->
         not (List.mem depends package_name ~equal:Package_name.equal))
     in
+    (* Partition into workspace deps (names in [local_packages]) vs locked
+       deps. Workspace deps are tagged separately in the lockdir so consumers
+       know to satisfy them from the workspace's install tree rather than
+       from a locked .pkg target. *)
     depends @ depopts
-    |> List.map ~f:(fun name -> { Lock_dir.Dependency.loc = Loc.none; name })
+    |> List.partition_map ~f:(fun name ->
+      let dep = { Lock_dir.Dependency.loc = Loc.none; name } in
+      if Package_name.Set.mem local_packages name then Right dep else Left dep)
   in
   let build_env action =
     let env_update =
@@ -617,15 +624,14 @@ let opam_package_to_lock_file_pkg
     OpamFile.OPAM.env opam_file |> List.map ~f:opam_env_update_to_env_update
   in
   let depends = lockfile_field_choice depends in
+  let workspace_depends = lockfile_field_choice workspace_depends in
   let enabled_on_platforms =
     [ Solver_env.remove_all_except_platform_specific solver_env ]
   in
   { Lock_dir.Pkg.build_command
   ; install_command
   ; depends
-  ; (* TODO(in-out-gh8652): populated by the solver in a follow-up; for now
-       leave empty so consumers see no workspace deps from this layer. *)
-    workspace_depends = []
+  ; workspace_depends
   ; depexts
   ; info
   ; exported_env
@@ -639,6 +645,7 @@ let opam_package_to_lock_file_pkg
       version_by_package_name
       opam_package
       ~pinned
+      ~local_packages
       resolved_package
       ~portable_lock_dir
   =
@@ -650,6 +657,7 @@ let opam_package_to_lock_file_pkg
          version_by_package_name
          opam_package
          ~pinned
+         ~local_packages
          resolved_package
          ~portable_lock_dir)
   with

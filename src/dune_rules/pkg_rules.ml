@@ -1289,33 +1289,37 @@ module DB = struct
         Package.Name.Table.find_or_add cache pkg.info.name ~f:(fun name ->
           let seen_set = Package.Name.Set.add seen_set name in
           let seen_list = pkg :: seen_list in
-          let has_dune_dep, workspace_deps, deps =
+          (* Workspace deps come straight from the lockdir entry's
+             [workspace_depends] field, classified by the solver. *)
+          let workspace_deps =
+            Dune_pkg.Lock_dir.Conditional_choice.choose_for_platform
+              pkg.workspace_depends
+              ~platform
+            |> Option.value ~default:[]
+            |> List.map ~f:(fun (d : Dune_pkg.Lock_dir.Dependency.t) -> d.name)
+          in
+          let has_dune_dep, deps =
             Dune_pkg.Lock_dir.Conditional_choice.choose_for_platform pkg.depends ~platform
             |> Option.value ~default:[]
             |> List.fold_right
-                 ~init:(false, [], [])
+                 ~init:(false, [])
                  ~f:
                    (fun
                      { Dune_pkg.Lock_dir.Dependency.name; loc = dep_loc }
-                     (has_dune_dep, workspace_deps, acc)
+                     (has_dune_dep, acc)
                    ->
                    match
                      ( Dune_lang.Package_name.equal name Dune_dep.name
                      , Package.Name.Set.mem system_provided name )
                    with
-                   | true, _ -> true, workspace_deps, acc
-                   | false, true -> has_dune_dep, workspace_deps, acc
+                   | true, _ -> true, acc
+                   | false, true -> has_dune_dep, acc
                    | _, false ->
-                     (match Package.Name.Map.find pkgs_by_name name with
-                      (* FIXME: We assume any package not found in the lockdir
-                         package list is a workspace package. *)
-                      | None -> has_dune_dep, name :: workspace_deps, acc
-                      | Some dep_pkg ->
-                        let dep_entry = compute_entry dep_pkg ~seen_set ~seen_list in
-                        ( has_dune_dep
-                        , workspace_deps
-                        , { dep_pkg; dep_loc; dep_pkg_digest = dep_entry.pkg_digest }
-                          :: acc )))
+                     let dep_pkg = Package.Name.Map.find_exn pkgs_by_name name in
+                     let dep_entry = compute_entry dep_pkg ~seen_set ~seen_list in
+                     ( has_dune_dep
+                     , { dep_pkg; dep_loc; dep_pkg_digest = dep_entry.pkg_digest } :: acc
+                     ))
           in
           let pkg_digest =
             Pkg_digest.create
