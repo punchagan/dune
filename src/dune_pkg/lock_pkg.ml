@@ -623,6 +623,9 @@ let opam_package_to_lock_file_pkg
   { Lock_dir.Pkg.build_command
   ; install_command
   ; depends
+  ; (* TODO(in-out-gh8652): populated by the solver in a follow-up; for now
+       leave empty so consumers see no workspace deps from this layer. *)
+    workspace_depends = []
   ; depexts
   ; info
   ; exported_env
