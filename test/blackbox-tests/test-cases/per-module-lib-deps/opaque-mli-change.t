@@ -6,31 +6,31 @@ whether cross-module inlining tracks a dep's [.cmx].
 Companion to [opaque.t], which covers the [.ml]-only change axis.
 
   $ cat > dune-project <<EOF
-  > (lang dune 3.0)
+  > (lang dune 3.23)
   > EOF
 
-  $ mkdir lib
-  $ cat > lib/dune <<EOF
-  > (library (name mylib))
+  $ mkdir dep_lib
+  $ cat > dep_lib/dune <<EOF
+  > (library (name dep_lib))
   > EOF
-  $ cat > lib/mylib.ml <<EOF
+  $ cat > dep_lib/dep_lib.ml <<EOF
   > let v = 42
   > EOF
-  $ cat > lib/mylib.mli <<EOF
+  $ cat > dep_lib/dep_lib.mli <<EOF
   > val v : int
   > EOF
 
   $ cat > dune <<EOF
-  > (executable (name main) (libraries mylib))
+  > (executable (name main) (libraries dep_lib))
   > EOF
   $ cat > main.ml <<EOF
-  > let () = print_int Mylib.v
+  > let () = print_int Dep_lib.v
   > EOF
 
 --- Release profile (opaque=false): .mli change rebuilds consumer ---
 
   $ cat > dune-workspace <<EOF
-  > (lang dune 3.0)
+  > (lang dune 3.23)
   > (profile release)
   > EOF
 
@@ -39,11 +39,11 @@ Companion to [opaque.t], which covers the [.ml]-only change axis.
 Add a new declaration to both [.ml] and [.mli] (paired so no value is
 left unexported, which would trip warning 32 under dev):
 
-  $ cat > lib/mylib.ml <<EOF
+  $ cat > dep_lib/dep_lib.ml <<EOF
   > let v = 42
   > let extra () = 0
   > EOF
-  $ cat > lib/mylib.mli <<EOF
+  $ cat > dep_lib/dep_lib.mli <<EOF
   > val v : int
   > val extra : unit -> int
   > EOF
@@ -55,7 +55,7 @@ left unexported, which would trip warning 32 under dev):
 --- Dev profile (opaque=true): .mli change still rebuilds consumer ---
 
   $ cat > dune-workspace <<EOF
-  > (lang dune 3.0)
+  > (lang dune 3.23)
   > (profile dev)
   > EOF
 
@@ -63,12 +63,12 @@ left unexported, which would trip warning 32 under dev):
 
 Add another paired declaration:
 
-  $ cat > lib/mylib.ml <<EOF
+  $ cat > dep_lib/dep_lib.ml <<EOF
   > let v = 42
   > let extra () = 0
   > let helper x = x + 1
   > EOF
-  $ cat > lib/mylib.mli <<EOF
+  $ cat > dep_lib/dep_lib.mli <<EOF
   > val v : int
   > val extra : unit -> int
   > val helper : int -> int

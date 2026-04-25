@@ -4,28 +4,28 @@ A consumer's [.cmx] compilation rule depends on a local library's
 behave differently; see [opaque-cmx-deps-external.t].
 
   $ cat > dune-project <<EOF
-  > (lang dune 3.0)
+  > (lang dune 3.23)
   > EOF
 
-  $ mkdir lib
-  $ cat > lib/dune <<EOF
-  > (library (name mylib))
+  $ mkdir local_dep
+  $ cat > local_dep/dune <<EOF
+  > (library (name local_dep))
   > EOF
-  $ cat > lib/mylib.ml <<EOF
+  $ cat > local_dep/local_dep.ml <<EOF
   > let v = 42
   > EOF
 
   $ cat > dune <<EOF
-  > (executable (name main) (libraries mylib))
+  > (executable (name main) (libraries local_dep))
   > EOF
   $ cat > main.ml <<EOF
-  > let () = print_int Mylib.v
+  > let () = print_int Local_dep.v
   > EOF
 
 --- Release profile (opaque=false): both .cmi and .cmx globs ---
 
   $ cat > dune-workspace <<EOF
-  > (lang dune 3.0)
+  > (lang dune 3.23)
   > (profile release)
   > EOF
 
@@ -38,7 +38,7 @@ behave differently; see [opaque-cmx-deps-external.t].
 --- Dev profile (opaque=true): only .cmi glob ---
 
   $ cat > dune-workspace <<EOF
-  > (lang dune 3.0)
+  > (lang dune 3.23)
   > (profile dev)
   > EOF
 

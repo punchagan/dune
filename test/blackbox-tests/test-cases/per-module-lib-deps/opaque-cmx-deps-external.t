@@ -2,10 +2,11 @@ A consumer's [.cmx] compilation rule depends on an external library's
 [.cmx] under both the release and dev profiles. Counterpart to
 [opaque-cmx-deps-local.t], which shows the dev-profile behaviour that
 omits the [.cmx] from the dep set for *local* libraries. The [unix]
-stdlib library, resolved through findlib, plays the role of "external".
+library, shipped with OCaml and resolved through findlib, plays the
+role of "external".
 
   $ cat > dune-project <<EOF
-  > (lang dune 3.0)
+  > (lang dune 3.23)
   > EOF
 
   $ cat > dune <<EOF
@@ -18,7 +19,7 @@ stdlib library, resolved through findlib, plays the role of "external".
 --- Release profile (opaque=false): both .cmi and .cmx globs ---
 
   $ cat > dune-workspace <<EOF
-  > (lang dune 3.0)
+  > (lang dune 3.23)
   > (profile release)
   > EOF
 
@@ -31,7 +32,7 @@ stdlib library, resolved through findlib, plays the role of "external".
 --- Dev profile (opaque=true): both .cmi and .cmx globs (unchanged for external libs) ---
 
   $ cat > dune-workspace <<EOF
-  > (lang dune 3.0)
+  > (lang dune 3.23)
   > (profile dev)
   > EOF
 
