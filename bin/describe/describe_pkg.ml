@@ -8,16 +8,11 @@ module Show_lock = struct
     let* lock_dir_paths =
       Memo.run (Workspace.workspace ())
       >>| Pkg.Pkg_common.Lock_dirs_arg.lock_dirs_of_workspace lock_dir_arg
-    and* local_packages = Memo.run Pkg.Pkg_common.find_local_packages in
-    let local_package_names =
-      Package_name.Map.keys local_packages |> Package_name.Set.of_list
     in
     Fiber.parallel_map lock_dir_paths ~f:(fun lock_dir_path ->
       let lock_dir_path = Path.source lock_dir_path in
       let+ platform = Pkg.Pkg_common.solver_env_from_system_and_context ~lock_dir_path in
       let lock_dir = Lock_dir.read_disk_exn lock_dir_path in
-      User_error.ok_exn
-        (Lock_dir.check_packages lock_dir.packages ~lock_dir_path ~local_package_names);
       let packages =
         Lock_dir.Packages.pkgs_on_platform_by_name lock_dir.packages ~platform
         |> Package_name.Map.values
