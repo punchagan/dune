@@ -58,9 +58,23 @@ filter can flip it to 0.
 
 Empty [link_only_module.ml] so its [.cmi] loses the [val x : int]
 binding. The cctx-wide glob over [link_only_lib]'s objdir fires
-on the [.cmi] content change, invalidating [main]:
+on the [.cmi] content change, invalidating [main] — both the
+[.cmi]/[.cmti] rule and the [.cmo]/[.cmt] rule re-run:
 
   $ echo > link_only_module.ml
   $ dune build @check
-  $ dune trace cat | jq -s 'include "dune"; [.[] | targetsMatchingFilter(test("dune__exe__Main"))] | length'
-  2
+  $ dune trace cat | jq -s 'include "dune"; [.[] | targetsMatchingFilter(test("dune__exe__Main"))]'
+  [
+    {
+      "target_files": [
+        "_build/default/.main.eobjs/byte/dune__exe__Main.cmi",
+        "_build/default/.main.eobjs/byte/dune__exe__Main.cmti"
+      ]
+    },
+    {
+      "target_files": [
+        "_build/default/.main.eobjs/byte/dune__exe__Main.cmo",
+        "_build/default/.main.eobjs/byte/dune__exe__Main.cmt"
+      ]
+    }
+  ]
