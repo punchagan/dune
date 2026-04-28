@@ -54,15 +54,15 @@ filter can flip it to 0.
   > let _ = Intermediate_module.x
   > EOF
 
-  $ dune build @check
+  $ dune build ./main.exe
 
 Empty [link_only_module.ml] so its [.cmi] loses the [val x : int]
 binding. The cctx-wide glob over [link_only_lib]'s objdir fires
 on the [.cmi] content change, invalidating [main] — both the
-[.cmi]/[.cmti] rule and the [.cmo]/[.cmt] rule re-run:
+[.cmi]/[.cmti] rule and the [.cmx]/[.o] rule re-run:
 
   $ echo > link_only_module.ml
-  $ dune build @check
+  $ dune build ./main.exe
   $ dune trace cat | jq -s 'include "dune"; [.[] | targetsMatchingFilter(test("dune__exe__Main"))]'
   [
     {
@@ -73,8 +73,8 @@ on the [.cmi] content change, invalidating [main] — both the
     },
     {
       "target_files": [
-        "_build/default/.main.eobjs/byte/dune__exe__Main.cmo",
-        "_build/default/.main.eobjs/byte/dune__exe__Main.cmt"
+        "_build/default/.main.eobjs/native/dune__exe__Main.cmx",
+        "_build/default/.main.eobjs/native/dune__exe__Main.o"
       ]
     }
   ]
