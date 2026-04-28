@@ -1,19 +1,25 @@
-Regression: under [(implicit_transitive_deps false)], a transitive
-link-only library must not invalidate the consumer when the consumer
-cannot see it through [-I] or [-H].
+Observational baseline: under [(implicit_transitive_deps false)],
+the consumer [main] uses [intermediate_lib] which declares
+[link_only_lib] as a transitive dep. [main]'s source never
+references any module of [link_only_lib]; under
+[(implicit_transitive_deps false)] (with [-H] support, mode
+[Disabled_with_hidden_includes]), [link_only_lib] is on [main]'s
+[-H] include path so the compiler can read its [.cmi] files via
+alias chains, but [main] does not use any of them.
 
-[link_only_lib] is a transitive dep of [main]: [main] depends on
-[intermediate_lib] which declares [link_only_lib]. With
-[(implicit_transitive_deps false)], [link_only_lib]'s modules are
-not on [main]'s [-I] path; [main]'s source cannot reference
-[Link_only_module] at all. The per-module dependency computation
-in #14116 must therefore not surface [link_only_lib] as a
-compile-rule dep — an earlier iteration of that PR did, via a
-glob over the lib's objdir, causing spurious [Main] recompiles
-when [link_only_module] changed.
+On trunk today, [main]'s compile rule globs over
+[link_only_lib]'s objdir as part of the cctx-wide [-H] glob, so
+any [.cmi] content change in [link_only_lib] invalidates [main].
+A tighter per-module filter could observe that no
+[link_only_lib] entry name reaches [main]'s reference closure
+and drop the lib from [main]'s compile-rule deps.
 
 Reported by @nojb in
-https://github.com/ocaml/dune/pull/14116#issuecomment-4323883194.
+https://github.com/ocaml/dune/pull/14116#issuecomment-4323883194
+and again, after a partial fix, in
+https://github.com/ocaml/dune/pull/14116#issuecomment-4331209820.
+Records [main]'s current rebuild count so a future per-module
+filter can flip it to 0.
 
   $ cat > dune-project <<EOF
   > (lang dune 3.23)
@@ -48,18 +54,13 @@ https://github.com/ocaml/dune/pull/14116#issuecomment-4323883194.
   > let _ = Intermediate_module.x
   > EOF
 
-  $ dune build ./main.exe
+  $ dune build @check
 
-Edit [link_only_module]. [Main] doesn't reference it, and the
-compiler cannot see [link_only_lib] under
-[(implicit_transitive_deps false)], so [Main] must not be
-recompiled (the executable may still relink because
-[link_only_module.cmx] changes, but [Main.cmo] / [Main.cmx] must
-not):
+Empty [link_only_module.ml] so its [.cmi] loses the [val x : int]
+binding. The cctx-wide glob over [link_only_lib]'s objdir fires
+on the [.cmi] content change, invalidating [main]:
 
-  $ cat > link_only_module.ml <<EOF
-  > let x = 43
-  > EOF
-  $ dune build ./main.exe
-  $ dune trace cat | jq -s 'include "dune"; [.[] | targetsMatchingFilter(test("dune__exe__Main"))]'
-  []
+  $ echo > link_only_module.ml
+  $ dune build @check
+  $ dune trace cat | jq -s 'include "dune"; [.[] | targetsMatchingFilter(test("dune__exe__Main"))] | length'
+  2
