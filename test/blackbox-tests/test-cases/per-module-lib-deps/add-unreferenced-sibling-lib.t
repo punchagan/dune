@@ -71,7 +71,23 @@ Add [added_lib] to [consumer_lib]'s [(libraries ...)]. Neither
   > EOF
 
   $ dune build @check
-  $ dune trace cat | jq -s 'include "dune"; [.[] | targetsMatchingFilter(test("consumes_dep"))] | length'
-  1
-  $ dune trace cat | jq -s 'include "dune"; [.[] | targetsMatchingFilter(test("unrelated_module"))] | length'
-  1
+  $ dune trace cat | jq -s 'include "dune"; [.[] | targetsMatchingFilter(test("consumes_dep"))]'
+  [
+    {
+      "target_files": [
+        "_build/default/.consumer_lib.objs/byte/consumes_dep.cmi",
+        "_build/default/.consumer_lib.objs/byte/consumes_dep.cmo",
+        "_build/default/.consumer_lib.objs/byte/consumes_dep.cmt"
+      ]
+    }
+  ]
+  $ dune trace cat | jq -s 'include "dune"; [.[] | targetsMatchingFilter(test("unrelated_module"))]'
+  [
+    {
+      "target_files": [
+        "_build/default/.consumer_lib.objs/byte/unrelated_module.cmi",
+        "_build/default/.consumer_lib.objs/byte/unrelated_module.cmo",
+        "_build/default/.consumer_lib.objs/byte/unrelated_module.cmt"
+      ]
+    }
+  ]
