@@ -17,10 +17,6 @@
     oxcaml = {
       url = "github:oxcaml/oxcaml/5.2.0minus-31";
     };
-    oxcaml-trunk = {
-      url = "github:oxcaml/oxcaml/main";
-      flake = false;
-    };
     oxcaml-opam-repository = {
       url = "github:oxcaml/opam-repository/231c88c2e564fdca40e15e750aacad5fb0887435";
       flake = false;
@@ -57,7 +53,6 @@
       ocaml-overlays,
       odoc-src,
       oxcaml,
-      oxcaml-trunk,
       oxcaml-opam-repository,
       revdeps-dune,
       menhir-src,
@@ -244,10 +239,14 @@
                 inherit pkgs menhir-src;
               };
             in
+            # nix build .#oxcaml-trunk-build --no-link --impure
             pkgs.stdenv.mkDerivation {
               pname = "oxcaml-trunk-build";
               version = "check";
-              src = oxcaml-trunk;
+              src = builtins.fetchGit {
+                url = "https://github.com/oxcaml/oxcaml.git";
+                ref = "main";
+              };
               nativeBuildInputs = [
                 dune
                 pkgs.autoconf
