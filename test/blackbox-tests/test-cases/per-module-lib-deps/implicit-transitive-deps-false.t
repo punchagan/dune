@@ -7,6 +7,13 @@ references any module of [link_only_lib]; under
 [-H] include path so the compiler can read its [.cmi] files via
 alias chains, but [main] does not use any of them.
 
+The mode-with-[-H] is only reached on dune lang [3.17+] with an
+OCaml compiler that supports hidden includes (5.2+); older dune
+lang versions fall back to mode [Disabled] without [-H]. This
+test pins [(lang dune 3.23)] below to keep the [-H]-glob path the
+one exercised — that is the path the future per-module filter is
+expected to tighten.
+
 On trunk today, [main]'s compile rule globs over
 [link_only_lib]'s objdir as part of the cctx-wide [-H] glob, so
 any [.cmi] content change in [link_only_lib] invalidates [main].
