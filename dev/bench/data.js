@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1777537633828,
+  "lastUpdate": 1777537940019,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -74992,6 +74992,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 1.1338533979733334,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "anmonteiro@gmail.com",
+            "name": "Antonio Nuno Monteiro",
+            "username": "anmonteiro"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "353181a80c6f5ee447ebbc12c975c5e05d5966cf",
+          "message": "test(melange): add a regression test for preprocessing dialects (#14381)\n\nSigned-off-by: Antonio Nuno Monteiro <anmonteiro@gmail.com>",
+          "timestamp": "2026-04-30T00:26:23-07:00",
+          "tree_id": "2334b8708cc74b4e6ec705b5fd58462430d07f2a",
+          "url": "https://github.com/punchagan/dune/commit/353181a80c6f5ee447ebbc12c975c5e05d5966cf"
+        },
+        "date": 1777537938831,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 60.18781802712667,
             "unit": "seconds"
           }
         ]
