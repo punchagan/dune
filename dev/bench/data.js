@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778063495121,
+  "lastUpdate": 1778063797255,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -75050,6 +75050,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 1.0622202650066666,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "ee485ee59ab6d82d992e4fe623417f7a72944dd7",
+          "message": "[pkg] Resolve directory symlinks in fetched targets (#13792)\n\n### Housekeeping\nThis PR fixes the tests in #13393\n#9873 will not be fixed, but still a significant step towards fixing\n#13678.\n\n### What this PR does\n\nAfter fetching package sources, add a pass resolving directory symlinks.\nAs they're not problematic at this stage, file symlinks are left as is.\nBroken symlinks are removed silently to preserve existing behaviour.\n\nNote: both `portable_hardlink` and `portable_symlink` work backwards\nfrom what I initially understood, see #13791\n\nDone with the help of @Alizter, so thanks :)",
+          "timestamp": "2026-05-06T09:49:13+01:00",
+          "tree_id": "3e4f055380bbe1376a1368ce9979801e2152f213",
+          "url": "https://github.com/punchagan/dune/commit/ee485ee59ab6d82d992e4fe623417f7a72944dd7"
+        },
+        "date": 1778063796352,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 59.518868363126664,
             "unit": "seconds"
           }
         ]
