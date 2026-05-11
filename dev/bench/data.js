@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778495893541,
+  "lastUpdate": 1778496145836,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -75108,6 +75108,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 1.0859248080666666,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "37448db722bfc3cf79bdd97ad2ca499596f8c693",
+          "message": "refactor: Use array-backed filename sets in load rules (#14487)\n\nIn watch mode, these sets and maps are rather long lived. Let's use a\nmore compact representation for them.\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-05-10T23:31:26+01:00",
+          "tree_id": "76cedfc608534180c9cdb7d9185c6021111e47be",
+          "url": "https://github.com/punchagan/dune/commit/37448db722bfc3cf79bdd97ad2ca499596f8c693"
+        },
+        "date": 1778496144807,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 49.77920669991334,
             "unit": "seconds"
           }
         ]
