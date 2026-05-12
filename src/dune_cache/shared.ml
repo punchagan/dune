@@ -430,7 +430,12 @@ let try_to_store_to_shared_cache ~mode ~rule_digest ~loc ~produced_targets
         | Some _ -> Ok ()
         | None -> Error ())
   with
-  | Error _ -> Fiber.return None
+  | Error errors ->
+    errors
+    |> Nonempty_list.to_list
+    |> List.iter ~f:(fun (e, ()) ->
+      Log.info "cache store target creation error" [ "target", Path.Build.to_dyn e ]);
+    Fiber.return None
   | Ok targets ->
     store_artifacts ~mode ~rule_digest targets
     >>= (function
