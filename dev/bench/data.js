@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778587616581,
+  "lastUpdate": 1778587866890,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -75166,6 +75166,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 0.8632742665733334,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "5576a614bf179e7295b63edf73a8b28462e0d482",
+          "message": "test: show auto-locking updates dependency version automatically (#14493)\n\nWhile looking at #13011, I wanted to test out this case to check if\nautolocking picks up a new release of a package dependency when\nrebuilding without cleaning the `_build` directory first. That does seem\nto be the case.",
+          "timestamp": "2026-05-12T11:54:59+01:00",
+          "tree_id": "f1733fb123a2c664bee95faf4546f19c969ff359",
+          "url": "https://github.com/punchagan/dune/commit/5576a614bf179e7295b63edf73a8b28462e0d482"
+        },
+        "date": 1778587865905,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 48.97022673676,
             "unit": "seconds"
           }
         ]
