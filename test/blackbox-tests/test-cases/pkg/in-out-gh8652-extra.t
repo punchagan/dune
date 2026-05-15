@@ -75,13 +75,3 @@ dune's bin/main.exe -> dune_scheduler -> ocaml_inotify chain.
   > EOF
 
   $ dune build 2>&1
-  Error: Dependency cycle between:
-     _build/default/dune.install
-  -> _build/_private/default/.pkg/base.0.0.1-25ad249b4871f392a283a69bc22e4611/target
-  -> _build/_private/default/.pkg/ppx_expect.0.0.1-0c2f1b0f7bc72df3e681e02a6d5921d3/target
-  -> library "ocaml_inotify" in _build/default/vendor/ocaml-inotify
-  -> _build/install/default/bin/dune
-  -> _build/default/dune.install
-  -> required by alias all
-  -> required by alias default
-  [1]

@@ -494,7 +494,20 @@ module DB = struct
     let instrument_with = Context.instrument_with context in
     let* lock_dir_active = Pkg_rules.lock_dir_active (Context.name context) in
     let+ public_libs =
-      let+ installed_libs = Lib.DB.installed context in
+      (* For Lock-kind contexts, the project-level fallback findlib is
+         narrowed to just the OCaml toolchain's stdlib path. This avoids
+         walking every lockdir target/lib during orphan workspace lib
+         compiles (the in-out cycle of #8652). Per-package scopes still
+         consult their own narrowed findlib via
+         [Pkg_rules.project_ocamlpath_for_package] for their declared
+         lockdir deps. *)
+      let+ installed_libs =
+        match Context.kind context with
+        | Default | Opam _ -> Lib.DB.installed context
+        | Lock _ ->
+          let* ocaml = Context.ocaml context in
+          Lib.DB.of_paths context ~paths:[ ocaml.lib_config.stdlib_dir ]
+      in
       public_libs t ~instrument_with ~installed_libs stanzas
     in
     let by_dir =
