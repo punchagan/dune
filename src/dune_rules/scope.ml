@@ -315,6 +315,7 @@ module DB = struct
         ~lib_config
         ~projects_by_root
         ~public_libs
+        ~installed_libs
         ~instrument_with
         ~lock_dir_active
         context
@@ -413,7 +414,7 @@ module DB = struct
                     | Some l -> [ Lib.DB.Resolve_result.found (Lib.info l) ]
                   in
                   Lib.DB.create
-                    ~parent:None (* TODO: is this correct? *)
+                    ~parent:(Some installed_libs)
                     ~resolve:resolve_name_narrowed
                     ~resolve_lib_id:resolve_lib_id_narrowed
                     ~all:(fun () -> Memo.return [])
@@ -493,22 +494,24 @@ module DB = struct
     in
     let instrument_with = Context.instrument_with context in
     let* lock_dir_active = Pkg_rules.lock_dir_active (Context.name context) in
+    (* For Lock-kind contexts, the project-level fallback findlib is
+       narrowed to just the OCaml toolchain's stdlib path. This avoids
+       walking every lockdir target/lib during orphan workspace lib
+       compiles (the in-out cycle of #8652). Per-package scopes still
+       consult their own narrowed findlib via
+       [Pkg_rules.project_ocamlpath_for_package] for their declared
+       lockdir deps, AND chain to [installed_libs] (stdlib) as a final
+       fallback so that workspace libraries with stdlib-only deps
+       (e.g. [unix]) can still be resolved. *)
+    let* installed_libs =
+      match Context.kind context with
+      | Default | Opam _ -> Lib.DB.installed context
+      | Lock _ ->
+        let* ocaml = Context.ocaml context in
+        Lib.DB.of_paths context ~paths:[ ocaml.lib_config.stdlib_dir ]
+    in
     let+ public_libs =
-      (* For Lock-kind contexts, the project-level fallback findlib is
-         narrowed to just the OCaml toolchain's stdlib path. This avoids
-         walking every lockdir target/lib during orphan workspace lib
-         compiles (the in-out cycle of #8652). Per-package scopes still
-         consult their own narrowed findlib via
-         [Pkg_rules.project_ocamlpath_for_package] for their declared
-         lockdir deps. *)
-      let+ installed_libs =
-        match Context.kind context with
-        | Default | Opam _ -> Lib.DB.installed context
-        | Lock _ ->
-          let* ocaml = Context.ocaml context in
-          Lib.DB.of_paths context ~paths:[ ocaml.lib_config.stdlib_dir ]
-      in
-      public_libs t ~instrument_with ~installed_libs stanzas
+      Memo.return (public_libs t ~instrument_with ~installed_libs stanzas)
     in
     let by_dir =
       scopes_by_dir
@@ -516,6 +519,7 @@ module DB = struct
         ~lib_config
         ~projects_by_root
         ~public_libs
+        ~installed_libs
         ~instrument_with
         ~lock_dir_active
         context
