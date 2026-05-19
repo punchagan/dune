@@ -1313,6 +1313,49 @@ let install_entries sctx package =
   Stanzas_to_entries.stanzas_to_entries_for_pkg sctx package
 ;;
 
+let () =
+  Install_layout.set_entry_resolver (fun context_name package ->
+    let open Memo.O in
+    let* sctx = Super_context.find_exn context_name in
+    let+ entries = install_entries sctx package in
+    let roots = Install.Roots.opam_from_prefix Path.root ~relative:Path.relative in
+    let install_paths = Install.Paths.make ~relative:Path.relative ~package ~roots in
+    List.filter_map entries ~f:(fun (s : Install.Entry.Sourced.Unexpanded.t) ->
+      let entry = s.entry in
+      match entry.kind with
+      | Install.Entry.Unexpanded.Source_tree -> None
+      | File | Directory ->
+        let relative =
+          Install.Entry.relative_installed_path entry ~paths:install_paths
+          |> Path.as_in_source_tree_exn
+        in
+        Some { Install_layout.src = Path.build entry.src; relative }))
+;;
+
+(** Generates the symlink rules for the install layout under
+    [_build/install/<context>/.packages/<key>/]. One rule per entry,
+    emitted when [gen_rules.ml] visits the entry's parent directory. *)
+let layout_gen_rules context_name ~dir key =
+  match Digest.from_hex key with
+  | None ->
+    (* This dispatch arm fires from [gen_rules.ml] when the build system
+       visits a path under [.packages/<key>/]. A non-hex key here means
+       the build system asked for a directory we never advertise, which
+       is an internal invariant violation, not user input. *)
+    Code_error.raise "invalid install layout key" [ "key", Dyn.string key ]
+  | Some digest ->
+    let* entries = Memo.exec Install_layout.entries_memo (context_name, digest) in
+    Memo.parallel_iter entries ~f:(fun (src, dst, _) ->
+      let rule_dir = Path.Build.parent_exn dst in
+      if Path.Build.equal rule_dir dir
+      then (
+        let { Action_builder.With_targets.build; targets } =
+          Action_builder.symlink ~src ~dst
+        in
+        Rules.Produce.rule (Rule.make ~info:(Rule.Info.of_loc_opt None) ~targets build))
+      else Memo.return ())
+;;
+
 let packages =
   let f sctx =
     let* packages = Dune_load.packages () in
