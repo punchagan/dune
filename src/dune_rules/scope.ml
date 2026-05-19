@@ -478,10 +478,14 @@ module DB = struct
             acc
           | Some (_loc, pkg_dir) ->
             let pkg_root = Path.Build.append_source build_dir pkg_dir in
-            Path.Source.Map.add_exn
-              acc
-              pkg_dir
-              { project; db; coq_db; rocq_db; root = pkg_root }))
+            let entry = { project; db; coq_db; rocq_db; root = pkg_root } in
+            (* When a package's [(dir ...)] is the project root itself,
+               its per-pkg scope replaces the fallback scope at that
+               root. This lets workspace packages without a per-subtree
+               dir (e.g. the [dune] package with [(dir .)]) own the
+               root scope and resolve their declared lockdir deps via
+               their narrowed findlib. *)
+            Path.Source.Map.set acc pkg_dir entry))
   ;;
 
   let create ~context ~projects_by_root stanzas coq_stanzas rocq_stanzas =
