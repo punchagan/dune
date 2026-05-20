@@ -2257,6 +2257,27 @@ let dune_dep =
 ;;
 
 let build_rule context_name ~source_deps (pkg : Pkg.t) =
+  let* workspace_dep_files =
+    (* Materialize the workspace_depends set as a scoped install layout
+       under [_build/install/<ctx>/.packages/<digest>/]. The dep on these
+       files forces the layout's symlink rules (which symlink the
+       workspace packages' install entries into the layout) without
+       going through [scheme_per_ctx_memo], avoiding the in-out cycle
+       (#8652). *)
+    if List.is_empty pkg.workspace_deps
+    then Memo.return []
+    else Install_layout.files context_name pkg.workspace_deps
+  in
+  let* workspace_dep_extra_ocamlpath =
+    (* In addition to the layout's [lib_root], the workspace packages'
+       OWN deps must be on OCAMLPATH so that findlib can resolve the
+       layout libraries' [requires] field (e.g. dune-configurator's
+       META declares [requires = "unix csexp"], so csexp's lockdir
+       lib path must be visible to base's nested dune build). *)
+    if List.is_empty pkg.workspace_deps
+    then Memo.return []
+    else Install_layout.extra_ocamlpath context_name pkg.workspace_deps
+  in
   let+ build_action =
     let+ copy_action, build_action, install_action =
       let+ copy_action =
@@ -2365,29 +2386,30 @@ let build_rule context_name ~source_deps (pkg : Pkg.t) =
        | false -> deps
        | true -> Dep.Set.add deps (Lazy.force dune_dep)
      in
-     (* FIXME Hackish way to force build workspace deps to ensure they are
-        built before this pkg *)
-     Dep.Set.of_list_map pkg.workspace_deps ~f:(fun ws_dep ->
-       let install_file =
-         Path.Build.relative
-           (Context_name.build_dir context_name)
-           (Package.Name.to_string ws_dep ^ ".install")
-         |> Path.build
-       in
-       install_file |> Dep.file)
-     |> Dep.Set.union deps
+     (* Force the workspace_depends layout files. The scoped layout is
+        produced by [Install_layout]; its rule dispatch goes through
+        [gen_rules.ml] (not [scheme_per_ctx_memo]), so loading these
+        deps does not trigger the workspace-wide install-rules cascade
+        that closes the in-out cycle (#8652). *)
+     Dep.Set.of_list_map workspace_dep_files ~f:Dep.file |> Dep.Set.union deps
    in
    Action_builder.deps deps |> Action_builder.with_no_targets)
   (* TODO should we add env deps on these? *)
   >>> (let env_with_workspace_libs =
-         (* FIXME This is a HACK adding workspace packages on PATH. *)
+         (* Add the scoped install layout's lib_root to OCAMLPATH for the
+            locked package's nested build. The layout contains only the
+            declared workspace_depends, not every workspace package.
+            Also add the workspace packages' lockdir deps' lib paths so
+            findlib can resolve the layout libraries' [requires]. *)
          let lib_root =
-           (let dir = Install.Context.dir ~context:context_name in
-            Path.Build.relative dir "lib")
-           |> Path.build
+           Install_layout.lib_root context_name pkg.workspace_deps |> Path.build
          in
          let pkg_env = Pkg.exported_value_env pkg in
-         Value_list_env.add_path pkg_env Dune_findlib.Config.ocamlpath_var lib_root
+         let pkg_env =
+           Value_list_env.add_path pkg_env Dune_findlib.Config.ocamlpath_var lib_root
+         in
+         List.fold_left workspace_dep_extra_ocamlpath ~init:pkg_env ~f:(fun env p ->
+           Value_list_env.add_path env Dune_findlib.Config.ocamlpath_var p)
          |> Value_list_env.to_env
        in
        if pkg.workspace_deps = []

@@ -1313,28 +1313,200 @@ let install_entries sctx package =
   Stanzas_to_entries.stanzas_to_entries_for_pkg sctx package
 ;;
 
+(** Wire [Install_layout.set_extra_ocamlpath_resolver]: given a workspace
+    package, return the OCAMLPATH paths for its declared lockdir deps
+    (transitively, with workspace_depends-bearing pkgs excluded per
+    [Pkg_rules.project_ocamlpath_for_package]). Consumers of the
+    layout (locked pkgs via [workspace_depends]) need these on
+    OCAMLPATH so findlib can resolve the layout libraries' [requires]. *)
 let () =
-  Install_layout.set_entry_resolver (fun context_name package ->
+  Install_layout.set_extra_ocamlpath_resolver (fun context_name package ->
     let open Memo.O in
-    let* sctx = Super_context.find_exn context_name in
-    let+ entries = install_entries sctx package in
-    let roots = Install.Roots.opam_from_prefix Path.root ~relative:Path.relative in
-    let install_paths = Install.Paths.make ~relative:Path.relative ~package ~roots in
-    List.filter_map entries ~f:(fun (s : Install.Entry.Sourced.Unexpanded.t) ->
-      let entry = s.entry in
-      match entry.kind with
-      | Install.Entry.Unexpanded.Source_tree -> None
-      | File | Directory ->
-        let relative =
-          Install.Entry.relative_installed_path entry ~paths:install_paths
-          |> Path.as_in_source_tree_exn
-        in
-        Some { Install_layout.src = Path.build entry.src; relative }))
+    let* packages = Dune_load.packages () in
+    match Package.Name.Map.find packages package with
+    | None -> Memo.return []
+    | Some pkg ->
+      let pkg_depends =
+        Package.depends pkg
+        |> List.map ~f:(fun (pd : Package_dependency.t) -> pd.name)
+      in
+      Pkg_rules.project_ocamlpath_for_package context_name ~package_deps:pkg_depends)
 ;;
 
-(** Generates the symlink rules for the install layout under
+(** Generate a minimal META file text from a [Library.t] stanza, using
+    only static stanza data. Avoids the [gen_meta_file] cascade that
+    forces [Scope.DB.lib_entries_of_package] (workspace-wide lib
+    instantiations -> in-out cycle).
+
+    Format produced (per library, single-library packages only):
+    {[
+      description = ""
+      requires = "<deps>"
+      archive(byte) = "<lib>.cma"
+      archive(native) = "<lib>.cmxa"
+      plugin(byte) = "<lib>.cma"
+      plugin(native) = "<lib>.cmxs"
+    ]} *)
+let static_meta_for_library (lib : Library.t) =
+  let lib_basename = Lib_name.Local.to_string (snd lib.name) in
+  let deps =
+    List.filter_map lib.buildable.libraries ~f:(function
+      | Lib_dep.Direct (_, name) -> Some (Lib_name.to_string name)
+      | Re_export (_, name) -> Some (Lib_name.to_string name)
+      | Select _ | Instantiate _ -> None)
+    |> String.concat ~sep:" "
+  in
+  String.concat
+    ~sep:"\n"
+    [ "description = \"\""
+    ; Printf.sprintf "requires = %S" deps
+    ; Printf.sprintf "archive(byte) = %S" (lib_basename ^ ".cma")
+    ; Printf.sprintf "archive(native) = %S" (lib_basename ^ ".cmxa")
+    ; Printf.sprintf "plugin(byte) = %S" (lib_basename ^ ".cma")
+    ; Printf.sprintf "plugin(native) = %S" (lib_basename ^ ".cmxs")
+    ]
+;;
+
+(** Derive a module name (capitalized) from a source filename by
+    stripping the OCaml source extension. Returns [None] if the
+    filename has no recognized OCaml source extension. *)
+let module_name_of_source_basename basename =
+  let suffixes = [ ".ml"; ".mli"; ".mll"; ".mly" ] in
+  List.find_map suffixes ~f:(fun suffix ->
+    match String.drop_suffix basename ~suffix with
+    | None -> None
+    | Some stem -> Some (String.capitalize stem))
+;;
+
+(** Compute the cmi basename in the obj_dir for a given module of a
+    wrapped library. The library's main module (matching the library
+    name) maps to [<lib>.cmi]; other modules to [<lib>__<Mod>.cmi].
+    The wrapper alias module [<lib>__.cmi] is included separately. *)
+let cmi_basename ~lib_name_local ~module_name =
+  let lib_name_str = Lib_name.Local.to_string lib_name_local in
+  let lib_module = String.capitalize lib_name_str in
+  if String.equal module_name lib_module
+  then lib_name_str ^ ".cmi"
+  else lib_name_str ^ "__" ^ module_name ^ ".cmi"
+;;
+
+let () =
+  Install_layout.set_entry_resolver (fun context_name package ->
+    (* Fully-static entry resolver: derive layout paths from static
+       stanza data only. NO [install_entries] / [lib_install_files] /
+       [Scope.DB.lib_entries_of_package] / [Lib.DB.find_lib_id] --
+       triggering any of those would force workspace-wide lib
+       instantiations, which re-enter this resolver via the
+       [workspace_depends] file dep chain (in-out cycle #8652). *)
+    let open Memo.O in
+    let* sctx = Super_context.find_exn context_name in
+    let ctx = Super_context.context sctx |> Context.build_context in
+    let* packages = Dune_load.packages () in
+    match Package.Name.Map.find packages package with
+    | None -> Memo.return []
+    | Some _pkg ->
+      let pkg_str = Package.Name.to_string package in
+      let layout_lib_dir : Path.Source.t =
+        Path.Source.L.relative Path.Source.root [ "lib"; pkg_str ]
+      in
+      let symlink_entry (src : Path.t) ~basename : Install_layout.entry =
+        let relative = Path.Source.relative layout_lib_dir basename in
+        { Install_layout.kind = Symlink src; relative }
+      in
+      let inline_entry ~basename ~content : Install_layout.entry =
+        let relative = Path.Source.relative layout_lib_dir basename in
+        { Install_layout.kind = Inline_content content; relative }
+      in
+      let* stanzas = Dune_load.dune_files context_name in
+      (* Collect [(library, lib_src_dir)] for libraries in this package. *)
+      let libs_in_pkg =
+        Dune_file.fold_static_stanzas stanzas ~init:[] ~f:(fun dune_file stanza acc ->
+          match Stanza.repr stanza with
+          | Library.T lib ->
+            (match Library.package lib with
+             | Some pkg' when Package.Name.equal (Package.name pkg') package ->
+               let lib_src_dir =
+                 Path.Build.append_source ctx.build_dir (Dune_file.dir dune_file)
+               in
+               (lib, lib_src_dir, Dune_file.dir dune_file) :: acc
+             | _ -> acc)
+          | _ -> acc)
+      in
+      let archive_entries =
+        List.concat_map libs_in_pkg ~f:(fun (lib, lib_src_dir, _src_path) ->
+          List.map
+            [ ".cma"; ".cmxa"; ".cmxs"; ".a" ]
+            ~f:(fun ext ->
+              let ext = Filename.Extension.of_string_exn ext in
+              let p = Library.archive lib ~dir:lib_src_dir ~ext in
+              symlink_entry (Path.build p) ~basename:(Path.Build.basename p)))
+      in
+      let* cmi_entries =
+        Memo.parallel_map libs_in_pkg ~f:(fun (lib, lib_src_dir, src_path) ->
+          let obj_dir = Library.obj_dir ~dir:lib_src_dir lib in
+          let byte_dir = Obj_dir.byte_dir obj_dir in
+          let lib_name_local = snd lib.name in
+          let lib_name_str = Lib_name.Local.to_string lib_name_local in
+          let+ source_dir = Source_tree.find_dir src_path in
+          let lib_module = String.capitalize lib_name_str in
+          let module_names =
+            match source_dir with
+            | None -> []
+            | Some dir ->
+              Source_tree.Dir.filenames dir
+              |> Filename.Array.Set.to_list
+              |> List.filter_map ~f:module_name_of_source_basename
+              |> List.sort_uniq ~compare:String.compare
+          in
+          let module_cmi_entries =
+            List.map module_names ~f:(fun module_name ->
+              let cmi_basename = cmi_basename ~lib_name_local ~module_name in
+              let cmi_src = Path.Build.relative byte_dir cmi_basename in
+              symlink_entry (Path.build cmi_src) ~basename:cmi_basename)
+          in
+          (* Wrapper alias module [<lib>__.cmi] only exists when the
+             library has modules besides the main lib module (i.e. when
+             dune's wrapping actually generates the alias). For a
+             single-module library where the module matches the lib
+             name, no wrapper is generated. *)
+          let has_non_main_modules =
+            List.exists module_names ~f:(fun n -> not (String.equal n lib_module))
+          in
+          if has_non_main_modules
+          then (
+            let wrapper_basename = lib_name_str ^ "__.cmi" in
+            let wrapper_entry =
+              let cmi_src = Path.Build.relative byte_dir wrapper_basename in
+              symlink_entry (Path.build cmi_src) ~basename:wrapper_basename
+            in
+            wrapper_entry :: module_cmi_entries)
+          else module_cmi_entries)
+      in
+      let cmi_entries = List.concat cmi_entries in
+      let meta_entry_opt =
+        match libs_in_pkg with
+        | [] -> None
+        | (lib, _, _) :: _ ->
+          Some
+            (inline_entry
+               ~basename:Dune_findlib.Package.meta_fn
+               ~content:(static_meta_for_library lib))
+      in
+      let entries = archive_entries @ cmi_entries in
+      let entries =
+        match meta_entry_opt with
+        | None -> entries
+        | Some e -> e :: entries
+      in
+      Memo.return entries)
+;;
+
+(** Generates rules for the install layout under
     [_build/install/<context>/.packages/<key>/]. One rule per entry,
-    emitted when [gen_rules.ml] visits the entry's parent directory. *)
+    emitted when [gen_rules.ml] visits the entry's parent directory.
+    For [Symlink] entries, generates a symlink rule. For
+    [Inline_content] entries, generates a [write_file] rule with the
+    inline content. *)
 let layout_gen_rules context_name ~dir key =
   match Digest.from_hex key with
   | None ->
@@ -1345,15 +1517,17 @@ let layout_gen_rules context_name ~dir key =
     Code_error.raise "invalid install layout key" [ "key", Dyn.string key ]
   | Some digest ->
     let* entries = Memo.exec Install_layout.entries_memo (context_name, digest) in
-    Memo.parallel_iter entries ~f:(fun (src, dst, _) ->
+    Memo.parallel_iter entries ~f:(fun (kind, dst, _) ->
       let rule_dir = Path.Build.parent_exn dst in
-      if Path.Build.equal rule_dir dir
-      then (
+      if not (Path.Build.equal rule_dir dir)
+      then Memo.return ()
+      else (
         let { Action_builder.With_targets.build; targets } =
-          Action_builder.symlink ~src ~dst
+          match (kind : Install_layout.entry_kind) with
+          | Symlink src -> Action_builder.symlink ~src ~dst
+          | Inline_content content -> Action_builder.write_file dst content
         in
-        Rules.Produce.rule (Rule.make ~info:(Rule.Info.of_loc_opt None) ~targets build))
-      else Memo.return ())
+        Rules.Produce.rule (Rule.make ~info:(Rule.Info.of_loc_opt None) ~targets build)))
 ;;
 
 let packages =

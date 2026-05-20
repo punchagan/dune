@@ -58,8 +58,12 @@ end = struct
   ;;
 end
 
+type entry_kind =
+  | Symlink of Path.t (** symlink from this source path *)
+  | Inline_content of string (** write this content to the layout dst *)
+
 type entry =
-  { src : Path.t
+  { kind : entry_kind
   ; relative : Path.Source.t
   }
 
@@ -79,9 +83,9 @@ let compute_entries context_name root packages =
   let get_entries = Fdecl.get entry_resolver_fdecl in
   Memo.parallel_map packages ~f:(fun pkg ->
     let+ entries = get_entries context_name pkg in
-    List.map entries ~f:(fun { src; relative } ->
+    List.map entries ~f:(fun { kind; relative } ->
       let dst = Path.Build.append_source root relative in
-      src, dst, relative))
+      kind, dst, relative))
   >>| List.rev_concat
 ;;
 
@@ -115,4 +119,26 @@ let files context_name packages =
 let lib_root context_name packages =
   let key = Digest.to_string (encode_packages packages) in
   Path.Build.relative (dir ~context:context_name ~key) "lib"
+;;
+
+(** Extra OCAMLPATH paths beyond the layout's own [lib_root]. For each
+    workspace package in the layout, returns paths to its transitive
+    lockdir dependencies' library roots -- so that consumers of the
+    layout can resolve the layout libraries' [requires] via findlib.
+
+    Wired through [install_rules] which has the Dune_load access
+    needed to look up [Package.depends] from dune-project. *)
+let extra_ocamlpath_resolver_fdecl
+  : (Context_name.t -> Package.Name.t -> Path.t list Memo.t) Fdecl.t
+  =
+  Fdecl.create Dyn.opaque
+;;
+
+let set_extra_ocamlpath_resolver f = Fdecl.set extra_ocamlpath_resolver_fdecl f
+
+let extra_ocamlpath context_name packages =
+  let open Memo.O in
+  let resolver = Fdecl.get extra_ocamlpath_resolver_fdecl in
+  let+ per_pkg = Memo.parallel_map packages ~f:(resolver context_name) in
+  List.rev_concat per_pkg |> List.sort_uniq ~compare:Path.compare
 ;;
