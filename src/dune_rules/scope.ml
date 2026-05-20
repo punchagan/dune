@@ -381,7 +381,7 @@ module DB = struct
            and we keep the un-narrowed [public_libs] as the parent — the
            per-package partition is then a no-op for resolution behavior. *)
         let db_per_package =
-          Package.Name.Map.map stanzas_by_owner ~f:(fun (package, _stanzas_for_pkg) ->
+          Package.Name.Map.map stanzas_by_owner ~f:(fun (package, stanzas_for_pkg) ->
             let pkg_public_libs =
               if not lock_dir_active
               then public_libs
@@ -424,10 +424,30 @@ module DB = struct
                 Lib.DB.with_parent public_libs ~parent:(Some narrowed_installed))
             in
             let db =
+              (* Library stanzas: include ONLY this package's own. Cross-pkg
+                 public libs fall through to [pkg_public_libs] which
+                 redirects to the owning scope (see [resolve_redirect_to]),
+                 so they get instantiated in the right db.
+                 Library_redirect / Deprecated_library_name: include from
+                 ALL packages — these are private-name → public-name
+                 redirects (e.g. [dune_rpc → dune-rpc]) which need to be
+                 visible cross-package, but they don't cause wrong-db
+                 instantiation since they redirect by name (the public
+                 name then goes through public_libs's [Redirect_by_id]). *)
+              let stanzas_for_db =
+                let is_library (_, (s : Library_related_stanza.t)) =
+                  match s with
+                  | Library _ -> true
+                  | Library_redirect _ | Deprecated_library_name _ -> false
+                in
+                let pkg_libs = List.filter stanzas_for_pkg ~f:is_library in
+                let non_libs =
+                  List.filter stanzas ~f:(fun s -> not (is_library s))
+                in
+                pkg_libs @ non_libs
+              in
               create_db_from_stanzas
-                stanzas
-                (* we pass the full stanzas list for cross-package
-                           internal lookups *)
+                stanzas_for_db
                 ~instrument_with
                 ~public_libs:pkg_public_libs
                 ~lib_config
