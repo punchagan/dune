@@ -734,6 +734,53 @@ let expand_pkg_macro ~loc { context; _ } macro_invocation =
   [ Value.Path path ]
 ;;
 
+(* For Lock-kind contexts, derive a [which_override] that narrows the
+   lockdir lookup to the owning package's transitive deps closure. This
+   avoids forcing every locked-pkg install cookie (the in-out cycle of
+   #8652). Workspace local_bins are still consulted first (via
+   [Artifacts.binary] / [Artifacts.binary_available]). The narrowed
+   lockdir lookup falls through to system PATH so genuinely-system
+   binaries (e.g. shellcheck, rg, hg) still work.
+
+   Returns [None] when narrowing doesn't apply (non-Lock context); in
+   that case the standard [Context.which] is used unchanged. *)
+let narrowed_which_override t =
+  let open Memo.O in
+  let context_name = Context.name t.context in
+  let* lock_active = Pkg_rules.lock_dir_active context_name in
+  if not lock_active
+  then Memo.return None
+  else (
+    let src_dir = Path.Build.drop_build_context_exn t.dir in
+    match Dune_project.exclusive_package t.project ~dir:src_dir with
+    | None ->
+      (* No owning package — restrict lockdir part to nothing; fall
+         through to system PATH. *)
+      Memo.return
+        (Some (fun prog -> Which.which ~path:(Context.path t.context) prog))
+    | Some pkg_id ->
+      let package_deps =
+        match
+          Package.Name.Map.find
+            (Dune_project.packages t.project)
+            (Package.Id.name pkg_id)
+        with
+        | None -> []
+        | Some pkg ->
+          Package.depends pkg
+          |> List.map ~f:(fun (pd : Package_dependency.t) -> pd.name)
+      in
+      Memo.return
+        (Some
+           (fun prog ->
+             let* narrowed =
+               Pkg_rules.which_for_package context_name ~package_deps prog
+             in
+             match narrowed with
+             | Some _ as r -> Memo.return r
+             | None -> Which.which ~path:(Context.path t.context) prog)))
+;;
+
 let expand_pform_macro
       (context : Context.t)
       ~dir
@@ -770,7 +817,9 @@ let expand_pform_macro
              Action_builder.of_memo
                (let open Memo.O in
                 let* artifacts_host = t.artifacts_host in
+                let* which_override = narrowed_which_override t in
                 Artifacts.binary
+                  ?which_override
                   ~loc:(Some (Dune_lang.Template.Pform.loc source))
                   ~dir:t.dir
                   artifacts_host
@@ -801,7 +850,10 @@ let expand_pform_macro
         Without
           (let open Memo.O in
            let* artifacts_host = t.artifacts_host in
-           let+ b = Artifacts.binary_available artifacts_host ~dir:t.dir s in
+           let* which_override = narrowed_which_override t in
+           let+ b =
+             Artifacts.binary_available ?which_override artifacts_host ~dir:t.dir s
+           in
            b |> string_of_bool |> string))
   | File_available ->
     Direct

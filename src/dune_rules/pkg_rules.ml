@@ -2616,22 +2616,34 @@ let all_deps universe =
 
 let all_project_deps context = all_deps (Dependencies context)
 
+(* [which] for Lock contexts. Looks up a binary in the OCaml toolchain
+   pkg's closure, identified by [lock_dir.ocaml] (the solver-recorded
+   compiler pkg, regardless of name — relocatable-compiler,
+   ocaml-base-compiler, etc.). Handles [ocamlc/ocamllex/ocamldep/...].
+
+   No full-lockdir closure fallback — that would force every pkg's
+   install cookie and cycle through [workspace_depends] back-edges
+   (the in-out cycle of #8652). [Context.which] falls through to
+   system PATH for binaries not in the toolchain closure.
+
+   For action expansion of arbitrary lockdir binaries, consumers
+   should narrow per-caller (see [which_for_package] used by
+   [%{bin-available:X}] expansion) or, longer-term, the solver should
+   record per-pkg [provides] metadata in the lockfile. *)
 let which context =
-  let artifacts_and_deps =
-    Memo.lazy_
-      ~human_readable_description:(fun () ->
-        Pp.textf
-          "Loading all binaries in the lock directory for %S"
-          (Context_name.to_string context))
-      (fun () ->
-         let+ { binaries; dep_info = _ } =
-           all_project_deps context >>= Action_expander.Artifacts_and_deps.of_closure
-         in
-         binaries)
+  let try_toolchain_closure program =
+    let* lock_dir = Lock_dir.get_exn context in
+    match lock_dir.ocaml with
+    | None -> Memo.return None
+    | Some ocaml_dep ->
+      let* pkg = resolve_pkg_dep context ocaml_dep in
+      let transitive = pkg :: Pkg.deps_closure pkg in
+      let+ { Action_expander.Artifacts_and_deps.binaries; _ } =
+        Action_expander.Artifacts_and_deps.of_closure transitive
+      in
+      Filename.Map.find binaries program
   in
-  Staged.stage (fun program ->
-    let+ artifacts = Memo.Lazy.force artifacts_and_deps in
-    Filename.Map.find artifacts program)
+  Staged.stage try_toolchain_closure
 ;;
 
 let ocamlpath universe =
@@ -2696,6 +2708,28 @@ let project_ocamlpath_for_package context ~package_deps =
 
 let lock_dir_active = Lock_dir.lock_dir_active
 let lock_dir_path = Lock_dir.get_path
+
+(* Look up a binary in the transitive locked-pkg closure of [package_deps].
+   Narrows the cookie-forcing to that closure instead of every locked package,
+   breaking the in-out cycle (#8652) when expanding [%{bin-available:X}] from
+   a stanza whose owning package is known. The caller passes its declared
+   depends list (same shape as [project_ocamlpath_for_package]) so this
+   module avoids depending on [Dune_load.packages]. *)
+let which_for_package context ~package_deps program =
+  let* digests = all_deps_for_package context ~package_deps in
+  if Pkg_digest.Set.is_empty digests
+  then Memo.return None
+  else
+    let* db = DB.of_ctx context ~allow_sharing:false in
+    let* pkgs =
+      Memo.parallel_map (Pkg_digest.Set.to_list digests) ~f:(fun pkg_digest ->
+        Resolve.resolve db Loc.none pkg_digest (Dependencies context))
+    in
+    let+ { Action_expander.Artifacts_and_deps.binaries; _ } =
+      Action_expander.Artifacts_and_deps.of_closure pkgs
+    in
+    Filename.Map.find binaries program
+;;
 
 let dev_tool_env tool =
   let package_name = Dune_pkg.Dev_tool.package_name tool in

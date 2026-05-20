@@ -34,6 +34,18 @@ val project_ocamlpath_for_package
   -> package_deps:Package.Name.t list
   -> Path.t list Memo.t
 
+(** Look up a binary, narrowing the cookie-forcing to the transitive
+    locked-pkg closure of [package_deps] instead of the full lockdir.
+    Returns [None] if no pkg in that closure provides the binary. Used by
+    [%{bin-available:X}] expansion to avoid forcing every locked pkg's
+    install cookie (the in-out cycle of #8652). Same shape as
+    [project_ocamlpath_for_package]; caller supplies its declared depends. *)
+val which_for_package
+  :  Context_name.t
+  -> package_deps:Package.Name.t list
+  -> Filename.t
+  -> Path.t option Memo.t
+
 val dev_tool_ocamlpath : Dune_pkg.Dev_tool.t -> Path.t list Memo.t
 val find_package : Context_name.t -> Package.Name.t -> unit Action_builder.t option Memo.t
 

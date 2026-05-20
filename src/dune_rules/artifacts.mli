@@ -28,9 +28,15 @@ val local_bin : Path.Build.t -> Path.Build.t
 val local_binaries : t -> File_binding.Expanded.t list Memo.t
 
 (** A named artifact that is looked up in the PATH if not found in the tree If
-    the name is an absolute path, it is used as it. *)
+    the name is an absolute path, it is used as it.
+
+    [which_override] has the same role as in [binary_available]: replaces the
+    [Context.which] step (the lockdir lookup) with a narrowed alternative.
+    Used by [%{bin:X}] expansion to break the in-out cycle (#8652) when the
+    owning package is known. *)
 val binary
-  :  t
+  :  ?which_override:(string -> Path.t option Memo.t)
+  -> t
   -> ?hint:string
   -> ?where:where
   -> dir:Path.Build.t
@@ -38,7 +44,16 @@ val binary
   -> Filename.t
   -> Action.Prog.t Memo.t
 
-val binary_available : t -> dir:Path.Build.t -> string -> bool Memo.t
+(** When [which_override] is provided, it replaces [Context.which] for the
+    lockdir lookup step. Workspace local_bins are still consulted first.
+    Used to substitute a per-package narrowed lockdir lookup to break the
+    in-out cycle (#8652) when checking [%{bin-available:X}]. *)
+val binary_available
+  :  ?which_override:(string -> Path.t option Memo.t)
+  -> t
+  -> dir:Path.Build.t
+  -> string
+  -> bool Memo.t
 val add_binaries : t -> dir:Path.Build.t -> File_binding.Expanded.t list -> t
 
 val create

@@ -46,7 +46,7 @@ let local_binaries { local_bins; _ } =
     | _, Origin _origins -> None)
 ;;
 
-let analyze_binary t ~dir name =
+let analyze_binary ?which_override t ~dir name =
   match Filename.is_relative name with
   | false -> Memo.return (`Resolved (Path.of_filename_relative_to_initial_cwd name))
   | true ->
@@ -57,7 +57,12 @@ let analyze_binary t ~dir name =
       | Relative_to_current_dir -> Path.Build.relative dir name |> Path.Build.basename
     in
     let which () =
-      Context.which t.context lookup_name
+      let lookup =
+        match which_override with
+        | Some f -> f
+        | None -> Context.which t.context
+      in
+      lookup lookup_name
       >>| function
       | None -> `None
       | Some path -> `Resolved path
@@ -87,8 +92,8 @@ let analyze_binary t ~dir name =
             ]))
 ;;
 
-let binary t ?hint ?(where = Install_dir) ~dir ~loc name =
-  analyze_binary t ~dir name
+let binary ?which_override t ?hint ?(where = Install_dir) ~dir ~loc name =
+  analyze_binary ?which_override t ~dir name
   >>= function
   | `Resolved path -> Memo.return @@ Ok path
   | `None ->
@@ -112,8 +117,8 @@ let binary t ?hint ?(where = Install_dir) ~dir ~loc name =
        Ok (Path.build src))
 ;;
 
-let binary_available t ~dir name =
-  analyze_binary t ~dir name
+let binary_available ?which_override t ~dir name =
+  analyze_binary ?which_override t ~dir name
   >>| function
   | `None -> false
   | `Resolved _ | `Origin _ -> true
