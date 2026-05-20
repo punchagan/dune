@@ -1383,6 +1383,13 @@ end = struct
                     else (
                       let req_by = Dep_stack.to_required_by stack in
                       Error.overlap ~in_workspace:lib'.info ~installed:(lib.info, req_by))
+                  | Status.Not_found ->
+                    (* With per-package narrowing, a transitive closure
+                       lib can be findable in its owner's scope but not
+                       in this consumer's narrowed db. That's not an
+                       inconsistency — skip the overlap check for this
+                       lib. *)
+                    Resolve.Memo.return ()
                   | found ->
                     Code_error.raise
                       "Unexpected find result"
