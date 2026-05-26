@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1778587873808,
+  "lastUpdate": 1779791654320,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -97149,6 +97149,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 15.90382368644,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "51b8290eebe0e8fce9fbc84cd0a68c1b7b0bdc68",
+          "message": "Fix FSEvents kind and action decoding (#14725)\n\nThe kind decoder only treated MustScanSubDirs as Dir_and_descendants\nwhen ItemIsDir was also set, so subtree invalidations without ItemIsDir\nwere reported as File.\n\nThe action decoder tested action bits in priority order, so events with\nmultiple action bits set, such as Created+Modified or Removed+Renamed,\nwere reported as a single action instead of Unknown.\n\nDecode these cases in the C stubs using the SDK flag constants, and\ncover the decoder with an inline library test using C-provided flag\nexamples.\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-05-26T11:27:58+02:00",
+          "tree_id": "6b195d6962361de285981cc059e1eb543fa3eeca",
+          "url": "https://github.com/punchagan/dune/commit/51b8290eebe0e8fce9fbc84cd0a68c1b7b0bdc68"
+        },
+        "date": 1779791645046,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 19.628571098746665,
             "unit": "seconds"
           }
         ]
