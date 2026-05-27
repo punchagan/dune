@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1779858092362,
+  "lastUpdate": 1779906076507,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -97323,6 +97323,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 20.263871697720003,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "52ee0fac4841b03fa5130c2ad6a1d48d82d8c744",
+          "message": "test: remove duplicate write permissions cram test (#14755)\n\nThe same write-permissions cram test exists at\ntest/blackbox-tests/test-cases/engine/write-permissions.t. Keep the\nengine copy and remove the top-level duplicate.\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-05-27T13:59:03+02:00",
+          "tree_id": "433e719a3b8be37be2fcefa02926d8d059e8c5b0",
+          "url": "https://github.com/punchagan/dune/commit/52ee0fac4841b03fa5130c2ad6a1d48d82d8c744"
+        },
+        "date": 1779906066038,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 20.305514918359997,
             "unit": "seconds"
           }
         ]
