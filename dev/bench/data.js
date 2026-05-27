@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1779858084295,
+  "lastUpdate": 1779858092362,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -75311,6 +75311,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 62.37118029557333,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "12aebcc9ba392335cc4709ab50eaf5dae2066630",
+          "message": "feat(pkg): install layouts for package sets (#14373)\n\n`(deps (package ...))` materializes a scoped install layout under\n`_build/install/<context>/.packages/<digest>/` containing only the\ndeclared package dependencies. This replaces the old alias-based\nmechanism where `(deps (package foo))` populated the shared\n`_build/install/` staging area, making every package in the workspace\ndiscoverable regardless of what was declared.\n\nThe layout includes only immediate deps (no transitive closure). Actions\nshould declare what they need explicitly. Environment variables (`PATH`,\n`OCAMLPATH`, `CAML_LD_LIBRARY_PATH`, `OCAMLFIND_IGNORE_DUPS_IN`,\n`OCAMLTOP_INCLUDE_PATH`, `MANPATH`) are set from the layout directory\nand consed onto the directory env via `extend_action`.\n\nThe layout only applies to workspace packages. Lock-dir packages and the\nsite/plugin system are unaffected.\n\nSee `doc/dev/install-layouts.md` for design details.\n\nRelated:\n\n- #7908\n- #8652\n- #13307\n- #13500\n- Depends on #14432\n- [x] changelog\n- [x] documentation (`doc/dev/install-layouts.md`)\n\n## Follow-up\n\n- [ ] refactor the env helpers\n- [ ] document env propagation in dune generally\n- [ ] exhaustively test env propagation\n- [ ] lock-dir packages classify as `Build` and don't set up layout env\nvars\n- [ ] sandbox PATH non-relocation for layout dirs\n- [ ] extract a `Digest_key` functor to dedupe `Install_layout.Key` /\n`Bin_layout.Key` / `Ppx_driver.Key`\n- [ ] factor the `Context.for_host` fallback into a single helper\n- [ ] missing test for mixed workspace + lock-dir package deps\n- [ ] dep expander invoked twice on the `(deps (package ...))` path",
+          "timestamp": "2026-05-27T00:34:59+01:00",
+          "tree_id": "0bb794c7af057c46d128a5ed5ea40895d820c635",
+          "url": "https://github.com/punchagan/dune/commit/12aebcc9ba392335cc4709ab50eaf5dae2066630"
+        },
+        "date": 1779858091386,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.0105840513333335,
             "unit": "seconds"
           }
         ]
