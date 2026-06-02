@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780403622771,
+  "lastUpdate": 1780403940855,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -75456,6 +75456,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 0.9072682957266668,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "1e404967f5a3e0436f33aa8b0c09682c817ff821",
+          "message": "Use anonymous actions for C compiler detection (#14799)\n\nReplace the .dune/cc_vendor/cc_vendor probe rule with an anonymous\naction that captures the preprocessor output. Remove the dedicated\nCc_rules module and the build-only cc_vendor directory hook.\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-06-02T14:17:21+02:00",
+          "tree_id": "88c20286a39942c12c70f49616ad5d3ad9bfcd65",
+          "url": "https://github.com/punchagan/dune/commit/1e404967f5a3e0436f33aa8b0c09682c817ff821"
+        },
+        "date": 1780403940141,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 62.59940147507999,
             "unit": "seconds"
           }
         ]
