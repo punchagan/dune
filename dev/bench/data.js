@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780408422517,
+  "lastUpdate": 1780408733064,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -75514,6 +75514,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 1.02370613286,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "0e68eb24259e893f2bc43b031940d665ba82e96a",
+          "message": "test: enabled_if restriction within executable stanza (#14848)\n\nThis commit adds a cram test from the reproducer in #14789 to\ndemonstrate the restricted set of allowed_vars in enabled_if used within\nthe exectuable stanza.",
+          "timestamp": "2026-06-02T14:45:40+01:00",
+          "tree_id": "2a32aebb56495ce265568a0cb42ceb030a1fb122",
+          "url": "https://github.com/punchagan/dune/commit/0e68eb24259e893f2bc43b031940d665ba82e96a"
+        },
+        "date": 1780408732152,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 61.278914308106664,
             "unit": "seconds"
           }
         ]
