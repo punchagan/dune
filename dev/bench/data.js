@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780389811396,
+  "lastUpdate": 1780389818376,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -75427,6 +75427,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 56.62995952357334,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "c46f2cfb3647537df8a25256a58c6e9028578ced",
+          "message": "Make RPC client example wait for terminal progress (#14843)\n\nThe progress poll can initially report an in-progress build even after\nthe example executable exists. Consume non-terminal progress states\nbefore printing the result so the cram test does not depend on that\ntiming.\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-06-02T10:22:51+02:00",
+          "tree_id": "58e58dfc969a7d5293cea99977ced4cf08771c54",
+          "url": "https://github.com/punchagan/dune/commit/c46f2cfb3647537df8a25256a58c6e9028578ced"
+        },
+        "date": 1780389817673,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 0.9072682957266668,
             "unit": "seconds"
           }
         ]
