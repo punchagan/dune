@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780485874751,
+  "lastUpdate": 1780485901029,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -75688,6 +75688,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 0.9492993474666668,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "44c14c223cbf4f968ed5fddb006e9b61d88bd514",
+          "message": "test(pkg): share fetch cache project fixture (#14909)\n\nExtract the repeated fetched-package lockfile and project setup in\nfetch-cache tests into a shared helper parameterized by the tar members.\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-06-03T13:04:22+02:00",
+          "tree_id": "30ff65bda4415beebf27122dafe668a665ce55f3",
+          "url": "https://github.com/punchagan/dune/commit/44c14c223cbf4f968ed5fddb006e9b61d88bd514"
+        },
+        "date": 1780485899681,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 60.479534714719996,
             "unit": "seconds"
           }
         ]
