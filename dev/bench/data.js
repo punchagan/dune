@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780485592387,
+  "lastUpdate": 1780485867631,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -75630,6 +75630,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 0.9774856812133333,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "8098ea46ba6cea51728c4b13e11304250035e08b",
+          "message": "Use anonymous actions for odoc dependency queries (#14786)\n\nCapture `odoc compile-deps` output directly when computing module\ndependencies instead of creating temporary `.deps` targets next to odoc\nfiles.\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-06-03T11:59:46+02:00",
+          "tree_id": "db5d98caacf65c5a2ddca2f894dafa57580ec154",
+          "url": "https://github.com/punchagan/dune/commit/8098ea46ba6cea51728c4b13e11304250035e08b"
+        },
+        "date": 1780485866869,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 60.300856977866665,
             "unit": "seconds"
           }
         ]
