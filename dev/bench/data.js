@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780493320127,
+  "lastUpdate": 1780493327841,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -75775,6 +75775,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 60.84784056316,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "ee560b9a0057ff30d176167835092333a4e63d2e",
+          "message": "refactor(bin): remove timeout on acquiring build lock (#14875)\n\nThe only consumer left of the timeout was passive watch mode which is\nfor testing, and it did not require this.\n\nAll the other user facing consumers of this timeout have been removed\nsince their semantics were dubious in various cases, such as expecting\nan RPC server to be running the lock is acquired.",
+          "timestamp": "2026-06-03T14:07:18+01:00",
+          "tree_id": "1de83335c555a1ad644f39d791fc0c16d829cb27",
+          "url": "https://github.com/punchagan/dune/commit/ee560b9a0057ff30d176167835092333a4e63d2e"
+        },
+        "date": 1780493327186,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.0417589060999999,
             "unit": "seconds"
           }
         ]
