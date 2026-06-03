@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780465874960,
+  "lastUpdate": 1780466178608,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -75572,6 +75572,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 1.0392354540933335,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shon.feder@gmail.com",
+            "name": "Shon Feder",
+            "username": "shonfeder"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "17bf6521dab42176a1d1933bf58bc82910492db5",
+          "message": "chore: run packaging CI tests on 4.14 (#14846)\n\nWe did not regressions in the packaging configuration affecting 4.14\nprior to cutting the pre-release for\nhttps://github.com/ocaml/opam-repository/pull/29969. This should ensure\nwe catch those errors in the future.",
+          "timestamp": "2026-06-02T22:07:57-04:00",
+          "tree_id": "c7368e8844c0e6aca00553b3879d0c913b6646f7",
+          "url": "https://github.com/punchagan/dune/commit/17bf6521dab42176a1d1933bf58bc82910492db5"
+        },
+        "date": 1780466177802,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 60.126644771946665,
             "unit": "seconds"
           }
         ]
