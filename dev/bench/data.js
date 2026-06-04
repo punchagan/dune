@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780579829589,
+  "lastUpdate": 1780580123666,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -75862,6 +75862,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 0.9455046431600002,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "a9d7de8c954fba3f0e3f08035a517519898eb0b0",
+          "message": "test(melange): default dir target lib path (#14945)\n\nMake the Melange directory-target runtime_deps helper default to writing\nthe lib fixture under `lib`, shortening the current call sites.",
+          "timestamp": "2026-06-04T12:03:55+01:00",
+          "tree_id": "531ba235ce967fe7e4a9d1a9ee80aad22d45f354",
+          "url": "https://github.com/punchagan/dune/commit/a9d7de8c954fba3f0e3f08035a517519898eb0b0"
+        },
+        "date": 1780580122840,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 58.14488463907333,
             "unit": "seconds"
           }
         ]
