@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780557036445,
+  "lastUpdate": 1780557044328,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -75833,6 +75833,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 59.75735477491333,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "bdf4182a60601a249a984b9cb74a667c8dda7b6c",
+          "message": "test(menhir): share merge_into parser fixture (#14925)\n\nExtract the repeated tokens/parser/dune files for the Menhir merge_into\nsubdirectory scenario into a shared helper.\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-06-03T23:43:51+01:00",
+          "tree_id": "78d140eb37871f6b62e684af6464d15720fdcd7c",
+          "url": "https://github.com/punchagan/dune/commit/bdf4182a60601a249a984b9cb74a667c8dda7b6c"
+        },
+        "date": 1780557043282,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 0.9455046431600002,
             "unit": "seconds"
           }
         ]
