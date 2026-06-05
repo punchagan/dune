@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780637652910,
+  "lastUpdate": 1780637952611,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -75920,6 +75920,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 0.9283799409933334,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@robinbb.com",
+            "name": "Robin Bate Boerop",
+            "username": "robinbb"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "281990d3a16616306edfb7faa4fba01225e60453",
+          "message": "refactor: stop allocating on tuple and list hashing (#14542)\n\n## Summary\n\nExtract the `(acc * 31) + x` hash accumulator into a new `Stdune.Hash`\nmodule per [#14542\nreview](https://github.com/ocaml/dune/pull/14542#issuecomment-4490075565),\nand route `Tuple.T2.hash`, `Tuple.T3.hash`, `List.hash`, `Result.hash`,\nand `Resolve.error_hash` through it. None of these allocate per call any\nmore.\n\nDrive-by fix: `Stdune.Result.hash` no longer collides `Ok x` with `Error\ny` whenever `h1 x = h2 y` (e.g. `Ok 0` vs `Error 0`) — same bug shape\n`Stdune.Option.hash` had before #14543.\n\nRelated: #14605 (`Repr.Poly.hash`).\n\nSigned-off-by: Robin Bate Boerop <me@robinbb.com>",
+          "timestamp": "2026-06-04T06:28:55-07:00",
+          "tree_id": "17a42cf188f5c3f961af385d188ebb3f7c0d7b61",
+          "url": "https://github.com/punchagan/dune/commit/281990d3a16616306edfb7faa4fba01225e60453"
+        },
+        "date": 1780637951969,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 59.311395436173335,
             "unit": "seconds"
           }
         ]
