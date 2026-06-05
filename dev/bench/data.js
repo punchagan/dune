@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1780684805274,
+  "lastUpdate": 1780684812942,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -76007,6 +76007,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 61.4954925587,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "punchagan@muse-amuse.in",
+            "name": "Puneeth Chaganti",
+            "username": "punchagan"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "26bb049272993c5390bd91a873058efedd4b3852",
+          "message": "enabled_if: Allow any vars in enabled_if within executables & install stanzas (#14860)\n\nWe allow any vars in the enabled_if field within the library stanza, but\nonly\ncommon_vars within the executable and the install stanzas. This commit \nfixes that and allows any vars inside both these stanzas.\n\nCloses #14789\n\n---------\n\nSigned-off-by: Puneeth Chaganti <punchagan@muse-amuse.in>",
+          "timestamp": "2026-06-05T19:22:01+01:00",
+          "tree_id": "746fa485ea6efd249b2e5252e8826dbbd7e0f565",
+          "url": "https://github.com/punchagan/dune/commit/26bb049272993c5390bd91a873058efedd4b3852"
+        },
+        "date": 1780684812274,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.0556006387533332,
             "unit": "seconds"
           }
         ]
