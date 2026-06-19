@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1781882447712,
+  "lastUpdate": 1781882456224,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -76065,6 +76065,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 59.801680152846664,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "3ac9b1951f7dac65e81fb783dbaa58449601e5f5",
+          "message": "fix(rpc): connect to long Unix socket paths from their directory (#15235)\n\nReuse the long-path Unix socket fallback for connect as well as bind so\nclients can reach sockets in absolute build directories outside their\ncwd.\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-06-19T00:37:07+01:00",
+          "tree_id": "845cd8993bc878817e23fbabf6260b1ce53064d2",
+          "url": "https://github.com/punchagan/dune/commit/3ac9b1951f7dac65e81fb783dbaa58449601e5f5"
+        },
+        "date": 1781882455663,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.2390112400200002,
             "unit": "seconds"
           }
         ]
