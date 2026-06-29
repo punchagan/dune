@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1782730266270,
+  "lastUpdate": 1782730589170,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -76094,6 +76094,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 1.2390112400200002,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "d47f5435e9170ad7d74a98869b1eada17525d9e5",
+          "message": "fix(utop): accept absolute paths to workspace directories (#15272)\n\nFixes #15108.\n\n`dune utop $PWD/lib` crashed with an internal `Code_error` while `dune\nutop lib` worked. `Common.prefix_target` is a no-op on absolute strings,\nso the absolute path reached `Path.Build.relative`, which raises on\nabsolute input.\n\nThis change localizes an absolute `DIR` argument with\n`Path.Expert.try_localize_external` before use. this is the same\napproach that `dune exec` (#12094) and `dune runtest` (#11936) already\nuses. A relative path still goes through `Common.prefix_target` so the\nrun-from-a-subdirectory case is unchanged, and a part outside the\nworkspace stays external and still produces the clean `Error: cannot\nfind directory: ...` message.\n\nBased on @Alizter's repro in #15116, the test was flipped from asserting\nthe crash to checking the working `foolib` output.\n\nquestions I have:\n\n* The issue suggests migrating `DIR` to `Arg.Workspace_path`. That\nconverter doesn't exist yet, and a cmdliner conv can't localize at parse\ntime since localization needs `Build.build_dir`, which is only set after\n`Common.init`. I went with the inline localization that `exec` and\n`runtest` already use. Happy to extract a shared `Arg.Workspace_path`\nfor #15109/#15110 if thats preferred. Should that live in this PR or a\nfollow-up?\n* An absolute path pointing into `_build` would localize to an in-build\npath. `exec` handles that through\n`Path.relative_to_source_in_build_or_external`. This isn't covered by\nthe repro or the issue's required behaviors, so I left it out for now.\nLet me know if you would like that included here.\n* I also wasnt sure if there is a preferred place for sharing this\nlocalization logic across commands instead of keeping it inline.",
+          "timestamp": "2026-06-29T09:00:55+01:00",
+          "tree_id": "b3166e3b06461d9a7d43ba79630bc7d1717d9d91",
+          "url": "https://github.com/punchagan/dune/commit/d47f5435e9170ad7d74a98869b1eada17525d9e5"
+        },
+        "date": 1782730588514,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 62.82481463247999,
             "unit": "seconds"
           }
         ]
