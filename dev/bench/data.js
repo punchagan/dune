@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1782816714867,
+  "lastUpdate": 1782816722895,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -76181,6 +76181,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 56.542978403620005,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "anmonteiro@gmail.com",
+            "name": "Antonio Nuno Monteiro",
+            "username": "anmonteiro"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "e7a919022f5dc93b92997812d6d94ec02ddf2526",
+          "message": "test(formatting): show regression making env vars missing from fmt actions (#15385)\n\nSigned-off-by: Antonio Nuno Monteiro <anmonteiro@gmail.com>",
+          "timestamp": "2026-06-30T00:51:02-07:00",
+          "tree_id": "2e6ece0dfd258d0393baaf1d848c95fb2c12588d",
+          "url": "https://github.com/punchagan/dune/commit/e7a919022f5dc93b92997812d6d94ec02ddf2526"
+        },
+        "date": 1782816722196,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.1386368943666667,
             "unit": "seconds"
           }
         ]
