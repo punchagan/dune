@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1782816722895,
+  "lastUpdate": 1783070403000,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -98628,6 +98628,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 3.845477561933334,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shon.feder@gmail.com",
+            "name": "Shon Feder",
+            "username": "shonfeder"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "825fbcfc651e9bec0f0a7472b7a08f5dda1f71c9",
+          "message": "Update dev tool docs for odoc and utop inclusion (#15404)\n\nFollowup to #15388\n\nUpdates docs to reflect the new behavior.\n\nI proposed this as a change there, but it was force pushed out.\n\nSigned-off-by: Shon Feder <shon.feder@gmail.com>",
+          "timestamp": "2026-07-03T10:09:50+02:00",
+          "tree_id": "f38a63b392c0c6beda6e203c1339d2d114d2192d",
+          "url": "https://github.com/punchagan/dune/commit/825fbcfc651e9bec0f0a7472b7a08f5dda1f71c9"
+        },
+        "date": 1783070392575,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 4.028533478326666,
             "unit": "seconds"
           }
         ]
