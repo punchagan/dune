@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1783070717721,
+  "lastUpdate": 1783088384901,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -98715,6 +98715,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 4.028533478326666,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shon.feder@gmail.com",
+            "name": "Shon Feder",
+            "username": "shonfeder"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "5dc2d6801ff3f5299a8dbb18e9f445d9659c9528",
+          "message": "Update mirage.yml to use latest opam commit (#15273)\n\nWith the release of the new 4.14 patch, the current opam pin is causing\na dependency error on the -rc tests:\n\n```\n[ERROR] Package conflict!\n  * Missing dependency:\n    - (invariant) → ocaml-base-compiler = 4.14.4 → ocaml-base-compiler.4.14.4: no longer available\n```\n\nI believe this is because setup-ocaml knows the latest version is out,\nand sets that invariant for the switch, but then we override the opam\nrepo to an older versions that doesn't have the required compiler\nversion.\n\nSigned-off-by: Shon Feder <shon.feder@gmail.com>",
+          "timestamp": "2026-07-03T12:39:26+02:00",
+          "tree_id": "adfc335bfdb53f0afdd4e9f3b297ad91cbb68672",
+          "url": "https://github.com/punchagan/dune/commit/5dc2d6801ff3f5299a8dbb18e9f445d9659c9528"
+        },
+        "date": 1783088374557,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 4.032027938933333,
             "unit": "seconds"
           }
         ]
