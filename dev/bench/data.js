@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1783371543667,
+  "lastUpdate": 1783371857647,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -76326,6 +76326,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 1.1476326792866667,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "fbdedfe64faa6a1dce4ed3e6f9944be08771298a",
+          "message": "feat(cc): align C compiler vendor detection with the OCaml compiler (#15423)\n\nFixes #14870.\n\nDune detected the C/C++ compiler vendor with a coarser vocabulary than\nthe OCaml compiler's own `OCAML_CC_VENDOR` macro (`ocaml/aclocal.m4`).\nIt recognized only `msvc`/`clang`/`gcc`/`other` and emitted a \"please\nopen an issue\" warning for compilers the compiler already names.\n\n## What changed\n\n- The detection probe now mirrors `OCAML_CC_VENDOR`'s ordered `#if`\nladder and identifiers: `msvc`, `icc`, `mingw`, `clang`, `gcc`, `xlc`,\n`sunc`, `unknown`.\n- `cc_vendor` now includes: `Gcc | Clang | Msvc | Mingw | Intel | Xlc |\nSun | Other`.\n\n`ocamlc -config` does not expose `c_compiler_vendor`, so dune keeps its\nown preprocessor probe. Only the detection table, parser, and vendor\ntype changed.\n\n## Testing\n\nAdded a pure-function expect test covering every vendor word. The\nexisting `foreign-stubs/cxx-flags.t` still passes unchanged.\n\n## Two points I'd like a call on\n\n1. **mingw-clang link flags** now use `-lstdc++` instead of `-lc++`. I\nbelieve this is the correct behavior since MinGW ships GNU `libstdc++`,\nbut wanted to call it out because it changes behavior.\n2. **xlc/sunc** are now recognized but remain flag-neutral. I avoided\nadding compiler-specific flags that I couldn't test.",
+          "timestamp": "2026-07-06T11:35:41+01:00",
+          "tree_id": "85bbee3b247adaef140f5dc675fcc5ca94a62e00",
+          "url": "https://github.com/punchagan/dune/commit/fbdedfe64faa6a1dce4ed3e6f9944be08771298a"
+        },
+        "date": 1783371856504,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 61.78506788491999,
             "unit": "seconds"
           }
         ]
