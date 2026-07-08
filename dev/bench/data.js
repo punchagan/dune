@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1783496715988,
+  "lastUpdate": 1783496724293,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -76413,6 +76413,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 60.95622678819333,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "ambre@tarides.com",
+            "name": "Ambre Austen Suhamy",
+            "username": "ElectreAAS"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "cf9bac60724b7d56bea3273f276793f0833569e7",
+          "message": "[doc] Add documentation page explaining shell completion (#15403)\n\nFollow-up to #14779, adding a public page in the docs about the new\nshell completion feature.\n\n---------\n\nSigned-off-by: Ambre Austen Suhamy <ambre@tarides.com>",
+          "timestamp": "2026-07-07T18:58:05+02:00",
+          "tree_id": "6b63397f67259ced6ed4a7892dc69399856a11e8",
+          "url": "https://github.com/punchagan/dune/commit/cf9bac60724b7d56bea3273f276793f0833569e7"
+        },
+        "date": 1783496723537,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.1534049612,
             "unit": "seconds"
           }
         ]
