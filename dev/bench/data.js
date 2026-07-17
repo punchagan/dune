@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1783496724293,
+  "lastUpdate": 1784279412265,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -98976,6 +98976,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 4.176640886606666,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "b3fd54ed66d17bca38ad396e24e3e0109ee0df5a",
+          "message": "install: validate dry-run non-empty destination dirs (#15501)\n\nHave dry-run inspect destination directories before printing a \"Removing\ndirectory (fail if not empty)\" operation. This makes dry-run report the\nsame non-empty-directory blocker as real install.\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-07-16T21:39:38+08:00",
+          "tree_id": "61228f31223405c7b41ebb5f11ecb190c9ac9bf4",
+          "url": "https://github.com/punchagan/dune/commit/b3fd54ed66d17bca38ad396e24e3e0109ee0df5a"
+        },
+        "date": 1784279400699,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 4.204111722220001,
             "unit": "seconds"
           }
         ]
