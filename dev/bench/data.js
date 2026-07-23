@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1784796911380,
+  "lastUpdate": 1784796919448,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -76529,6 +76529,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 50.63026345177334,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": false,
+          "id": "5790d8d17592ee051037f8e9825376fbc538ffe4",
+          "message": "test(pkg): reproduce pkg enabled with watch server (#15588)\n\nThis adds a reproduction for #15587.\n\nIt demonstrates that `dune pkg enabled` succeeds for a package-enabled\nproject before a passive watch server starts, but exits with a\nbuild-directory lock error while that server is running.\n\nThis PR intentionally contains only the reproduction; the fix is kept in\na separate local commit.",
+          "timestamp": "2026-07-22T18:46:12+02:00",
+          "tree_id": "94c192010a14f011d3b8d37e951297b117816275",
+          "url": "https://github.com/punchagan/dune/commit/5790d8d17592ee051037f8e9825376fbc538ffe4"
+        },
+        "date": 1784796918474,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 1.0225828289666665,
             "unit": "seconds"
           }
         ]
