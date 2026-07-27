@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1784796919448,
+  "lastUpdate": 1785152727324,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -99150,6 +99150,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 3.4325003314933333,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "42edbc2c2052781a4b257325f09fc80f33018f3c",
+          "message": "Add a GitHub Actions workflow for checking changelog entries (#15505)\n\n\n<!-- Thank you for contributing to dune!\n\n For general guidelines on contributing to dune, see\nhttps://github.com/ocaml/dune/blob/main/CONTRIBUTING.md#developing-dune\n-->\n\n## Description\n\nThis uses an existing action from\nhttps://github.com/tarides/changelog-check-action. It checks for changes\nin the PATH (here: `doc/changes`). I'll add a `no changelog` label if\nthis is okay, as recommended by the action.\n\n\n## Related Issue and Motivation\n<!-- Why is this change required? What problem does it solve? -->\n<!-- If it closes an open issue, link to the issue here. -->\n<!-- Non-trivial contributions are expected to be preceded by an issue,\nas\n     per CONTRIBUTING.md. -->\n\nFixes #15460\n\n## Checklist\n\n- [x] Tests added, if applicable. (NA)\n- [ ] [Change log entry\nadded](../CONTRIBUTING.md#updating-the-changelog) for any user-facing\nchanges.\n- [x] Documentation added for any user-facing changes. (NA)",
+          "timestamp": "2026-07-27T10:40:09+01:00",
+          "tree_id": "0ee9ba17d8f24ee33d64f09fe339fe0a36f81621",
+          "url": "https://github.com/punchagan/dune/commit/42edbc2c2052781a4b257325f09fc80f33018f3c"
+        },
+        "date": 1785152717113,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 4.175672550039999,
             "unit": "seconds"
           }
         ]
