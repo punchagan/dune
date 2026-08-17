@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1786956402874,
+  "lastUpdate": 1786956708577,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -76616,6 +76616,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 1.2472423911066668,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "anmonteiro@gmail.com",
+            "name": "Antonio Nuno Monteiro",
+            "username": "anmonteiro"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "99654b64affff542226d6a6a1a754fcc78a3f517",
+          "message": "refactor(melange): centralize output paths (#15978)\n\nSigned-off-by: Antonio Nuno Monteiro <anmonteiro@gmail.com>",
+          "timestamp": "2026-08-17T00:33:22-07:00",
+          "tree_id": "e5d376ca13c4faf3fd5e5e21138477b73579607a",
+          "url": "https://github.com/punchagan/dune/commit/99654b64affff542226d6a6a1a754fcc78a3f517"
+        },
+        "date": 1786956707401,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 60.051778700119996,
             "unit": "seconds"
           }
         ]
