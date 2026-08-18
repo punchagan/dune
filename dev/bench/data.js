@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1787038689883,
+  "lastUpdate": 1787038995979,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -76674,6 +76674,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 0.5748469156866668,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "anmonteiro@gmail.com",
+            "name": "Antonio Nuno Monteiro",
+            "username": "anmonteiro"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "9bc8687a66062c5f234bbfa472ee9db39b8e02d3",
+          "message": "refactor(ml-sources): share source file scanning (#16038)\n\nShare source filename parsing and duplicate detection between OCaml and\nMelange module discovery.\n\nSigned-off-by: Antonio Nuno Monteiro <anmonteiro@gmail.com>",
+          "timestamp": "2026-08-17T22:45:26-07:00",
+          "tree_id": "bf2b3db79d61c7b3e42007f75e9f2e5bd4e73a9b",
+          "url": "https://github.com/punchagan/dune/commit/9bc8687a66062c5f234bbfa472ee9db39b8e02d3"
+        },
+        "date": 1787038995079,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 60.19055135479334,
             "unit": "seconds"
           }
         ]
