@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1787039002141,
+  "lastUpdate": 1787134691394,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -99411,6 +99411,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 3.6587807392799996,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "anmonteiro@gmail.com",
+            "name": "Antonio Nuno Monteiro",
+            "username": "anmonteiro"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "0cfcb504900ff3a9ac28b687bf79b8df1c5b42b8",
+          "message": "refactor(melange): centralize compiler CLI flags (#16046)\n\nCentralize syntax-version-dependent Melange compiler flags used by CMJ\ncompilation and JavaScript emission.\n\nSigned-off-by: Antonio Nuno Monteiro <anmonteiro@gmail.com>",
+          "timestamp": "2026-08-18T22:37:29-07:00",
+          "tree_id": "70b2aec59e41ca5b558f185c1df0535b99356959",
+          "url": "https://github.com/punchagan/dune/commit/0cfcb504900ff3a9ac28b687bf79b8df1c5b42b8"
+        },
+        "date": 1787134683742,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 2.4803518673733334,
             "unit": "seconds"
           }
         ]
