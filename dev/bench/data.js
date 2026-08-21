@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1787316847558,
+  "lastUpdate": 1787316853173,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -76819,6 +76819,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 61.75870362368,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "7b0f4fbd9839c81c91142c30058a8470cc62d4f0",
+          "message": "perf(targets): preserve unchanged target sets (#16069)\n\n`Targets.combine` is used while accumulating action targets. When both\nset unions reuse the fields from an input, return that existing\n`Targets.t` instead of allocating an equivalent record.\n\nAlso remove the unused `Targets.diff` operation. This is an\nimplementation-only change, so it does not need a changelog entry.\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-08-21T11:44:01+01:00",
+          "tree_id": "b8ae44cdbe6199bf639142c4e5fd10575969d9cc",
+          "url": "https://github.com/punchagan/dune/commit/7b0f4fbd9839c81c91142c30058a8470cc62d4f0"
+        },
+        "date": 1787316852453,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 0.56765568904,
             "unit": "seconds"
           }
         ]
