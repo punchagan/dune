@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1787546562045,
+  "lastUpdate": 1787546568129,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -76877,6 +76877,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 60.22021972864,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "anmonteiro@gmail.com",
+            "name": "Antonio Nuno Monteiro",
+            "username": "anmonteiro"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "136b11d6d3b164fc2226c29ace9edc622a65ca5a",
+          "message": "chore(nix): update nix flakes (#16156)\n\nSigned-off-by: Antonio Nuno Monteiro <anmonteiro@gmail.com>",
+          "timestamp": "2026-08-23T19:34:24-07:00",
+          "tree_id": "436f2962bc9cd5468551edf752b3f2be2e4cc229",
+          "url": "https://github.com/punchagan/dune/commit/136b11d6d3b164fc2226c29ace9edc622a65ca5a"
+        },
+        "date": 1787546567188,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 0.5626949681000001,
             "unit": "seconds"
           }
         ]
