@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1787633989800,
+  "lastUpdate": 1787633995539,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -76935,6 +76935,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 61.04192413172,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "shon.feder@gmail.com",
+            "name": "Shon Feder",
+            "username": "shonfeder"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "640d1cdd48f25a139049fffe9a7a41e39b302ce4",
+          "message": "Tool implementation issue planning (#16043)\n\n<!-- Thank you for contributing to dune!\n\n For general guidelines on contributing to dune, see\nhttps://github.com/ocaml/dune/blob/main/CONTRIBUTING.md#developing-dune\n-->\n\n## Description\n\nTo connect the planned implementation work for the tools redesign with\nthe motivating requirements, this update adds links to the tracking\nissues for each major feature (or validation) to satisfy the\ncorresponding tool management requirements.\n\n\n## Related Issue and Motivation\n<!-- Why is this change required? What problem does it solve? -->\n<!-- If it closes an open issue, link to the issue here. -->\n<!-- Non-trivial contributions are expected to be preceded by an issue,\nas\n     per CONTRIBUTING.md. -->\n\nContributes to #12914\n\n## Checklist\n\n- [x] Tests added, if applicable.\n- [x] [Change log entry\nadded](../CONTRIBUTING.md#updating-the-changelog) for any user-facing\nchanges.\n- [x] Documentation added for any user-facing changes.",
+          "timestamp": "2026-08-25T00:16:45-04:00",
+          "tree_id": "f84d7e28574a179a379d4cf4b05d6fcb85ad5b39",
+          "url": "https://github.com/punchagan/dune/commit/640d1cdd48f25a139049fffe9a7a41e39b302ce4"
+        },
+        "date": 1787633994821,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 0.5689133203466668,
             "unit": "seconds"
           }
         ]
