@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1787633995539,
+  "lastUpdate": 1788155094117,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -99759,6 +99759,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 3.68153034188,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "anmonteiro@gmail.com",
+            "name": "Antonio Nuno Monteiro",
+            "username": "anmonteiro"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "7b70b2a332d676bc30c390a795072e965100229b",
+          "message": "nix: use Melange with melobjinfo (#16271)\n\nUse Melange v7-55 so Dune's Nix development shells provide melobjinfo.\n\nUses melange-re/melange#1859, backporting melange-re/melange#1858.\n\nSigned-off-by: Antonio Nuno Monteiro <anmonteiro@gmail.com>",
+          "timestamp": "2026-08-30T19:17:15-07:00",
+          "tree_id": "87647acc8c3ee673ced99c232b9c432313db3a09",
+          "url": "https://github.com/punchagan/dune/commit/7b70b2a332d676bc30c390a795072e965100229b"
+        },
+        "date": 1788155083680,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 3.751969675633333,
             "unit": "seconds"
           }
         ]
