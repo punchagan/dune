@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1788155406192,
+  "lastUpdate": 1788403420626,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -99846,6 +99846,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 3.751969675633333,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "59105f88ea3a86354df6881972ffbfc54af00b2e",
+          "message": "chore: improve Linguist language detection (#16305)\n\n## Description\n\nGitHub Linguist recognizes `dune-project`, but does not detect most\nother Dune file names by default. This change:\n\n- classifies standard Dune file names and variants as Dune\n- keeps the fixtures that deliberately use OCaml syntax classified as\nOCaml\n- narrows the OCaml override so documentation, grammar, and patch files\nare not treated as OCaml source\n- classifies `.mld` files as documentation and Reason files explicitly\n- normalizes the one existing CRLF `dune-project` now covered by the LF\nattribute\n\nWith Linguist 9.5.0, Dune increases from 0.30% to 2.50%, the spurious\nPuppet classification disappears, and the misidentified Reason source is\ncorrected.\n\n## Testing\n\n- Checked representative paths with `git check-attr`.\n- Checked the repository breakdown with GitHub Linguist 9.5.0.\n- Verified that a fresh checkout remains clean with `git diff\n--exit-code`.\n- `./dune.exe runtest\ntest/blackbox-tests/test-cases/stanzas/copy_files/test2.t`\n- `./dune.exe build @check @fmt`\n\nThe full `./dune.exe build @check @fmt @runtest` was attempted, but the\nlocal run fails in `otherlibs/dune-site/test/run_2_9.t` because the\nlibrary `b.b.b` cannot be found. A targeted rerun fails identically.",
+          "timestamp": "2026-09-03T00:17:39+02:00",
+          "tree_id": "27ccdb01cdb82aa8a667fb73850b2dbb6676ea77",
+          "url": "https://github.com/punchagan/dune/commit/59105f88ea3a86354df6881972ffbfc54af00b2e"
+        },
+        "date": 1788403410904,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 3.871908533613334,
             "unit": "seconds"
           }
         ]
