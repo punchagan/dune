@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1788853917490,
+  "lastUpdate": 1788853923503,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -77109,6 +77109,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 62.604820216780006,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "9aed4b6ff4318afb8514a7529ee0aad0e18e3352",
+          "message": "test(action-plugin): cover patch-back of dynamic dependencies (#16354)\n\nAdd end-to-end coverage for `dynamic-run` in a `patch_back_source_tree`\nsandbox. The plugin reads a nested file absent from the initial sandbox,\nand the action then deletes its containing directories.\n\nCheck that patch-back reports both directory deletions and the file\ndeletion, while leaving the source input untouched. This guards the\nincremental snapshot bookkeeping introduced in #16342: without\nregistering the newly populated directories, only the file deletion is\nreported.\n\nTest-only; no implementation changes.\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-09-07T22:48:37+01:00",
+          "tree_id": "16ca391e211bc5b5cb4787f20e06dd7999738db5",
+          "url": "https://github.com/punchagan/dune/commit/9aed4b6ff4318afb8514a7529ee0aad0e18e3352"
+        },
+        "date": 1788853922711,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 0.6243446409866666,
             "unit": "seconds"
           }
         ]
