@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1789023892364,
+  "lastUpdate": 1789023898526,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -77167,6 +77167,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 61.375980797500006,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "alizter@gmail.com",
+            "name": "Ali Caglayan",
+            "username": "Alizter"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "13e6bc71ea30ec3001371a8fb9f20c5db42648d3",
+          "message": "test(package-deps): cover package-granular library closure (#16361)\n\nRecord missing package contents, sibling dependencies, and stale\nconsumers across workspace, installed metadata, and lock-built\nproviders. Exercise lock-provider names that differ from their library\nnamespaces.",
+          "timestamp": "2026-09-10T00:19:07+02:00",
+          "tree_id": "0b80c6456e853d012cfb0f1eef6bdfb96cbc249c",
+          "url": "https://github.com/punchagan/dune/commit/13e6bc71ea30ec3001371a8fb9f20c5db42648d3"
+        },
+        "date": 1789023897703,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 0.6068293037866667,
             "unit": "seconds"
           }
         ]
