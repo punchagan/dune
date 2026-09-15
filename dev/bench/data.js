@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1789459981925,
+  "lastUpdate": 1789459987906,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -77225,6 +77225,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (cold, Linux)",
             "value": 58.18358345433999,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "0602a8e7b050fa2cbe88d660d57069acadf6b68f",
+          "message": "refactor(stdune): return results from file reads and writes (#16406)\n\nMake `Io.read_file` and `Io.write_file` return results, retaining `_exn`\nvariants for callers that propagate exceptions. Replace\n`Io.write_fd_exn` with result-returning `Io.write_fd`, without a raising\nvariant.\n\nMigrate existing IO exception handlers to inspect `Error` directly,\nincluding the cache writer, RPC code, and cram execution. Add coverage\nfor binary/text IO, truncation, permissions, and descriptor-write\nfailures.\n\nLocal full-suite validation encounters two sandbox-actions failures\nbecause bubblewrap cannot set up UID mappings; compilation, formatting,\nand Stdune tests pass.\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-09-13T19:14:46+01:00",
+          "tree_id": "0bc61616d28025abb72713ccd79bf4495418b0e6",
+          "url": "https://github.com/punchagan/dune/commit/0602a8e7b050fa2cbe88d660d57069acadf6b68f"
+        },
+        "date": 1789459986929,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (warm, Linux)",
+            "value": 0.5232390461,
             "unit": "seconds"
           }
         ]
