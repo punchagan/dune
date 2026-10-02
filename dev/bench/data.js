@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1789459987906,
+  "lastUpdate": 1790914472756,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -100194,6 +100194,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 3.5005788281066668,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "punchagan@muse-amuse.in",
+            "name": "Puneeth Chaganti",
+            "username": "punchagan"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "c967ed2d38da799bc67baa0a321bb36be0e216ab",
+          "message": "test: add cram tests for curl failures (#16514)\n\nTests for #16465 \n\n## Checklist\n\n- [x] Tests added, if applicable.\n- [ ] [Change log entry\nadded](../CONTRIBUTING.md#updating-the-changelog) for any user-facing\nchanges.\n- [ ] Documentation added for any user-facing changes.\n\nSigned-off-by: Puneeth Chaganti <punchagan@muse-amuse.in>",
+          "timestamp": "2026-10-02T09:35:48+05:30",
+          "tree_id": "8d325521aba94eb407244032f8f5acab4d7b8e94",
+          "url": "https://github.com/punchagan/dune/commit/c967ed2d38da799bc67baa0a321bb36be0e216ab"
+        },
+        "date": 1790914465525,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 2.5018745173799997,
             "unit": "seconds"
           }
         ]
