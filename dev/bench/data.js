@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1791184158234,
+  "lastUpdate": 1791184468347,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -77312,6 +77312,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 0.4135635489466667,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "anmonteiro@gmail.com",
+            "name": "Antonio Nuno Monteiro",
+            "username": "anmonteiro"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "8cf80a16033c17158b8ada219b6b928504362830",
+          "message": "refactor(rules): use local library information (#16541)\n\nUse local-library metadata directly instead of converting through\ngeneric library values.\n\nUpstreams anmonteiro/dune#137.\n\nSigned-off-by: Antonio Nuno Monteiro <anmonteiro@gmail.com>",
+          "timestamp": "2026-10-04T22:38:34-07:00",
+          "tree_id": "06582cc40c0de31a732e9f38439f6662de395d92",
+          "url": "https://github.com/punchagan/dune/commit/8cf80a16033c17158b8ada219b6b928504362830"
+        },
+        "date": 1791184467186,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 60.526533215133334,
             "unit": "seconds"
           }
         ]
