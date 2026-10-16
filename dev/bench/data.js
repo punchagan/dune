@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1791804475583,
+  "lastUpdate": 1792126368974,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -100455,6 +100455,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 3.636606840426667,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "7912309477f5f8a26aaab1bdc43263e7edb27744",
+          "message": "refactor(rpc): share diagnostic record serialization (#16613)\n\nParameterize diagnostic fields by message and related-entry types, and\nshare the record and S-expression converter between the current\ndiagnostics and `Diagnostics_v1`. This removes duplicated definitions\nwhile preserving both wire formats.\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-10-16T11:11:26+08:00",
+          "tree_id": "f69dc5e2414bcfe514441490ca25411609b35ea4",
+          "url": "https://github.com/punchagan/dune/commit/7912309477f5f8a26aaab1bdc43263e7edb27744"
+        },
+        "date": 1792126357948,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 2.6842487913866666,
             "unit": "seconds"
           }
         ]
