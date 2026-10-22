@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1792126608184,
+  "lastUpdate": 1792652595107,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -100542,6 +100542,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 2.6842487913866666,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "173a4de35499ccee845afb460881fa7066488b52",
+          "message": "refactor(engine): inline one-use action-builder evaluation (#16676)\n\nEvaluate build goals directly in the request runner, removing a one-use\nhelper that only discarded the collected dependency facts. This\npreserves existing behavior.\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-10-22T10:36:38+08:00",
+          "tree_id": "6a29fd8c7d0514bd9487bc18740f9bc5a50aa208",
+          "url": "https://github.com/punchagan/dune/commit/173a4de35499ccee845afb460881fa7066488b52"
+        },
+        "date": 1792652585087,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 2.65832206416,
             "unit": "seconds"
           }
         ]
