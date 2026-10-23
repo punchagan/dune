@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1792652831134,
+  "lastUpdate": 1792741800499,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -100629,6 +100629,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic watch build time (warm, Linux)",
             "value": 2.65832206416,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "me@rgrinberg.com",
+            "name": "Rudi Grinberg",
+            "username": "rgrinberg"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "3ada54e07d8323693309d2830255c5566afbc7b1",
+          "message": "test(pkg): reject malformed curl status responses (#16691)\n\nExtend the curl failure cram test to check that a successful curl\nprocess returning a non-numeric status or an unquoted status code is\nrejected with the expected diagnostic. Add a response override to the\nfake curl to exercise both cases.\n\nSigned-off-by: Rudi Grinberg <me@rgrinberg.com>",
+          "timestamp": "2026-10-23T11:08:37+08:00",
+          "tree_id": "3246c0508e1813fcc4a6e23fc2e5009ab48bb27e",
+          "url": "https://github.com/punchagan/dune/commit/3ada54e07d8323693309d2830255c5566afbc7b1"
+        },
+        "date": 1792741790160,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic watch build time (warm, Linux)",
+            "value": 3.870703799653333,
             "unit": "seconds"
           }
         ]
