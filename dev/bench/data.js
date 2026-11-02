@@ -1,5 +1,5 @@
 window.BENCHMARK_DATA = {
-  "lastUpdate": 1793608543852,
+  "lastUpdate": 1793608828890,
   "repoUrl": "https://github.com/punchagan/dune",
   "entries": {
     "Melange Benchmark": [
@@ -77776,6 +77776,35 @@ window.BENCHMARK_DATA = {
           {
             "name": "synthetic build time (warm, Linux)",
             "value": 0.4284817399,
+            "unit": "seconds"
+          }
+        ]
+      },
+      {
+        "commit": {
+          "author": {
+            "email": "anmonteiro@gmail.com",
+            "name": "Antonio Nuno Monteiro",
+            "username": "anmonteiro"
+          },
+          "committer": {
+            "email": "noreply@github.com",
+            "name": "GitHub",
+            "username": "web-flow"
+          },
+          "distinct": true,
+          "id": "b9abdebb6458e514feb4c3cb9e7be410fb0061f1",
+          "message": "test: avoid login shells in trace polling helpers (#16877)\n\nRun trace polling helpers without sourcing host login profiles, which\nadd unexpected output on Ubuntu 26.04 runners.\n\n01a12d8e-c091-7010-b0cd-3fdc40400e80\n\nSigned-off-by: Antonio Nuno Monteiro <anmonteiro@gmail.com>",
+          "timestamp": "2026-11-01T14:56:38-08:00",
+          "tree_id": "b46932265b0b20207d312035deb1495a9fb531fd",
+          "url": "https://github.com/punchagan/dune/commit/b9abdebb6458e514feb4c3cb9e7be410fb0061f1"
+        },
+        "date": 1793608827147,
+        "tool": "customSmallerIsBetter",
+        "benches": [
+          {
+            "name": "synthetic build time (cold, Linux)",
+            "value": 55.05044511834001,
             "unit": "seconds"
           }
         ]
